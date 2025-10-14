@@ -1,141 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Buy BRICS Token</title>
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f3f6fa;
+      font-family: "Inter", Arial, sans-serif;
+      background: linear-gradient(180deg, #eaf5ff 0%, #f8fbff 100%);
       text-align: center;
-      padding: 20px;
-    }
-    .header {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    .header img {
-      width: 100px;
-      border-radius: 50%;
-      box-shadow: 0 0 10px #00aaff;
-    }
-    .map {
-      width: 100%;
-      max-width: 320px;
-      margin: 15px auto;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      padding: 30px;
+      color: #111;
     }
     .card {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      margin-top: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      background: #fff;
+      border-radius: 18px;
+      padding: 30px;
+      max-width: 720px;
+      margin: auto;
+      box-shadow: 0 6px 30px rgba(0, 0, 0, 0.08);
+    }
+    h2 {
+      color: #007bff;
+      margin-bottom: 10px;
+    }
+    input, button {
+      width: 90%;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 16px;
     }
     button {
       background: #007bff;
       color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 10px;
       cursor: pointer;
-      font-size: 16px;
-      margin-top: 15px;
+      font-weight: 600;
+      border: none;
     }
-    button:hover { background: #0056b3; }
-    select, input {
-      width: 90%;
-      padding: 10px;
-      margin-top: 10px;
-      border: 1px solid #ccc;
+    button:hover {
+      background: #005ecf;
+    }
+    .info-box {
+      background: #f5f8ff;
       border-radius: 10px;
+      padding: 15px;
+      margin-top: 20px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #333;
+    }
+    .status {
+      color: #007bff;
+      font-weight: bold;
+      margin-top: 10px;
+      min-height: 20px;
+    }
+    .discount-info {
+      margin-top: 10px;
+      color: #00a36c;
+      font-weight: 600;
+    }
+    hr {
+      border: 0;
+      border-top: 1px solid #eee;
+      margin: 20px 0;
     }
   </style>
 </head>
 <body>
 
-  <div class="header">
-    <img src="bricslogo.png" alt="BRICS Logo">
-    <h2>BRICS Coin Purchase</h2>
-  </div>
-
-  <div class="map">
-    <img src="brics-map.jpg" width="100%" alt="BRICS Countries Map" />
-  </div>
-
   <div class="card">
-    <p>Enter your Binance Smart Chain (BEP20) wallet address:</p>
-    <input type="text" id="walletAddress" placeholder="0x..." />
+    <img src="bricslogo.png" alt="BRICS Logo" width="100" />
+    <h2>Buy BRICS Token</h2>
 
-    <p>Select payment token:</p>
-    <select id="paymentToken">
-      <option value="BNB">BNB</option>
-      <option value="BUSD">BUSD</option>
-      <option value="USDT">USDT</option>
-    </select>
+    <p><strong>Contract Address:</strong><br>0xAF2009350F6ECBE22c23A505a590239c7aaA3037</p>
+    <p><strong>Owner / Receiver Address:</strong><br>0x67594E1D30Cec8a5f906C8278A1BC694641486cf</p>
 
-    <p>Amount of BRICS to buy:</p>
-    <input type="number" id="bricsAmount" placeholder="e.g. 1000" />
+    <hr />
 
-    <button id="buyBtn">Buy BRICS</button>
+    <p>Enter the amount of BRICS you want to buy:</p>
+    <input id="bricsAmount" type="number" placeholder="Example: 1000" />
 
-    <p id="status"></p>
+    <button id="connectBtn">Connect Wallet</button>
+    <button id="calcBtn">Get Live Price</button>
+    <button id="buyBtn" disabled>Buy BRICS</button>
+
+    <p id="discountInfo" class="discount-info"></p>
+    <p id="status" class="status"></p>
+
+    <div class="info-box">
+      💡 <b>Important Notice:</b><br>
+      BRICS Token will be officially <b>listed in February 2026</b>.<br>
+      Trading will only be available with <b>exclusive crypto assets</b> of BRICS member countries.<br><br>
+      Current accepted currency: <b>BNB (BEP20)</b><br>
+      Network: <b>BNB Smart Chain</b><br>
+      Live price source: <a href="https://pancakeswap.finance/v2/pair/0xAF2009350F6ECBE22c23A505a590239c7aaA3037/BNB?chain=bsc&persistChain=1" target="_blank">PancakeSwap Pair</a>
+    </div>
   </div>
 
-<script>
-const BRICS_CONTRACT = "YOUR_PROXY_CONTRACT_ADDRESS"; // آدرس پروکسی اصلی بریکس
-const BRICS_ABI = [ // فقط تابع buyWithBNB را لازم داریم برای نمونه
-  "function buyWithBNB() payable"
-];
+  <script>
+    const PANCAKE_PAIR_ADDRESS = "0xAF2009350F6ECBE22c23A505a590239c7aaA3037";
+    const BRICS_CONTRACT = "0xAF2009350F6ECBE22c23A505a590239c7aaA3037";
+    const BRICS_ABI = ["function buyWithBNB() payable"];
+    const CHAIN_ID_BSC = 56;
+    const PAIR_ABI = [
+      "function getReserves() view returns (uint112,uint112,uint32)",
+      "function token0() view returns (address)",
+      "function token1() view returns (address)"
+    ];
+    const WBNB = "0xBB4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c".toLowerCase();
 
-async function buyBRICS() {
-  const wallet = document.getElementById("walletAddress").value;
-  const token = document.getElementById("paymentToken").value;
-  const amount = parseFloat(document.getElementById("bricsAmount").value);
-  const status = document.getElementById("status");
+    const connectBtn = document.getElementById("connectBtn");
+    const calcBtn = document.getElementById("calcBtn");
+    const buyBtn = document.getElementById("buyBtn");
+    const statusEl = document.getElementById("status");
+    const discountInfo = document.getElementById("discountInfo");
+    const bricsInput = document.getElementById("bricsAmount");
 
-  if (!wallet.startsWith("0x") || wallet.length !== 42) {
-    status.textContent = "Please enter a valid BSC wallet address.";
-    return;
-  }
+    let provider, signer, userAddress;
+    let currentPrice = 0, totalBNB = 0;
 
-  if (!window.ethereum) {
-    alert("Please install MetaMask first.");
-    return;
-  }
+    function logStatus(txt) { statusEl.textContent = txt; }
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
-  const contract = new ethers.Contract(BRICS_CONTRACT, BRICS_ABI, signer);
-
-  // قیمت فعلی 0.05 دلار برای هر بریکس
-  // فرض می‌کنیم 1 BNB = 600 دلار برای محاسبه تقریبی:
-  const bnbPrice = 600;
-  const costUSD = amount * 0.05 + 0.10;
-  const costBNB = costUSD / bnbPrice;
-
-  if (token === "BNB") {
-    try {
-      const tx = await contract.buyWithBNB({ value: ethers.utils.parseEther(costBNB.toFixed(6)) });
-      status.textContent = "Transaction sent. Waiting for confirmation...";
-      await tx.wait();
-      status.textContent = "✅ BRICS successfully purchased!";
-    } catch (err) {
-      console.error(err);
-      status.textContent = "❌ Transaction failed.";
+    async function connectWallet() {
+      if (!window.ethereum) return alert("Please install MetaMask.");
+      provider = new ethers.providers.Web3Provider(window.ethereum);
+      const net = await provider.getNetwork();
+      if (net.chainId !== CHAIN_ID_BSC) {
+        await window.ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: ethers.utils.hexValue(CHAIN_ID_BSC) }]
+        });
+      }
+      await provider.send("eth_requestAccounts", []);
+      signer = provider.getSigner();
+      userAddress = await signer.getAddress();
+      logStatus("Connected: " + userAddress);
+      connectBtn.disabled = true;
     }
-  } else {
-    status.textContent = "Payment with " + token + " will be supported soon.";
-  }
-}
 
-document.getElementById("buyBtn").addEventListener("click", buyBRICS);
-</script>
+    function calculateDiscount(amount) {
+      if (amount < 500) return 0;
+      if (amount >= 1_000_000) return 50;
+      const ratio = (amount - 500) / (1_000_000 - 500);
+      return Math.min(50, (ratio * 50).toFixed(2));
+    }
+
+    async function getPriceFromPancake() {
+      const rpc = provider || new ethers.providers.JsonRpcProvider("https://bsc-dataseed.binance.org/");
+      const pair = new ethers.Contract(PANCAKE_PAIR_ADDRESS, PAIR_ABI, rpc);
+      const [t0, t1] = await Promise.all([pair.token0(), pair.token1()]);
+      const [r0, r1] = await pair.getReserves();
+      const wbnbIs0 = t0.toLowerCase() === WBNB;
+      const reserveWBNB = wbnbIs0 ? r0 : r1;
+      const reserveBRICS = wbnbIs0 ? r1 : r0;
+      const priceBNB = reserveWBNB.mul(ethers.constants.WeiPerEther).div(reserveBRICS);
+      return parseFloat(ethers.utils.formatUnits(priceBNB, 18));
+    }
+
+    async function calcPrice() {
+      const amount = parseFloat(bricsInput.value);
+      if (!amount || amount <= 0) return logStatus("Enter a valid amount.");
+      logStatus("Fetching live price from PancakeSwap...");
+      currentPrice = await getPriceFromPancake();
+      const discount = calculateDiscount(amount);
+      const priceAfterDiscount = currentPrice * (1 - discount / 100);
+      totalBNB = amount * priceAfterDiscount;
+      discountInfo.textContent = `Discount: ${discount}% | Final Price per BRICS ≈ ${priceAfterDiscount.toFixed(10)} BNB`;
+      logStatus(`Total: ${totalBNB.toFixed(8)} BNB`);
+      buyBtn.disabled = false;
+    }
+
+    async function buyBrics() {
+      if (!provider || !signer) return alert("Connect your wallet first.");
+      const contract = new ethers.Contract(BRICS_CONTRACT, BRICS_ABI, signer);
+      try {
+        logStatus("Sending transaction...");
+        const tx = await contract.buyWithBNB({ value: ethers.utils.parseEther(totalBNB.toFixed(8)) });
+        logStatus("Waiting for confirmation...");
+        await tx.wait();
+        logStatus("✅ Purchase successful!");
+      } catch (err) {
+        logStatus("Error: " + (err.data?.message || err.message));
+      }
+    }
+
+    connectBtn.onclick = connectWallet;
+    calcBtn.onclick = calcPrice;
+    buyBtn.onclick = buyBrics;
+  </script>
 </body>
 </html>
