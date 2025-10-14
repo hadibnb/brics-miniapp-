@@ -2,10 +2,140 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BRICS Mini App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buy BRICS Token</title>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f6fa;
+      text-align: center;
+      padding: 20px;
+    }
+    .header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header img {
+      width: 100px;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #00aaff;
+    }
+    .map {
+      width: 100%;
+      max-width: 320px;
+      margin: 15px auto;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      margin-top: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 15px;
+    }
+    button:hover { background: #0056b3; }
+    select, input {
+      width: 90%;
+      padding: 10px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+  </style>
 </head>
 <body>
-  <div id="root"></div>
+
+  <div class="header">
+    <img src="https://hadibnb.github.io/BRICScoin/images/brics-logo.png" alt="BRICS Logo">
+    <h2>BRICS Coin Purchase</h2>
+  </div>
+
+  <div class="map">
+    <img src="https://hadibnb.github.io/BRICScoin/images/brics-map.jpg" width="100%" alt="BRICS Countries Map" />
+  </div>
+
+  <div class="card">
+    <p>Enter your Binance Smart Chain (BEP20) wallet address:</p>
+    <input type="text" id="walletAddress" placeholder="0x..." />
+
+    <p>Select payment token:</p>
+    <select id="paymentToken">
+      <option value="BNB">BNB</option>
+      <option value="BUSD">BUSD</option>
+      <option value="USDT">USDT</option>
+    </select>
+
+    <p>Amount of BRICS to buy:</p>
+    <input type="number" id="bricsAmount" placeholder="e.g. 1000" />
+
+    <button id="buyBtn">Buy BRICS</button>
+
+    <p id="status"></p>
+  </div>
+
+<script>
+const BRICS_CONTRACT = "YOUR_PROXY_CONTRACT_ADDRESS"; // آدرس پروکسی اصلی بریکس
+const BRICS_ABI = [ // فقط تابع buyWithBNB را لازم داریم برای نمونه
+  "function buyWithBNB() payable"
+];
+
+async function buyBRICS() {
+  const wallet = document.getElementById("walletAddress").value;
+  const token = document.getElementById("paymentToken").value;
+  const amount = parseFloat(document.getElementById("bricsAmount").value);
+  const status = document.getElementById("status");
+
+  if (!wallet.startsWith("0x") || wallet.length !== 42) {
+    status.textContent = "Please enter a valid BSC wallet address.";
+    return;
+  }
+
+  if (!window.ethereum) {
+    alert("Please install MetaMask first.");
+    return;
+  }
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const contract = new ethers.Contract(BRICS_CONTRACT, BRICS_ABI, signer);
+
+  // قیمت فعلی 0.05 دلار برای هر بریکس
+  // فرض می‌کنیم 1 BNB = 600 دلار برای محاسبه تقریبی:
+  const bnbPrice = 600;
+  const costUSD = amount * 0.05 + 0.10;
+  const costBNB = costUSD / bnbPrice;
+
+  if (token === "BNB") {
+    try {
+      const tx = await contract.buyWithBNB({ value: ethers.utils.parseEther(costBNB.toFixed(6)) });
+      status.textContent = "Transaction sent. Waiting for confirmation...";
+      await tx.wait();
+      status.textContent = "✅ BRICS successfully purchased!";
+    } catch (err) {
+      console.error(err);
+      status.textContent = "❌ Transaction failed.";
+    }
+  } else {
+    status.textContent = "Payment with " + token + " will be supported soon.";
+  }
+}
+
+document.getElementById("buyBtn").addEventListener("click", buyBRICS);
+</script>
 </body>
 </html>
