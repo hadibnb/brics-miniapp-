@@ -88,14 +88,13 @@ const spinner = document.getElementById("priceSpinner");
 
 let provider = null, signer = null, userAddress = null;
 let priceScaled = null, bricsPriceBNB=0, bnbUsdPrice=0;
-let updateTimer = null;
 
-function shortAddr(addr){ if(!addr||addr.length<10)return addr; return addr.slice(0,6)+"..."+addr.slice(-4);}
+function shortAddr(addr){ return addr.slice(0,6)+"..."+addr.slice(-4);}
 contractShort.textContent = shortAddr(BRICS_CONTRACT);
-copyBtn.onclick = async()=>{ try{ await navigator.clipboard.writeText(BRICS_CONTRACT); alert("BRICS contract address copied to clipboard"); }catch(e){ alert("Copy failed. Copy manually: "+BRICS_CONTRACT); } };
+copyBtn.onclick = async()=>{ try{ await navigator.clipboard.writeText(BRICS_CONTRACT); alert("BRICS contract address copied"); }catch(e){ alert("Copy manually: "+BRICS_CONTRACT); } };
 
 function setStatus(txt){ statusEl.textContent=txt; }
-function showSpinner(show){ if(show) spinner.classList.toggle('visible',show); }
+function showSpinner(show){ spinner.classList.toggle('visible',show); }
 
 async function connectWallet(){
 if(!window.ethereum){ alert("Install MetaMask."); return; }
@@ -118,8 +117,7 @@ function calculateDiscount(amount){
 const a=Number(amount); if(!a||a<=0)return 0;
 if(a<100) return 0;
 if(a>=1000000) return 50;
-const ratio=(a-100)/(1000000-100);
-return Math.round(ratio*50*100)/100;
+return Math.round(((a-100)/(1000000-100)*50)*100)/100;
 }
 
 async function fetchLivePriceScaled(){
@@ -130,26 +128,30 @@ const reserves=await pair.getReserves();
 let reserveWBNB, reserveBRICS;
 if(t0.toLowerCase()===WBNB){ reserveWBNB=reserves[0]; reserveBRICS=reserves[1]; } 
 else if(t1.toLowerCase()===WBNB){ reserveWBNB=reserves[1]; reserveBRICS=reserves[0]; } 
-else throw new Error("WBNB not found in pair.");
-const priceScaledLocal=reserveWBNB.mul(ethers.constants.WeiPerEther).div(reserveBRICS);
-return priceScaledLocal;
+else throw new Error("WBNB not found");
+return reserveWBNB.mul(ethers.constants.WeiPerEther).div(reserveBRICS);
 }
 
-async function fetchBnbUsd(){ try{ const res=await fetch("https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT"); const j=await res.json(); return parseFloat(j.price); } catch(e){ console.error("BNB->USD fetch failed",e); return null;} }
+async function fetchBnbUsd(){ 
+try{ const res=await fetch("https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT"); const j=await res.json(); return parseFloat(j.price); } 
+catch(e){ console.error("BNB->USD fetch failed",e); return 0; }
+}
 
 async function updatePrices(){
-try{ showSpinner(true); setStatus("Updating live prices...");
+try{
+showSpinner(true); setStatus("Updating live prices...");
 const [pscaled,bnbusd]=await Promise.allSettled([fetchLivePriceScaled(),fetchBnbUsd()]);
-if(pscaled.status==="fulfilled"){ priceScaled=pscaled.value; bricsPriceBNB=parseFloat(ethers.utils.formatEther(priceScaled)); } 
+if(pscaled.status==="fulfilled") priceScaled=pscaled.value;
 if(bnbusd.status==="fulfilled") bnbUsdPrice=bnbusd.value||0;
-if(priceScaled && bnbUsdPrice) { priceInfo.innerHTML=`Live BRICS price: ${bricsPriceBNB.toFixed(6)} BNB (~$${(bricsPriceBNB*bnbUsdPrice).toFixed(2)} USD)`; } 
-else priceInfo.innerHTML="Live BRICS price unavailable";
-setStatus(""); showSpinner(false);
-updateBuyBtnState();
-}catch(e){ console.error(e); showSpinner(false); setStatus("Price update failed."); }
+if(priceScaled && bnbUsdPrice){ 
+bricsPriceBNB=parseFloat(ethers.utils.formatEther(priceScaled)); 
+priceInfo.innerHTML=`Live BRICS price: ${bricsPriceBNB.toFixed(6)} BNB (~$${(bricsPriceBNB*bnbUsdPrice).toFixed(2)} USD)`;
+} else priceInfo.innerHTML="Live BRICS price unavailable";
+setStatus(""); updateBuyBtnState();
+}catch(e){ console.error(e); showSpinner(false); setStatus("Price update failed"); }
 }
 
-function updateBuyBtnState(){ buyBtn.disabled=!userAddress||!bricsPriceBNB; }
+function updateBuyBtnState(){ buyBtn.disabled=!userAddress || !bricsPriceBNB || !bnbUsdPrice; }
 
 async function buyBRICS(){
 if(!signer){ setStatus("Connect wallet first."); return; }
@@ -162,7 +164,8 @@ totalInfo.textContent=`Total payment: ${totalBNB.toFixed(6)} BNB (~$${(totalBNB*
 try{
 setStatus("Waiting for transaction approval...");
 const contract=new ethers.Contract(BRICS_CONTRACT,BRICS_ABI,signer);
-const tx=await contract.buyWithBNB({value: ethers.utils.parseEther(totalBNB.toFixed(18))});
+const totalWei=ethers.utils.parseUnits(totalBNB.toFixed(18),"ether");
+const tx=await contract.buyWithBNB({value:totalWei});
 setStatus("Transaction sent: "+shortAddr(tx.hash));
 await tx.wait();
 setStatus("✅ BRICS purchased successfully!");
