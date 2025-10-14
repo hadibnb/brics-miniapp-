@@ -7,13 +7,14 @@
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 <meta name="theme-color" content="#0b63ff"/>
 <style>
+/* ⚠️ استایل‌ها بدون تغییر باقی می‌مانند */
 :root{
-  --bg:#f3f6fb; --card:#ffffff; --primary:#0b63ff; --accent:#00b07a; --muted:#6b7280;
+  --bg:#f3f6fb; --card:#ffffff; --primary:#0b63ff; --accent:#00b07a; --muted:#6b7280;
 }
 *{box-sizing:border-box}
 body{
-  margin:0; font-family: "Vazirmatn", "Arial", sans-serif; background:linear-gradient(180deg,#f6f9ff 0%,var(--bg) 100%);
-  padding:18px; display:flex; align-items:flex-start; justify-content:center; min-height:100vh;
+  margin:0; font-family: "Vazirmatn", "Arial", sans-serif; background:linear-gradient(180deg,#f6f9ff 0%,var(--bg) 100%);
+  padding:18px; display:flex; align-items:flex-start; justify-content:center; min-height:100vh;
 }
 .container{width:100%;max-width:980px;margin:auto}
 .card{background:var(--card);border-radius:18px;padding:18px;box-shadow:0 12px 40px rgba(11,99,255,0.06);display:flex;gap:18px;flex-direction:column;}
@@ -66,93 +67,90 @@ th{background:#f7fbff;font-weight:800;}
 </head>
 <body>
 <div class="container">
-  <div class="card" role="main" aria-labelledby="title">
-    <div class="hero">
-      <img class="map" src="brics-map.jpg" alt="BRICS map image (colored members)"/>
-      <div class="logo"><img src="logobrics.png" alt="BRICS logo"/></div>
-    </div>
+  <div class="card" role="main" aria-labelledby="title">
+    <div class="hero">
+      <img class="map" src="brics-map.jpg" alt="BRICS map image (colored members)"/>
+      <div class="logo"><img src="logobrics.png" alt="BRICS logo"/></div>
+    </div>
 
-    <h1 id="title">Buy BRICS Token</h1>
-    <div class="sub">لطفاً آدرس قرارداد را به MetaMask اضافه کنید تا قبل از خرید توکن را مشاهده کنید</div>
+    <h1 id="title">Buy BRICS Token</h1>
+    <div class="sub">لطفاً آدرس قرارداد را به MetaMask اضافه کنید تا قبل از خرید توکن را مشاهده کنید</div>
 
-    <div class="contract-row">
-      <div id="contractBox" class="contract-box" title="کلیک برای کپی">0xAF20...3037</div>
-      <button id="copyContract" class="copy-btn">Copy</button>
-    </div>
+    <div class="contract-row">
+      <div id="contractBox" class="contract-box" title="کلیک برای کپی">0xAF20...3037</div>
+      <button id="copyContract" class="copy-btn">Copy</button>
+    </div>
 
-    <div class="grid">
-      <!-- left -->
-      <div class="panel">
-        <div class="label">قیمت لحظه‌ای</div>
-        <div id="priceLine" class="small"><span id="priceText">در حال دریافت قیمت...</span> <span id="priceSpinner" class="spinner"></span></div>
+    <div class="grid">
+            <div class="panel">
+        <div class="label">قیمت لحظه‌ای</div>
+        <div id="priceLine" class="small"><span id="priceText">در حال دریافت قیمت...</span> <span id="priceSpinner" class="spinner"></span></div>
 
-        <div class="label" style="margin-top:12px">Enter amount of BRICS to buy</div>
-        <div class="input-row" style="margin-top:8px">
-          <input id="bricsAmount" class="amount-input" type="number" min="100" max="1000000" placeholder="مثال: 1000" />
-          <div class="token-tag">BRICS</div>
-        </div>
+        <div class="label" style="margin-top:12px">Enter amount of BRICS to buy</div>
+        <div class="input-row" style="margin-top:8px">
+          <input id="bricsAmount" class="amount-input" type="number" min="100" max="1000000" placeholder="مثال: 1000" />
+          <div class="token-tag">BRICS</div>
+        </div>
 
-        <div class="calc-row" style="margin-top:10px">
-          <div id="usdPreview">USD: $0.00</div>
-          <div id="discountPreview">تخفیف: 0%</div>
-        </div>
+        <div class="calc-row" style="margin-top:10px">
+          <div id="usdPreview">USD: $0.00</div>
+          <div id="discountPreview">تخفیف: 0%</div>
+        </div>
 
-        <div class="memo">
-          <div><strong>MEMO TAG :</strong> <span id="memoTag">—</span></div>
-          <div class="small" style="margin-top:6px">این MEMO را هنگام انتقال BNB وارد کنید تا تراکنش به‌درستی پردازش شود.</div>
-        </div>
+        <div class="memo">
+          <div><strong>MEMO TAG :</strong> <span id="memoTag">—</span></div>
+          <div class="small" style="margin-top:6px">این MEMO را هنگام انتقال BNB وارد کنید تا تراکنش به‌درستی پردازش شود.</div>
+        </div>
 
-        <div style="margin-top:12px" class="info-note">
-          روش پرداخت: <strong>BNB (BEP20)</strong> • آدرس مالک برای دریافت: <code style="direction:ltr">0x67594E1D30Cec8a5f906C8278A1BC694641486cf</code>
-          <br/>قیمت BRICS از PancakeSwap (pair) خوانده می‌شود و معادل دلاری از API Binance.
-        </div>
-      </div>
+        <div style="margin-top:12px" class="info-note">
+          روش پرداخت: <strong>BNB (BEP20)</strong> • آدرس مالک برای دریافت: <code style="direction:ltr">0x67594E1D30Cec8a5f906C8278A1BC694641486cf</code>
+          <br/>قیمت BRICS از PancakeSwap (pair) خوانده می‌شود و معادل دلاری از API Binance.
+        </div>
+      </div>
 
-      <!-- right -->
-      <div class="wallet-card">
-        <div class="wallet-top">
-          <div>
-            <div class="small">My Wallet</div>
-            <div class="wallet-addr" id="walletAddr">—</div>
-          </div>
-          <div style="text-align:left">
-            <div class="small">Owner (receive BNB)</div>
-            <div style="direction:ltr;font-weight:800;color:var(--primary)">0x67594E1D30Ce...486cf</div>
-          </div>
-        </div>
+            <div class="wallet-card">
+        <div class="wallet-top">
+          <div>
+            <div class="small">My Wallet</div>
+            <div class="wallet-addr" id="walletAddr">—</div>
+          </div>
+          <div style="text-align:left">
+            <div class="small">Owner (receive BNB)</div>
+            <div style="direction:ltr;font-weight:800;color:var(--primary)">0x67594E1D30Ce...486cf</div>
+          </div>
+        </div>
 
-        <div id="balances" style="display:none" class="balances">
-          <div class="bal-row"><div>BNB</div><div id="bnbBal">0 BNB</div></div>
-          <div class="bal-row"><div>BRICS</div><div id="bricsBal">0 BRICS</div></div>
-        </div>
+        <div id="balances" style="display:none" class="balances">
+          <div class="bal-row"><div>BNB</div><div id="bnbBal">0 BNB</div></div>
+          <div class="bal-row"><div>BRICS</div><div id="bricsBal">0 BRICS</div></div>
+        </div>
 
-        <button id="connectBtn" class="connect-btn">Connect MetaMask</button>
-        <button id="buyBtn" class="buy-btn" disabled>Buy BRICS</button>
+        <button id="connectBtn" class="connect-btn">Connect MetaMask</button>
+        <button id="buyBtn" class="buy-btn" disabled>Buy BRICS</button>
 
-        <div id="status" class="status">وضعیت: آماده</div>
-        <div class="footer-note">Accepted: <strong>BNB (BEP20)</strong> • Pair: PancakeSwap</div>
-      </div>
-    </div>
+        <div id="status" class="status">وضعیت: آماده</div>
+        <div class="footer-note">Accepted: <strong>BNB (BEP20)</strong> • Pair: PancakeSwap</div>
+      </div>
+    </div>
 
-    <!-- logs -->
-    <div class="log-wrap" id="logWrap">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <strong>Transaction Log (محلی — localStorage)</strong>
-        <div class="actions">
-          <button id="exportBtn" class="btn-sm export-btn">Export JSON</button>
-          <button id="clearBtn" class="btn-sm clear-btn">Clear logs</button>
-        </div>
-      </div>
-      <div style="margin-top:8px">
-        <table id="logTable">
-          <thead><tr><th>Buyer</th><th>BRICS</th><th>Discount</th><th>BNB Paid</th><th>USD</th><th>Tx Hash</th><th>Time</th></tr></thead>
-          <tbody id="logBody"></tbody>
-        </table>
-      </div>
-      <div class="small" style="margin-top:8px">لاگ‌ها در مرورگر ذخیره می‌شوند. برای بکاپ گرفتن از دکمه Export JSON استفاده کن.</div>
-    </div>
+        <div class="log-wrap" id="logWrap">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <strong>Transaction Log (محلی — localStorage)</strong>
+        <div class="actions">
+          <button id="exportBtn" class="btn-sm export-btn">Export JSON</button>
+          <button id="clearBtn" class="btn-sm clear-btn">Clear logs</button>
+        </div>
+      </div>
+      <div style="margin-top:8px">
+        <table id="logTable">
+          <thead><tr><th>Buyer</th><th>BRICS</th><th>Discount</th><th>BNB Paid</th><th>USD</th><th>Tx Hash</th><th>Time</th></tr></thead>
+          <tbody id="logBody"></tbody>
+        </table>
+      </div>
+      <div class="small" style="margin-top:8px">لاگ‌ها در مرورگر ذخیره می‌شوند. برای بکاپ گرفتن از دکمه Export JSON استفاده کن.</div>
+    </div>
 
-  </div>
+  </div>
 </div>
 
 <script>
@@ -163,9 +161,11 @@ const PANCAKE_PAIR = "0xAF2009350F6ECBE22c23A505a590239c7aaA3037".toLowerCase();
 const OWNER_ADDRESS = "0x67594E1D30Cec8a5f906C8278A1BC694641486cf".toLowerCase();
 const CHAIN_ID_BSC = 56;
 const WBNB = "0xBB4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c".toLowerCase();
-/* Telegram (توکن ربات را خودت فرستادی؛ chat id را اینجا قرار بده) */
-const BOT_TOKEN = "8279712354:AAGhJz8Vg1hD2DCiu2jAcxc3Y26p7LLt06I"; // ⚠️ هشدار امنیتی در پایین توضیح داده شده
-const TELEGRAM_CHAT_ID = "@your_channel_here"; // <-- این را تغییر بده به آی‌دی کانالت یا numeric chat id
+
+// ⚠️ جدید: رمز مشترک برای دسترسی به Netlify Function. 
+// ⚠️ باید با متغیر محیطی SHARED_SECRET در Netlify یکسان باشد.
+const CLIENT_SECRET = "YOUR_STRONG_CLIENT_SECRET_HERE"; // ❌ این مقدار را با رمز واقعی جایگزین کنید
+
 /* ABIs */
 const PAIR_ABI = ["function getReserves() view returns (uint112,uint112,uint32)","function token0() view returns (address)","function token1() view returns (address)"];
 const ERC20_ABI = ["function balanceOf(address) view returns (uint256)","function decimals() view returns (uint8)"];
@@ -210,69 +210,69 @@ let bricsPriceBNB = 0;
 let bnbUsdPrice = 0;
 
 async function fetchPairPrice(){
-  try{
-    const pair = new ethers.Contract(PANCAKE_PAIR, PAIR_ABI, providerRpc);
-    const [t0,t1] = await Promise.all([pair.token0(), pair.token1()]);
-    const reserves = await pair.getReserves();
-    let reserveWBNB, reserveBRICS;
-    if(t0.toLowerCase() === WBNB){ reserveWBNB = reserves[0]; reserveBRICS = reserves[1]; }
-    else if(t1.toLowerCase() === WBNB){ reserveWBNB = reserves[1]; reserveBRICS = reserves[0]; }
-    else throw new Error("WBNB not in pair");
-    // price = reserveWBNB / reserveBRICS, scaled 1e18
-    const scaled = reserveWBNB.mul(ethers.constants.WeiPerEther).div(reserveBRICS);
-    priceScaled = scaled;
-    bricsPriceBNB = parseFloat(ethers.utils.formatEther(priceScaled));
-    return bricsPriceBNB;
-  }catch(e){ console.error("fetchPairPrice",e); priceScaled = null; bricsPriceBNB = 0; throw e; }
+  try{
+    const pair = new ethers.Contract(PANCAKE_PAIR, PAIR_ABI, providerRpc);
+    const [t0,t1] = await Promise.all([pair.token0(), pair.token1()]);
+    const reserves = await pair.getReserves();
+    let reserveWBNB, reserveBRICS;
+    if(t0.toLowerCase() === WBNB){ reserveWBNB = reserves[0]; reserveBRICS = reserves[1]; }
+    else if(t1.toLowerCase() === WBNB){ reserveWBNB = reserves[1]; reserveBRICS = reserves[0]; }
+    else throw new Error("WBNB not in pair");
+    // price = reserveWBNB / reserveBRICS, scaled 1e18
+    const scaled = reserveWBNB.mul(ethers.constants.WeiPerEther).div(reserveBRICS);
+    priceScaled = scaled;
+    bricsPriceBNB = parseFloat(ethers.utils.formatEther(priceScaled));
+    return bricsPriceBNB;
+  }catch(e){ console.error("fetchPairPrice",e); priceScaled = null; bricsPriceBNB = 0; throw e; }
 }
 
 async function fetchBnbUsd(){
-  try{
-    const res = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT");
-    const j = await res.json();
-    bnbUsdPrice = parseFloat(j.price);
-    return bnbUsdPrice;
-  }catch(e){ console.error("fetchBnbUsd", e); bnbUsdPrice = 0; throw e; }
+  try{
+    const res = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT");
+    const j = await res.json();
+    bnbUsdPrice = parseFloat(j.price);
+    return bnbUsdPrice;
+  }catch(e){ console.error("fetchBnbUsd", e); bnbUsdPrice = 0; throw e; }
 }
 
 async function updatePrices(){
-  priceSpinner.classList.add('visible');
-  try{
-    await Promise.allSettled([fetchPairPrice(), fetchBnbUsd()]);
-    if(bricsPriceBNB && bnbUsdPrice){
-      priceText.textContent = `یک BRICS ≈ ${bricsPriceBNB.toFixed(8)} BNB (~$${(bricsPriceBNB*bnbUsdPrice).toFixed(4)})`;
-    } else { priceText.textContent = 'قیمت لحظه‌ای ناموجود'; }
-  }catch(e){ priceText.textContent = 'قیمت لحظه‌ای ناموجود'; }
-  priceSpinner.classList.remove('visible');
-  updateCalc();
+  priceSpinner.classList.add('visible');
+  try{
+    await Promise.allSettled([fetchPairPrice(), fetchBnbUsd()]);
+    if(bricsPriceBNB && bnbUsdPrice){
+      priceText.textContent = `یک BRICS ≈ ${bricsPriceBNB.toFixed(8)} BNB (~$${(bricsPriceBNB*bnbUsdPrice).toFixed(4)})`;
+    } else { priceText.textContent = 'قیمت لحظه‌ای ناموجود'; }
+  }catch(e){ priceText.textContent = 'قیمت لحظه‌ای ناموجود'; }
+  priceSpinner.classList.remove('visible');
+  updateCalc();
 }
 updatePrices();
 setInterval(updatePrices, 10000);
 
 /* discount: linear mapping 100 -> 5% , 1,000,000 -> 50% */
 function calcDiscount(amount){
-  const a = Number(amount);
-  if(!a || a < 100) return 0;
-  if(a >= 1000000) return 50;
-  const minA = 100, maxA = 1000000;
-  const minD = 5, maxD = 50;
-  const ratio = (a - minA) / (maxA - minA);
-  const d = minD + ratio * (maxD - minD);
-  return Math.round(d * 100) / 100;
+  const a = Number(amount);
+  if(!a || a < 100) return 0;
+  if(a >= 1000000) return 50;
+  const minA = 100, maxA = 1000000;
+  const minD = 5, maxD = 50;
+  const ratio = (a - minA) / (maxA - minA);
+  const d = minD + ratio * (maxD - minD);
+  return Math.round(d * 100) / 100;
 }
 
 /* update preview */
 function updateCalc(){
-  const a = Number(bricsAmount.value);
-  const disc = calcDiscount(a);
-  discountPreview.textContent = `تخفیف: ${disc}%`;
-  if(!a || !bricsPriceBNB || !bnbUsdPrice){ usdPreview.textContent = 'USD: $0.00'; }
-  else {
-    const totalBNB = a * bricsPriceBNB * (1 - disc/100); // buyer pays less due to discount
-    const totalUSD = totalBNB * bnbUsdPrice;
-    usdPreview.textContent = `USD: $${totalUSD.toFixed(2)}`;
-  }
-  updateBuyState();
+  const a = Number(bricsAmount.value);
+  const disc = calcDiscount(a);
+  discountPreview.textContent = `تخفیف: ${disc}%`;
+  if(!a || !bricsPriceBNB || !bnbUsdPrice){ usdPreview.textContent = 'USD: $0.00'; }
+  else {
+    const totalBNB = a * bricsPriceBNB * (1 - disc/100); // buyer pays less due to discount
+    const totalUSD = totalBNB * bnbUsdPrice;
+    usdPreview.textContent = `USD: $${totalUSD.toFixed(2)}`;
+  }
+  updateBuyState();
 }
 bricsAmount.addEventListener('input', updateCalc);
 
@@ -280,95 +280,95 @@ bricsAmount.addEventListener('input', updateCalc);
 let provider = null, signer = null, user = null;
 
 async function connectWallet(){
-  if(window.ethereum){
-    provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-    try{
-      const net = await provider.getNetwork();
-      if(net.chainId !== CHAIN_ID_BSC){
-        try{ await window.ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: ethers.utils.hexValue(CHAIN_ID_BSC) }] }); }catch(e){ console.warn("switch chain failed", e); }
-      }
-      await provider.send("eth_requestAccounts", []);
-      signer = provider.getSigner();
-      user = await signer.getAddress();
-      walletAddr.textContent = short(user);
-      connectBtn.textContent = 'Connected';
-      connectBtn.disabled = true;
-      setStatus('کیف پول متصل شد ✅');
-      await refreshBalances();
-      if(window.ethereum && window.ethereum.on){
-        window.ethereum.on('accountsChanged', async (accounts)=>{ if(accounts && accounts.length){ user = accounts[0]; walletAddr.textContent = short(user); await refreshBalances(); } else { user = null; walletAddr.textContent='—'; balancesDiv.style.display='none'; connectBtn.disabled=false; connectBtn.textContent='Connect MetaMask'; setStatus('حساب جدا شد'); }});
-        window.ethereum.on('chainChanged', ()=> setTimeout(()=>location.reload(),300));
-      }
-      updateBuyState();
-    }catch(e){ console.error(e); setStatus('اتصال ناموفق: '+(e.message||e),'error'); }
-  } else {
-    if(isMobile()){
-      const href = window.location.href.replace(/^https?:\/\//,'');
-      window.location.href = `https://metamask.app.link/dapp/${href}`;
-    } else {
-      setStatus('MetaMask پیدا نشد — لطفاً افزونه MetaMask را نصب کنید','error');
-      window.open('https://metamask.io/download.html','_blank');
-    }
-  }
+  if(window.ethereum){
+    provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    try{
+      const net = await provider.getNetwork();
+      if(net.chainId !== CHAIN_ID_BSC){
+        try{ await window.ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: ethers.utils.hexValue(CHAIN_ID_BSC) }] }); }catch(e){ console.warn("switch chain failed", e); }
+      }
+      await provider.send("eth_requestAccounts", []);
+      signer = provider.getSigner();
+      user = await signer.getAddress();
+      walletAddr.textContent = short(user);
+      connectBtn.textContent = 'Connected';
+      connectBtn.disabled = true;
+      setStatus('کیف پول متصل شد ✅');
+      await refreshBalances();
+      if(window.ethereum && window.ethereum.on){
+        window.ethereum.on('accountsChanged', async (accounts)=>{ if(accounts && accounts.length){ user = accounts[0]; walletAddr.textContent = short(user); await refreshBalances(); } else { user = null; walletAddr.textContent='—'; balancesDiv.style.display='none'; connectBtn.disabled=false; connectBtn.textContent='Connect MetaMask'; setStatus('حساب جدا شد'); }});
+        window.ethereum.on('chainChanged', ()=> setTimeout(()=>location.reload(),300));
+      }
+      updateBuyState();
+    }catch(e){ console.error(e); setStatus('اتصال ناموفق: '+(e.message||e),'error'); }
+  } else {
+    if(isMobile()){
+      const href = window.location.href.replace(/^https?:\/\//,'');
+      window.location.href = `https://metamask.app.link/dapp/${href}`;
+    } else {
+      setStatus('MetaMask پیدا نشد — لطفاً افزونه MetaMask را نصب کنید','error');
+      window.open('https://metamask.io/download.html','_blank');
+    }
+  }
 }
 
 /* refresh balances */
 async function refreshBalances(){
-  if(!provider || !user) return;
-  try{
-    const rawBnb = await provider.getBalance(user);
-    const bnb = parseFloat(ethers.utils.formatEther(rawBnb));
-    bnbBal.textContent = `${bnb.toFixed(6)} BNB (~$${(bnb*bnbUsdPrice).toFixed(2)})`;
-    // token balance (read decimals if available)
-    const token = new ethers.Contract(BRICS_CONTRACT, ERC20_ABI, provider);
-    let decimals = 18;
-    try{ decimals = await token.decimals(); }catch(e){ decimals = 18; }
-    const rawTok = await token.balanceOf(user);
-    const tok = parseFloat(ethers.utils.formatUnits(rawTok, decimals));
-    bricsBal.textContent = `${tok.toFixed(4)} BRICS (~$${(tok * bricsPriceBNB * bnbUsdPrice).toFixed(2)})`;
-    balancesDiv.style.display = 'flex';
-  }catch(e){ console.error('refreshBalances', e); }
+  if(!provider || !user) return;
+  try{
+    const rawBnb = await provider.getBalance(user);
+    const bnb = parseFloat(ethers.utils.formatEther(rawBnb));
+    bnbBal.textContent = `${bnb.toFixed(6)} BNB (~$${(bnb*bnbUsdPrice).toFixed(2)})`;
+    // token balance (read decimals if available)
+    const token = new ethers.Contract(BRICS_CONTRACT, ERC20_ABI, provider);
+    let decimals = 18;
+    try{ decimals = await token.decimals(); }catch(e){ decimals = 18; }
+    const rawTok = await token.balanceOf(user);
+    const tok = parseFloat(ethers.utils.formatUnits(rawTok, decimals));
+    bricsBal.textContent = `${tok.toFixed(4)} BRICS (~$${(tok * bricsPriceBNB * bnbUsdPrice).toFixed(2)})`;
+    balancesDiv.style.display = 'flex';
+  }catch(e){ console.error('refreshBalances', e); }
 }
 
 /* buy flow: send BNB to OWNER_ADDRESS directly */
 function updateBuyState(){
-  const a = Number(bricsAmount.value);
-  buyBtn.disabled = !(signer && a >= 100 && bricsPriceBNB && bnbUsdPrice);
+  const a = Number(bricsAmount.value);
+  buyBtn.disabled = !(signer && a >= 100 && bricsPriceBNB && bnbUsdPrice);
 }
 
 async function buyBRICS(){
-  if(!signer){ setStatus('ابتدا کیف پول خود را متصل کنید','error'); return; }
-  const amountBRICS = Number(bricsAmount.value);
-  if(!amountBRICS || amountBRICS < 100){ setStatus('مقدار BRICS را بین 100 تا 1,000,000 وارد کنید','error'); return; }
-  const discount = calcDiscount(amountBRICS);
-  const totalBNB = amountBRICS * bricsPriceBNB * (1 - discount/100);
-  setStatus('در حال آماده‌سازی تراکنش ...');
-  try{
-    // send BNB to owner
-    const txObj = { to: OWNER_ADDRESS, value: ethers.utils.parseUnits(totalBNB.toFixed(18), 'ether') };
-    const txResp = await signer.sendTransaction(txObj);
-    setStatus('تراکنش ارسال شد: ' + short(txResp.hash));
-    await txResp.wait();
-    setStatus('✅ تراکنش موفق — Tx: ' + txResp.hash);
-    // log locally
-    const logEntry = {
-      buyer: user,
-      requestedBRICS: amountBRICS,
-      discountPercent: discount,
-      bnbPaid: totalBNB,
-      usdApprox: totalBNB * bnbUsdPrice,
-      txHash: txResp.hash,
-      memo: currentMemo,
-      timestamp: new Date().toISOString()
-    };
-    pushLog(logEntry);
-    renderLogs();
-    // try to send to Telegram (optional)
-    try{ await sendTelegramLog(logEntry); }catch(e){ console.warn('telegram send failed', e); }
-    // refresh balances and regen memo
-    await refreshBalances();
-    currentMemo = genMemo(); memoTag.textContent = currentMemo;
-  }catch(e){ console.error('buyBRICS err', e); setStatus('خطا در ارسال تراکنش: ' + (e.message||e),'error'); }
+  if(!signer){ setStatus('ابتدا کیف پول خود را متصل کنید','error'); return; }
+  const amountBRICS = Number(bricsAmount.value);
+  if(!amountBRICS || amountBRICS < 100){ setStatus('مقدار BRICS را بین 100 تا 1,000,000 وارد کنید','error'); return; }
+  const discount = calcDiscount(amountBRICS);
+  const totalBNB = amountBRICS * bricsPriceBNB * (1 - discount/100);
+  setStatus('در حال آماده‌سازی تراکنش ...');
+  try{
+    // send BNB to owner
+    const txObj = { to: OWNER_ADDRESS, value: ethers.utils.parseUnits(totalBNB.toFixed(18), 'ether') };
+    const txResp = await signer.sendTransaction(txObj);
+    setStatus('تراکنش ارسال شد: ' + short(txResp.hash));
+    await txResp.wait();
+    setStatus('✅ تراکنش موفق — Tx: ' + txResp.hash);
+    // log locally
+    const logEntry = {
+      buyer: user,
+      requestedBRICS: amountBRICS,
+      discountPercent: discount,
+      bnbPaid: totalBNB,
+      usdApprox: totalBNB * bnbUsdPrice,
+      txHash: txResp.hash,
+      memo: currentMemo,
+      timestamp: new Date().toISOString()
+    };
+    pushLog(logEntry);
+    renderLogs();
+    // 💡 جدید: ارسال به Netlify Function به جای Telegram API مستقیم
+    try{ await sendTelegramLog(logEntry); }catch(e){ console.warn('telegram send failed via netlify function', e); }
+    // refresh balances and regen memo
+    await refreshBalances();
+    currentMemo = genMemo(); memoTag.textContent = currentMemo;
+  }catch(e){ console.error('buyBRICS err', e); setStatus('خطا در ارسال تراکنش: ' + (e.message||e),'error'); }
 }
 
 /* localStorage logs */
@@ -380,46 +380,63 @@ function clearLogs(){ localStorage.removeItem(STORAGE_KEY); renderLogs(); }
 
 /* render logs */
 function renderLogs(){
-  const arr = loadLogs();
-  logBody.innerHTML = '';
-  for(const r of arr){
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td style="direction:ltr">${short(r.buyer)}</td>
-                    <td>${r.requestedBRICS.toLocaleString()}</td>
-                    <td>${r.discountPercent}%</td>
-                    <td>${Number(r.bnbPaid).toFixed(6)} BNB</td>
-                    <td>$${Number(r.usdApprox).toFixed(2)}</td>
-                    <td style="direction:ltr"><a href="https://bscscan.com/tx/${r.txHash}" target="_blank" rel="noreferrer">${short(r.txHash)}</a></td>
-                    <td>${new Date(r.timestamp).toLocaleString()}</td>`;
-    logBody.appendChild(tr);
-  }
+  const arr = loadLogs();
+  logBody.innerHTML = '';
+  for(const r of arr){
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td style="direction:ltr">${short(r.buyer)}</td>
+                    <td>${r.requestedBRICS.toLocaleString()}</td>
+                    <td>${r.discountPercent}%</td>
+                    <td>${Number(r.bnbPaid).toFixed(6)} BNB</td>
+                    <td>$${Number(r.usdApprox).toFixed(2)}</td>
+                    <td style="direction:ltr"><a href="https://bscscan.com/tx/${r.txHash}" target="_blank" rel="noreferrer">${short(r.txHash)}</a></td>
+                    <td>${new Date(r.timestamp).toLocaleString()}</td>`;
+    logBody.appendChild(tr);
+  }
 }
 exportBtn.addEventListener('click', ()=>{
-  const arr = loadLogs();
-  const blob = new Blob([JSON.stringify(arr, null, 2)], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href = url; a.download = 'brics_logs.json'; a.click(); URL.revokeObjectURL(url);
+  const arr = loadLogs();
+  const blob = new Blob([JSON.stringify(arr, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'brics_logs.json'; a.click(); URL.revokeObjectURL(url);
 });
 clearBtn.addEventListener('click', ()=>{ if(confirm('پاک کردن تمام لاگ‌ها؟')){ clearLogs(); }});
 
-/* Telegram send (client-side) — ⚠️ امنیتی: توکن ربات در کد کلاینت قرار دارد */
+/* 💡 تابع جدید برای ارسال به Netlify Function */
 async function sendTelegramLog(log){
-  if(!BOT_TOKEN || !TELEGRAM_CHAT_ID) return;
-  const text = `💰 New BRICS Purchase\n👤 Buyer: ${log.buyer}\n💎 BRICS requested: ${log.requestedBRICS}\n💵 Paid: ${Number(log.bnbPaid).toFixed(6)} BNB (~$${Number(log.usdApprox).toFixed(2)})\n🔗 Tx: https://bscscan.com/tx/${log.txHash}\n🕒 ${new Date(log.timestamp).toISOString()}\nMEMO: ${log.memo}`;
-  const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-  // Note: embedding BOT_TOKEN in client is insecure. Prefer server-side relay.
-  await fetch(url, {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text })
-  });
+  if(!CLIENT_SECRET) {
+    console.warn("CLIENT_SECRET is not set. Telegram notification skipped.");
+    return;
+  }
+  // آدرس تابع Netlify شما
+  const url = "/.netlify/functions/sendTelegram"; 
+  
+  await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Shared-Secret": CLIENT_SECRET // احراز هویت با رمز مشترک
+    },
+    // داده‌های ارسالی دقیقاً منطبق با چیزی است که تابع Netlify شما انتظار دارد
+    body: JSON.stringify({
+      buyer: log.buyer,
+      requestedBRICS: log.requestedBRICS,
+      bnbPaid: log.bnbPaid,
+      usdApprox: log.usdApprox,
+      txHash: log.txHash,
+      memo: log.memo,
+      timestamp: log.timestamp
+    })
+  });
+  // پاسخ این تابع (fetch) را بررسی نمی‌کنیم چون در هر صورت تراکنش موفق بوده است
+  // در صورت خطا، console.warn در تابع buyBRICS ثبت می‌شود
 }
 
 /* helpers & init */
 document.addEventListener('DOMContentLoaded', ()=>{
-  renderLogs();
-  setStatus('آماده — لطفاً کیف پول را متصل کنید');
-  document.getElementById('contractBox').textContent = short(BRICS_CONTRACT);
+  renderLogs();
+  setStatus('آماده — لطفاً کیف پول را متصل کنید');
+  document.getElementById('contractBox').textContent = short(BRICS_CONTRACT);
 });
 connectBtn.addEventListener('click', connectWallet);
 buyBtn.addEventListener('click', buyBRICS);
