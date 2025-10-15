@@ -1,176 +1,174 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Buy BRICS Token</title>
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-  <meta name="theme-color" content="#0b63ff"/>
-  <style>
-    :root{
-      --bg:#f3f6fb; --card:#ffffff; --primary:#0b63ff; --accent:#00b07a; --muted:#6b7280;
-      --glass: rgba(255,255,255,0.7);
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0; font-family: "Vazirmatn", "Arial", sans-serif; background:linear-gradient(180deg,#f6f9ff 0%,var(--bg) 100%);
-      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; padding:18px;
-      display:flex; align-items:flex-start; justify-content:center; min-height:100vh;
-    }
-    .container{width:100%;max-width:920px;margin:auto}
-    .card{
-      background:var(--card); border-radius:18px; padding:18px; box-shadow:0 12px 40px rgba(11,99,255,0.06);
-      overflow:hidden; display:flex; gap:18px; align-items:flex-start; flex-direction:column;
-    }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Buy BRICS Token</title>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <meta name="theme-color" content="#0b63ff"/>
+  <style>
+    :root{
+      --bg:#f3f6fb; --card:#ffffff; --primary:#0b63ff; --accent:#00b07a; --muted:#6b7280;
+      --glass: rgba(255,255,255,0.7);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: "Vazirmatn", "Arial", sans-serif; background:linear-gradient(180deg,#f6f9ff 0%,var(--bg) 100%);
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; padding:18px;
+      display:flex; align-items:flex-start; justify-content:center; min-height:100vh;
+      direction:ltr; /* Changed to LTR */
+    }
+    .container{width:100%;max-width:920px;margin:auto}
+    .card{
+      background:var(--card); border-radius:18px; padding:18px; box-shadow:0 12px 40px rgba(11,99,255,0.06);
+      overflow:hidden; display:flex; gap:18px; align-items:flex-start; flex-direction:column;
+    }
 
-    /* top map + logo */
-    .hero{
-      position:relative; border-radius:12px; overflow:hidden; height:160px; display:block;
-      background:linear-gradient(90deg, rgba(11,99,255,0.06), rgba(0,176,122,0.03));
-    }
-    .hero img.map{ width:100%; height:100%; object-fit:cover; filter:contrast(1.02) saturate(1.02); }
-    .logo{
-      position:absolute; left:50%; transform:translateX(-50%); top:16px; width:86px; height:86px; border-radius:50%;
-      background:linear-gradient(180deg,#fff,#f4f8ff); display:flex; align-items:center; justify-content:center;
-      border:3px solid rgba(11,99,255,0.12);
-      box-shadow:0 8px 20px rgba(11,99,255,0.08);
-    }
-    .logo img{ width:68%; height:68%; object-fit:contain; }
+    /* top map + logo */
+    .hero{
+      position:relative; border-radius:12px; overflow:hidden; height:160px; display:block;
+      background:linear-gradient(90deg, rgba(11,99,255,0.06), rgba(0,176,122,0.03));
+    }
+    .hero img.map{ width:100%; height:100%; object-fit:cover; filter:contrast(1.02) saturate(1.02); }
+    .logo{
+      position:absolute; left:50%; transform:translateX(-50%); top:16px; width:86px; height:86px; border-radius:50%;
+      background:linear-gradient(180deg,#fff,#f4f8ff); display:flex; align-items:center; justify-content:center;
+      border:3px solid rgba(11,99,255,0.12);
+      box-shadow:0 8px 20px rgba(11,99,255,0.08);
+    }
+    .logo img{ width:68%; height:68%; object-fit:contain; }
 
-    h1{color:var(--primary); font-size:22px; margin:10px 0 2px; text-align:center}
-    .sub{ text-align:center; color:var(--muted); font-weight:600; margin-bottom:6px; }
+    h1{color:var(--primary); font-size:22px; margin:10px 0 2px; text-align:center}
+    .sub{ text-align:center; color:var(--muted); font-weight:600; margin-bottom:6px; }
 
-    .contract-row{display:flex; gap:10px; align-items:center; justify-content:center; flex-wrap:wrap; margin-top:8px}
-    .contract-box{background:linear-gradient(180deg,#f7fbff,#ffffff); padding:8px 12px; border-radius:10px; border:1px solid #eef5ff; font-weight:800; direction:ltr}
-    .copy-btn{background:transparent;border:none;color:var(--primary);cursor:pointer;font-weight:800}
+    .contract-row{display:flex; gap:10px; align-items:center; justify-content:center; flex-wrap:wrap; margin-top:8px}
+    .contract-box{background:linear-gradient(180deg,#f7fbff,#ffffff); padding:8px 12px; border-radius:10px; border:1px solid #eef5ff; font-weight:800; direction:ltr}
+    .copy-btn{background:transparent;border:none;color:var(--primary);cursor:pointer;font-weight:800}
 
-    .grid{
-      width:100%; display:grid; grid-template-columns: 1fr 340px; gap:16px; margin-top:12px;
-    }
-    @media(max-width:880px){ .grid{ grid-template-columns:1fr; } }
+    .grid{
+      width:100%; display:grid; grid-template-columns: 1fr 340px; gap:16px; margin-top:12px;
+    }
+    @media(max-width:880px){ .grid{ grid-template-columns:1fr; } }
 
-    /* left column (controls) */
-    .panel{ padding:12px; border-radius:12px; background:linear-gradient(180deg,#ffffff,#fcfeff); border:1px solid rgba(11,99,255,0.04) }
-    .label{ font-weight:800; color:#0e2546; margin-bottom:6px }
-    .input-row{ display:flex; gap:10px; align-items:center; }
-    .amount-input{ flex:1; padding:12px 10px; font-size:16px; border-radius:10px; border:1px solid #e6eefb; outline:none }
-    .amount-input:focus{ box-shadow:0 6px 20px rgba(11,99,255,0.06); border-color:var(--primary) }
-    .token-tag{ min-width:96px; background:linear-gradient(90deg,#f3f7ff,#ffffff); border-radius:10px; padding:10px; text-align:center; font-weight:900; letter-spacing:1px }
+    /* left column (controls) */
+    .panel{ padding:12px; border-radius:12px; background:linear-gradient(180deg,#ffffff,#fcfeff); border:1px solid rgba(11,99,255,0.04) }
+    .label{ font-weight:800; color:#0e2546; margin-bottom:6px }
+    .input-row{ display:flex; gap:10px; align-items:center; }
+    .amount-input{ flex:1; padding:12px 10px; font-size:16px; border-radius:10px; border:1px solid #e6eefb; outline:none; direction:ltr; }
+    .amount-input:focus{ box-shadow:0 6px 20px rgba(11,99,255,0.06); border-color:var(--primary) }
+    .token-tag{ min-width:96px; background:linear-gradient(90deg,#f3f7ff,#ffffff); border-radius:10px; padding:10px; text-align:center; font-weight:900; letter-spacing:1px }
 
-    .calc-row{ display:flex; justify-content:space-between; gap:8px; margin-top:8px; color:var(--muted); font-weight:700 }
-    .memo{ margin-top:12px; padding:10px; border-radius:10px; background:linear-gradient(180deg,#f6fbff,#ffffff); border:1px solid #eef6ff; font-weight:700 }
+    .calc-row{ display:flex; justify-content:space-between; gap:8px; margin-top:8px; color:var(--muted); font-weight:700 }
+    .memo{ margin-top:12px; padding:10px; border-radius:10px; background:linear-gradient(180deg,#f6fbff,#ffffff); border:1px solid #eef6ff; font-weight:700; text-align:left; }
 
-    /* right column (wallet & buy) */
-    .wallet-card{ padding:14px; border-radius:12px; background:linear-gradient(90deg,#f8fbff,#ffffff); border:1px solid rgba(11,99,255,0.04); display:flex; flex-direction:column; gap:10px; align-items:stretch }
-    .wallet-top{ display:flex; justify-content:space-between; align-items:center; gap:8px; }
-    .wallet-addr{ font-weight:800; direction:ltr; color:#0b63ff }
-    .connect-btn{ padding:12px;border-radius:12px;border:none;background:linear-gradient(90deg,#0b63ff,#2e8bff);color:#fff;font-weight:900; cursor:pointer; box-shadow:0 8px 20px rgba(11,99,255,0.12) }
-    .connect-btn:disabled{ opacity:0.6; cursor:not-allowed }
+    /* right column (wallet & buy) */
+    .wallet-card{ padding:14px; border-radius:12px; background:linear-gradient(90deg,#f8fbff,#ffffff); border:1px solid rgba(11,99,255,0.04); display:flex; flex-direction:column; gap:10px; align-items:stretch }
+    .wallet-top{ display:flex; justify-content:space-between; align-items:center; gap:8px; }
+    .wallet-addr{ font-weight:800; direction:ltr; color:#0b63ff }
+    .connect-btn{ padding:12px;border-radius:12px;border:none;background:linear-gradient(90deg,#0b63ff,#2e8bff);color:#fff;font-weight:900; cursor:pointer; box-shadow:0 8px 20px rgba(11,99,255,0.12) }
+    .connect-btn:disabled{ opacity:0.6; cursor:not-allowed }
 
-    .balances{ display:flex; gap:8px; flex-direction:column; margin-top:6px }
-    .bal-row{ display:flex; justify-content:space-between; background:linear-gradient(180deg,#fff,#fbfeff); padding:8px 10px; border-radius:8px; border:1px solid #eef6ff; font-weight:800 }
+    .balances{ display:flex; gap:8px; flex-direction:column; margin-top:6px }
+    .bal-row{ display:flex; justify-content:space-between; background:linear-gradient(180deg,#fff,#fbfeff); padding:8px 10px; border-radius:8px; border:1px solid #eef6ff; font-weight:800 }
+    .bal-row > div:last-child { direction:ltr; }
 
-    .buy-btn{ margin-top:6px; padding:12px; border-radius:12px; border:none; cursor:pointer; font-weight:900; color:#fff; background:linear-gradient(90deg,#00b07a,#0076f3); box-shadow:0 10px 30px rgba(0,112,240,0.12) }
-    .buy-btn:disabled{ opacity:0.5; cursor:not-allowed }
+    .buy-btn{ margin-top:6px; padding:12px; border-radius:12px; border:none; cursor:pointer; font-weight:900; color:#fff; background:linear-gradient(90deg,#00b07a,#0076f3); box-shadow:0 10px 30px rgba(0,112,240,0.12) }
+    .buy-btn:disabled{ opacity:0.5; cursor:not-allowed }
 
-    .status{ margin-top:10px; min-height:20px; font-weight:800; color:var(--muted) }
+    .status{ margin-top:10px; min-height:20px; font-weight:800; color:var(--muted); text-align:left; }
 
-    .small{ font-size:13px; color:var(--muted) }
+    .small{ font-size:13px; color:var(--muted) }
 
-    .footer-note{ margin-top:14px; font-size:13px; color:#4b5563; text-align:center; }
+    .footer-note{ margin-top:14px; font-size:13px; color:#4b5563; text-align:center; }
 
-    .spinner{ display:inline-block; width:16px; height:16px; border-radius:50%; border:3px solid rgba(0,0,0,0.08); border-top-color:var(--primary); animation:spin 1s linear infinite; vertical-align:middle; margin-left:8px; visibility:hidden; }
-    .spinner.visible{ visibility:visible; }
-    @keyframes spin{ to{ transform:rotate(360deg) } }
+    .spinner{ display:inline-block; width:16px; height:16px; border-radius:50%; border:3px solid rgba(0,0,0,0.08); border-top-color:var(--primary); animation:spin 1s linear infinite; vertical-align:middle; margin-left:8px; visibility:hidden; }
+    .spinner.visible{ visibility:visible; }
+    @keyframes spin{ to{ transform:rotate(360deg) } }
 
-  </style>
+  </style>
 </head>
 <body>
-  <div class="container">
-    <div class="card" role="main" aria-labelledby="title">
-      <div class="hero">
-        <img class="map" src="brics-map.jpg" alt="BRICS map image (colored members)" />
-        <div class="logo"><img src="logobrics.png" alt="BRICS logo" /></div>
-      </div>
+  <div class="container">
+    <div class="card" role="main" aria-labelledby="title">
+      <div class="hero">
+        <img class="map" src="brics-map.jpg" alt="BRICS map image (colored members)" />
+        <div class="logo"><img src="logobrics.png" alt="BRICS logo" /></div>
+      </div>
 
-      <h1 id="title">Buy BRICS Token</h1>
-      <div class="sub">لطفا آدرس قرارداد را به MetaMask اضافه کنید تا قبل از خرید توکن را مشاهده نمایید</div>
+      <h1 id="title">Buy BRICS Token</h1>
+      <div class="sub">Please add the contract address to MetaMask to view the token before buying.</div>
 
-      <div class="contract-row">
-        <div id="contractBox" class="contract-box" title="کلیک برای کپی">0xAF20...3037</div>
-        <button id="copyContract" class="copy-btn">Copy</button>
-      </div>
+      <div class="contract-row">
+        <div id="contractBox" class="contract-box" title="Click to copy">0xAF20...3037</div>
+        <button id="copyContract" class="copy-btn">Copy</button>
+      </div>
 
-      <div class="grid">
-        <!-- LEFT: amount / memo / info -->
-        <div class="panel">
-          <div class="label">قیمت لحظه‌ای</div>
-          <div id="priceLine" class="small"><span id="priceText">در حال دریافت قیمت...</span> <span id="priceSpinner" class="spinner"></span></div>
+      <div class="grid">
+                <div class="panel">
+          <div class="label">Current Price</div>
+          <div id="priceLine" class="small"><span id="priceText">Fetching price...</span> <span id="priceSpinner" class="spinner"></span></div>
 
-          <div class="label" style="margin-top:12px">Enter amount of BRICS to buy</div>
-          <div class="input-row" style="margin-top:8px">
-            <input id="bricsAmount" class="amount-input" type="number" min="1" placeholder="مثال: 1000" />
-            <div class="token-tag">BRICS</div>
-          </div>
+          <div class="label" style="margin-top:12px">Enter amount of BRICS to buy</div>
+          <div class="input-row" style="margin-top:8px">
+            <input id="bricsAmount" class="amount-input" type="number" min="1" placeholder="e.g. 1000" />
+            <div class="token-tag">BRICS</div>
+          </div>
 
-          <div class="calc-row" style="margin-top:10px">
-            <div id="usdPreview">USD: $0.00</div>
-            <div id="discountPreview">تخفیف: 0%</div>
-          </div>
+          <div class="calc-row" style="margin-top:10px">
+            <div id="usdPreview">USD: $0.00</div>
+            <div id="discountPreview">Discount: 0%</div>
+          </div>
 
-          <div class="memo" style="margin-top:12px">
-            <div><strong>MEMO TAG :</strong> <span id="memoTag">—</span></div>
-            <div class="small" style="margin-top:6px">این MEMO را هنگام انتقال BNB وارد کنید تا مینی‌اپلیکیشن تراکنش را به‌درستی پردازش کند.</div>
-          </div>
+          <div class="memo" style="margin-top:12px">
+            <div><strong>MEMO TAG:</strong> <span id="memoTag">—</span></div>
+            <div class="small" style="margin-top:6px">Include this MEMO when sending BNB to ensure the transaction is processed correctly.</div>
+          </div>
 
-          <div class="label" style="margin-top:12px">اطلاعات بیشتر</div>
-          <div class="small" style="margin-top:6px; line-height:1.45">
-            پرداخت با شبکه: <strong>BNB Smart Chain (BEP20)</strong> — آدرس قرارداد: <code style="direction:ltr">0xAF2009350F6ECBE22c23A505a590239c7aaA3037</code>.
-            قیمت از PancakeSwap گرفته می‌شود و معادل دلاری از API عمومی Binance.
-          </div>
-        </div>
+          <div class="label" style="margin-top:12px">More Information</div>
+          <div class="small" style="margin-top:6px; line-height:1.45">
+            Payment Network: <strong>BNB Smart Chain (BEP20)</strong> — Contract Address: <code style="direction:ltr">0xAF2009350F6ECBE22c23A505a590239c7aaA3037</code>.
+            BRICS price is fixed at **$3.11**. The BNB equivalent is calculated based on the live BNB/USD market rate.
+          </div>
+        </div>
 
-        <!-- RIGHT: wallet / buy -->
-        <div class="wallet-card">
-          <div class="wallet-top">
-            <div>
-              <div class="small">My Wallet</div>
-              <div class="wallet-addr" id="walletAddr">—</div>
-            </div>
-            <div style="text-align:left">
-              <div class="small">Owner (receive BNB)</div>
-              <div style="direction:ltr; font-weight:800; color:#0b63ff">0x67594E1D30Ce...486cf</div>
-            </div>
-          </div>
+                <div class="wallet-card">
+          <div class="wallet-top">
+            <div>
+              <div class="small">My Wallet</div>
+              <div class="wallet-addr" id="walletAddr">—</div>
+            </div>
+            <div style="text-align:left">
+              <div class="small">Owner (receive BNB)</div>
+              <div style="direction:ltr; font-weight:800; color:#0b63ff">0x67594E1D30Ce...486cf</div>
+            </div>
+          </div>
 
-          <div id="balances" style="display:none" class="balances">
-            <div class="bal-row"><div>BNB</div><div id="bnbBal">0 BNB</div></div>
-            <div class="bal-row"><div>BRICS</div><div id="bricsBal">0 BRICS</div></div>
-          </div>
+          <div id="balances" style="display:none" class="balances">
+            <div class="bal-row"><div>BNB</div><div id="bnbBal">0 BNB</div></div>
+            <div class="bal-row"><div>BRICS</div><div id="bricsBal">0 BRICS</div></div>
+          </div>
 
-          <button id="connectBtn" class="connect-btn">Connect MetaMask</button>
+          <button id="connectBtn" class="connect-btn">Connect Wallet</button>
 
-          <button id="buyBtn" class="buy-btn" disabled>Buy BRICS</button>
+          <button id="buyBtn" class="buy-btn" disabled>Buy BRICS</button>
 
-          <div id="status" class="status">وضعیت: آماده</div>
-          <div class="footer-note">Accepted: <strong>BNB (BEP20)</strong> • Pair: PancakeSwap</div>
-        </div>
-      </div>
+          <div id="status" class="status">Status: Ready</div>
+          <div class="footer-note">Accepted: <strong>BNB (BEP20)</strong> • Pair: PancakeSwap</div>
+        </div>
+      </div>
 
-    </div>
-  </div>
+    </div>
+  </div>
 
 <script>
 /* ================== CONFIG ================== */
 const BRICS_CONTRACT = "0xAF2009350F6ECBE22c23A505a590239c7aaA3037".toLowerCase();
-const PANCAKE_PAIR = "0xAF2009350F6ECBE22c23A505a590239c7aaA3037".toLowerCase(); // pair you provided
 const OWNER_ADDRESS = "0x67594E1D30Cec8a5f906C8278A1BC694641486cf".toLowerCase();
 const CHAIN_ID_BSC = 56;
-const WBNB = "0xBB4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c".toLowerCase();
+const BRICS_USD_PRICE = 3.11; // 💡 FIXED PRICE: 3.11 USD
 /* ABIs */
-const PAIR_ABI = ["function getReserves() view returns (uint112,uint112,uint32)","function token0() view returns (address)","function token1() view returns (address)"];
 const ERC20_ABI = ["function balanceOf(address) view returns (uint256)","function decimals() view returns (uint8)"];
-const BRICS_ABI = ["function buyWithBNB() payable"]; // expected buy entrypoint; change if different
+const BRICS_ABI = ["function buyWithBNB() payable"];
 /* ============================================ */
 
 const contractBox = document.getElementById('contractBox');
@@ -198,8 +196,8 @@ function setStatus(msg, type=''){ statusEl.textContent = msg; statusEl.className
 
 /* copy contract */
 copyContract.addEventListener('click', async ()=>{
-  try{ await navigator.clipboard.writeText(BRICS_CONTRACT); setStatus('آدرس قرارداد کپی شد ✅'); }
-  catch(e){ setStatus('کپی نشد — لطفاً دستی کپی کنید'); console.error(e); }
+  try{ await navigator.clipboard.writeText(BRICS_CONTRACT); setStatus('Contract address copied successfully ✅'); }
+  catch(e){ setStatus('Copy failed — please copy manually', 'error'); console.error(e); }
 });
 contractBox.addEventListener('click', ()=> copyContract.click());
 
@@ -208,87 +206,84 @@ let currentMemo = genMemo();
 memoTag.textContent = currentMemo;
 function genMemo(){ return Math.random().toString(36).slice(2,10).toUpperCase(); }
 
-/* Price fetch (pair reserves -> BRICS price in BNB) */
+/* Price fetch (Fixed BRICS Price, Dynamic BNB Price) */
 let providerRpc = new ethers.providers.JsonRpcProvider("https://bsc-dataseed.binance.org/");
-let priceScaled = null; // BigNumber, scaled 1e18 => BRICS price in BNB
-let bricsPriceBNB = 0;
-let bnbUsdPrice = 0;
-
-async function fetchPairPrice(){
-  try{
-    const pair = new ethers.Contract(PANCAKE_PAIR, PAIR_ABI, providerRpc);
-    const [t0,t1] = await Promise.all([pair.token0(), pair.token1()]);
-    const reserves = await pair.getReserves();
-    let reserveWBNB, reserveBRICS;
-    if(t0.toLowerCase() === WBNB){ reserveWBNB = reserves[0]; reserveBRICS = reserves[1]; }
-    else if(t1.toLowerCase() === WBNB){ reserveWBNB = reserves[1]; reserveBRICS = reserves[0]; }
-    else throw new Error("WBNB not in pair");
-    const scaled = reserveWBNB.mul(ethers.constants.WeiPerEther).div(reserveBRICS);
-    priceScaled = scaled;
-    bricsPriceBNB = parseFloat(ethers.utils.formatEther(priceScaled));
-    return bricsPriceBNB;
-  }catch(e){
-    console.error("fetchPairPrice err", e);
-    priceScaled = null;
-    bricsPriceBNB = 0;
-    throw e;
-  }
-}
+let bnbUsdPrice = 0; // Dynamic BNB price
+let bricsPriceBNB = 0; // Calculated BRICS price in BNB based on $3.11
+let bricsDecimals = 18; // Default, will try to fetch
 
 async function fetchBnbUsd(){
-  try{
-    const res = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT");
-    const j = await res.json();
-    bnbUsdPrice = parseFloat(j.price);
-    return bnbUsdPrice;
-  }catch(e){
-    console.error("fetchBnbUsd err", e);
-    bnbUsdPrice = 0;
-    throw e;
-  }
+  try{
+    const res = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT");
+    const j = await res.json();
+    bnbUsdPrice = parseFloat(j.price);
+    
+    // 💡 CALCULATE FIXED BRICS PRICE IN BNB
+    if (bnbUsdPrice > 0) {
+      bricsPriceBNB = BRICS_USD_PRICE / bnbUsdPrice;
+      priceText.textContent = `1 BRICS = $${BRICS_USD_PRICE.toFixed(2)} (≈ ${bricsPriceBNB.toFixed(6)} BNB)`;
+    } else {
+      priceText.textContent = `1 BRICS = $${BRICS_USD_PRICE.toFixed(2)} (BNB Price Unavailable)`;
+    }
+    
+    return bnbUsdPrice;
+  }catch(e){ 
+    console.error("fetchBnbUsd failed", e); 
+    bnbUsdPrice = 0; 
+    priceText.textContent = `1 BRICS = $${BRICS_USD_PRICE.toFixed(2)} (Error fetching BNB price)`;
+    throw e; 
+  }
 }
 
 async function updatePrices(){
-  priceSpinner.classList.add('visible');
-  try{
-    await Promise.allSettled([fetchPairPrice(), fetchBnbUsd()]);
-    if(bricsPriceBNB && bnbUsdPrice){
-      priceText.textContent = `یک BRICS ≈ ${bricsPriceBNB.toFixed(8)} BNB (~$${(bricsPriceBNB*bnbUsdPrice).toFixed(4)})`;
-    } else {
-      priceText.textContent = 'قیمت لحظه‌ای ناموجود';
-    }
-  }catch(e){
-    priceText.textContent = 'قیمت لحظه‌ای ناموجود';
-  }finally{
-    priceSpinner.classList.remove('visible');
-    updateCalc();
-  }
+  priceSpinner.classList.add('visible');
+  await fetchBnbUsd();
+  priceSpinner.classList.remove('visible');
+  updateCalc();
+  
+  // Attempt to fetch decimals only once
+  if (providerRpc && bricsDecimals === 18) {
+    try {
+      const token = new ethers.Contract(BRICS_CONTRACT, ERC20_ABI, providerRpc);
+      bricsDecimals = await token.decimals();
+    } catch (e) {
+      console.warn("Failed to fetch token decimals, assuming 18.");
+    }
+  }
 }
 updatePrices();
-setInterval(updatePrices, 10000);
+setInterval(updatePrices, 15000); // Update every 15 seconds
 
-/* discount */
+/* discount: linear mapping 100 -> 5% , 1,000,000 -> 50% */
 function calcDiscount(a){
-  const n = Number(a);
-  if(!n || n < 100) return 0;
-  if(n >= 1000000) return 50;
-  const r = (n - 100) / (1000000 - 100);
-  return Math.round(r * 50 * 100) / 100;
+  const n = Number(a);
+  if(!n || n < 100) return 0;
+  if(n >= 1000000) return 50;
+  const r = (n - 100) / (1000000 - 100);
+  return Math.round((5 + r * 45) * 100) / 100; // 5% minimum
 }
 
 /* update calculation preview */
 function updateCalc(){
-  const amt = Number(bricsAmount.value);
-  const disc = calcDiscount(amt);
-  discountPreview.textContent = `تخفیف: ${disc}%`;
-  if(!amt || !bricsPriceBNB || !bnbUsdPrice){ usdPreview.textContent = 'USD: $0.00'; }
-  else {
-    const after = amt * (1 - disc/100);
-    const totalBNB = after * bricsPriceBNB;
-    const totalUSD = totalBNB * bnbUsdPrice;
-    usdPreview.textContent = `USD: $${totalUSD.toFixed(2)}`;
-  }
-  updateBuyState();
+  const amt = Number(bricsAmount.value);
+  const disc = calcDiscount(amt);
+  discountPreview.textContent = `Discount: ${disc.toFixed(1)}%`;
+  
+  if(!amt || !bricsPriceBNB || !bnbUsdPrice){ 
+    usdPreview.textContent = 'USD: $0.00'; 
+  } else {
+    // Calculate total USD based on fixed price and discount
+    const totalUSD = amt * BRICS_USD_PRICE * (1 - disc/100); 
+    
+    usdPreview.textContent = `USD: $${totalUSD.toFixed(2)}`;
+    
+    // Total BNB needed
+    const totalBNB = totalUSD / bnbUsdPrice;
+    
+    // Update the BNB balance preview with the amount needed
+    bnbBal.textContent = `${totalBNB.toFixed(6)} BNB ($${totalUSD.toFixed(2)})`;
+  }
+  updateBuyState();
 }
 bricsAmount.addEventListener('input', updateCalc);
 
@@ -296,104 +291,104 @@ bricsAmount.addEventListener('input', updateCalc);
 let provider = null, signer = null, user = null;
 
 async function connectWallet(){
-  if(window.ethereum){
-    provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-    try{
-      const network = await provider.getNetwork();
-      if(network.chainId !== CHAIN_ID_BSC){
-        try{
-          await window.ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: ethers.utils.hexValue(CHAIN_ID_BSC) }] });
-        }catch(switchErr){
-          console.warn("switch chain failed", switchErr);
-        }
-      }
-      await provider.send("eth_requestAccounts", []);
-      signer = provider.getSigner();
-      user = await signer.getAddress();
-      walletAddr.textContent = short(user);
-      connectBtn.textContent = 'Connected';
-      connectBtn.disabled = true;
-      setStatus('کیف پول متصل شد ✅');
-      await refreshBalances();
-      updateBuyState();
-      // listen for account change
-      if(window.ethereum && window.ethereum.on){
-        window.ethereum.on('accountsChanged', (accounts) => { if(accounts && accounts.length) { user = accounts[0]; walletAddr.textContent = short(user); refreshBalances(); } else { user = null; walletAddr.textContent = '—'; balancesDiv.style.display = 'none'; connectBtn.disabled = false; connectBtn.textContent = 'Connect MetaMask'; setStatus('حساب جدا شد'); }});
-        window.ethereum.on('chainChanged', (chainId)=>{ setTimeout(()=>location.reload(),500) });
-      }
-    }catch(e){
-      console.error(e);
-      setStatus('اتصال ناموفق: '+(e.message||e), 'error');
-    }
-  } else {
-    // no injected provider
-    if(isMobile()){
-      // deep link to MetaMask mobile to open current dapp
-      const href = window.location.href.replace(/^https?:\/\//,'');
-      const link = `https://metamask.app.link/dapp/${href}`;
-      setStatus('متامسک نصب نیست — تلاش برای باز کردن MetaMask mobile ...');
-      window.location.href = link;
-    } else {
-      setStatus('MetaMask پیدا نشد — لطفاً افزونه MetaMask را نصب کنید', 'error');
-      window.open('https://metamask.io/download.html', '_blank');
-    }
-  }
+  if(window.ethereum){
+    // DESKTOP (Web3/Injected Provider)
+    provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    setStatus('Connecting to wallet...');
+    try{
+      const network = await provider.getNetwork();
+      if(network.chainId !== CHAIN_ID_BSC){
+        try{
+          await window.ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: ethers.utils.hexValue(CHAIN_ID_BSC) }] });
+        }catch(switchErr){
+          console.warn("switch chain failed", switchErr);
+          setStatus('Please manually switch network to BNB Smart Chain (BSC)','error');
+        }
+      }
+      await provider.send("eth_requestAccounts", []);
+      signer = provider.getSigner();
+      user = await signer.getAddress();
+      walletAddr.textContent = short(user);
+      connectBtn.textContent = `Connected: ${short(user)}`;
+      connectBtn.disabled = true;
+      setStatus('Wallet connected successfully ✅');
+      await refreshBalances();
+      updateBuyState();
+    }catch(e){
+      console.error(e);
+      setStatus('Connection failed: '+(e.message||e), 'error');
+    }
+  } else {
+    // MOBILE/NO PROVIDER
+    if(isMobile()){
+      // DEEP LINK to MetaMask mobile
+      const href = window.location.href.replace(/^https?:\/\//,'');
+      const link = `https://metamask.app.link/dapp/${href}`;
+      setStatus('MetaMask not found — Attempting to open MetaMask mobile...');
+      window.location.href = link;
+    } else {
+      // DESKTOP NO PROVIDER
+      setStatus('MetaMask extension not found — Please install it to connect.', 'error');
+      window.open('https://metamask.io/download.html', '_blank');
+    }
+  }
 }
 
 async function refreshBalances(){
-  if(!provider || !user) return;
-  try{
-    const rawBnb = await provider.getBalance(user);
-    const bnb = parseFloat(ethers.utils.formatEther(rawBnb));
-    bnbBal.textContent = `${bnb.toFixed(6)} BNB (~$${(bnb*bnbUsdPrice).toFixed(2)})`;
+  if(!provider || !user || bnbUsdPrice === 0) return;
+  try{
+    const rawBnb = await provider.getBalance(user);
+    const bnb = parseFloat(ethers.utils.formatEther(rawBnb));
+    bnbBal.textContent = `${bnb.toFixed(6)} BNB (~$${(bnb*bnbUsdPrice).toFixed(2)})`;
 
-    const token = new ethers.Contract(BRICS_CONTRACT, ERC20_ABI, provider);
-    let decimals = 18;
-    try{ decimals = await token.decimals(); }catch(e){ decimals = 18; }
-    const rawTok = await token.balanceOf(user);
-    const tok = parseFloat(ethers.utils.formatUnits(rawTok, decimals));
-    bricsBal.textContent = `${tok.toFixed(4)} BRICS (~$${(tok * bricsPriceBNB * bnbUsdPrice).toFixed(2)})`;
+    const token = new ethers.Contract(BRICS_CONTRACT, ERC20_ABI, provider);
+    const rawTok = await token.balanceOf(user);
+    const tok = parseFloat(ethers.utils.formatUnits(rawTok, bricsDecimals));
+    // Value calculation uses fixed price
+    const tokUsdValue = tok * BRICS_USD_PRICE;
+    bricsBal.textContent = `${tok.toFixed(4)} BRICS (~$${tokUsdValue.toFixed(2)})`;
 
-    balancesDiv.style.display = 'flex';
-  }catch(e){
-    console.error('refreshBalances err', e);
-  }
+    balancesDiv.style.display = 'flex';
+  }catch(e){
+    console.error('refreshBalances error', e);
+    setStatus('Failed to fetch balances.', 'error');
+  }
 }
 
 /* buy flow */
 function updateBuyState(){
-  const amt = Number(bricsAmount.value);
-  buyBtn.disabled = !(signer && amt > 0 && bricsPriceBNB && bnbUsdPrice);
+  const amt = Number(bricsAmount.value);
+  buyBtn.disabled = !(signer && amt > 0 && bricsPriceBNB && bnbUsdPrice);
 }
 
 async function buyAction(){
-  if(!signer){ setStatus('ابتدا کیف پول خود را متصل کنید', 'error'); return; }
-  const amt = Number(bricsAmount.value);
-  if(!amt || amt <= 0){ setStatus('مقدار BRICS معتبر وارد کنید', 'error'); return; }
-  const disc = calcDiscount(amt);
-  const after = amt * (1 - disc/100);
-  const totalBNB = after * bricsPriceBNB;
-  setStatus('در حال آماده‌سازی تراکنش برای ارسال به قرارداد ...');
-  try{
-    const contract = new ethers.Contract(BRICS_CONTRACT, BRICS_ABI, signer);
-    // convert totalBNB to wei
-    const valueWei = ethers.utils.parseUnits(totalBNB.toFixed(18), 'ether');
-    // optionally attach MEMO via data or event — here we rely on on-chain function; MEMO is for off-chain matching
-    const tx = await contract.buyWithBNB({ value: valueWei });
-    setStatus('تراکنش ارسال شد: ' + short(tx.hash));
-    await tx.wait();
-    setStatus('✅ تراکنش موفق — BRICS برای شما ارسال شد. Tx: ' + tx.hash);
-    // refresh balances
-    await refreshBalances();
-    // generate new memo
-    currentMemo = genMemo();
-    memoTag.textContent = currentMemo;
-    // optional: POST to backend logging (commented out — replace URL if you have backend)
-    // await fetch('https://your-server.example.com/log', {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({wallet:user,brics:amt,totalBNB,discount:disc,tx:tx.hash,memo:currentMemo,timestamp:new Date().toISOString()})});
-  }catch(e){
-    console.error('buy err', e);
-    setStatus('خطا در ارسال تراکنش: ' + (e.message || e), 'error');
-  }
+  if(!signer){ setStatus('Please connect your wallet first', 'error'); return; }
+  const amt = Number(bricsAmount.value);
+  if(!amt || amt <= 0){ setStatus('Enter a valid BRICS amount', 'error'); return; }
+  
+  const discount = calcDiscount(amt);
+  const totalBNB = amt * bricsPriceBNB * (1 - discount/100);
+  setStatus('Preparing transaction to send to contract...');
+  
+  try{
+    const contract = new ethers.Contract(BRICS_CONTRACT, BRICS_ABI, signer);
+    // convert totalBNB to wei
+    const valueWei = ethers.utils.parseUnits(totalBNB.toFixed(18), 'ether');
+    
+    // Call the buy function
+    const tx = await contract.buyWithBNB({ value: valueWei });
+    setStatus('Transaction sent: ' + short(tx.hash));
+    await tx.wait();
+    setStatus('✅ Transaction successful — BRICS sent to your wallet. Tx: ' + short(tx.hash));
+    
+    // generate new memo and refresh balances
+    currentMemo = genMemo(); 
+    memoTag.textContent = currentMemo;
+    await refreshBalances();
+  }catch(e){
+    console.error('buy err', e);
+    setStatus('Error sending transaction: ' + (e.message || e), 'error');
+  }
 }
 
 /* events */
@@ -401,19 +396,10 @@ connectBtn.addEventListener('click', connectWallet);
 buyBtn.addEventListener('click', buyAction);
 bricsAmount.addEventListener('input', updateCalc);
 
-/* auto update preview */
-setInterval(updateCalc, 900);
-
-/* helper: show owner and contract short in UI */
-document.addEventListener('DOMContentLoaded', ()=>{
-  // show owners / contract display
-  const el = document.getElementById('contractBox');
-  el.textContent = short(BRICS_CONTRACT);
-  // show owner short already in DOM
-});
-
 /* initial UI */
-setStatus('آماده — لطفا کیف پول را متصل کنید');
+document.addEventListener('DOMContentLoaded', ()=>{
+  setStatus('Ready — Please connect your wallet');
+});
 </script>
 </body>
 </html>
