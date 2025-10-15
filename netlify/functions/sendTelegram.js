@@ -1,54 +1,54 @@
 // netlify/functions/sendTelegram.js
 const fetch = require('node-fetch');
 
-const 8279712354:AAGhJz8Vg1hD2DCiu2jAcxc3Y26p7LLt06I = (token)=>`https://api.telegram.org/bot${token}/sendMessage`;
-
-exports.handler = async (event) => {
+exports.handler = async function(event, context) {
   try {
     if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
 
-    // احراز ساده با header امن
-    const headers = event.headers || {};
-    const secretHeader = headers['x-shared-secret'] || headers['X-Shared-Secret'];
-    const expected = process.env.SHARED_SECRET;
-    if (!expected || secretHeader !== expected) {
-      return { statusCode: 401, body: 'Unauthorized' };
-    }
-
     const body = JSON.parse(event.body || '{}');
+    // Replace the BOT_TOKEN value below with your real bot token BEFORE deploy
+    const BOT_TOKEN = "8279712354:AAGhJz8Vg1hD2DCiu2jAcxc3Y26p7LLt06I";
+    const CHANNEL_ID = body.channel_id || "-1003031571306";
 
-    // مقدارهای مورد نیاز: buyer, requestedBRICS, bnbPaid, usdApprox, txHash, memo, timestamp
-    const { buyer, requestedBRICS, bnbPaid, usdApprox, txHash, memo, timestamp } = body;
-    if (!buyer || !txHash) return { statusCode: 400, body: 'Missing fields' };
+    const {
+      buyer,
+      requestedBRICS,
+      discountPercent,
+      bnbPaid,
+      usdApprox,
+      txHash,
+      memo,
+      timestamp
+    } = body;
 
-    const token = process.env.8279712354:AAGhJz8Vg1hD2DCiu2jAcxc3Y26p7LLt06I;
-    const chatId = process.env.@MyBricsLogbot;
-    if (!token || !chatId) return { statusCode: 500, body: 'Server misconfigured' };
-
-    const text =
-`💰 New BRICS Purchase
+    const text = `💰 New BRICS Purchase
 👤 Buyer: ${buyer}
 💎 BRICS requested: ${requestedBRICS}
+🏷 Discount: ${discountPercent}%
 💵 Paid: ${Number(bnbPaid).toFixed(6)} BNB (~$${Number(usdApprox).toFixed(2)})
 🔗 Tx: https://bscscan.com/tx/${txHash}
-🕒 ${timestamp}
+🕒 ${timestamp || new Date().toISOString()}
 MEMO: ${memo}`;
 
-    const res = await fetch(TELEGRAM_API(token), {
+    const tgRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: chatId, text, disable_web_page_preview: true })
+      body: JSON.stringify({
+        chat_id: CHANNEL_ID,
+        text,
+        disable_web_page_preview: true
+      })
     });
 
-    if (!res.ok) {
-      const errText = await res.text();
-      console.error('Telegram send failed', res.status, errText);
+    if (!tgRes.ok) {
+      const errText = await tgRes.text();
+      console.error('telegram error', errText);
       return { statusCode: 502, body: 'Telegram API error' };
     }
 
-    return { statusCode: 200, body: 'OK' };
+    return { statusCode: 200, body: JSON.stringify({ ok: true }) };
   } catch (err) {
     console.error(err);
-    return { statusCode: 500, body: 'Internal Error' };
+    return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
   }
 };
