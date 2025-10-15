@@ -1,157 +1,206 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>BRICS Wallet Connect</title>
+<title>Connect Wallet - Buy BRICS Token</title>
 
-<!-- کتابخانه‌ها -->
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
 
-<!-- فونت و استایل -->
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600&display=swap" rel="stylesheet">
 <style>
+/* 1. Spacing Minimized */
 body {
-  background: radial-gradient(circle at top, #0e1a26 0%, #071017 100%);
-  font-family: 'Vazirmatn', sans-serif;
-  color: white;
-  text-align: center;
-  padding: 50px 20px;
-  direction: rtl;
+  background: radial-gradient(circle at top, #0e1a26 0%, #071017 100%);
+  font-family: 'Vazirmatn', sans-serif;
+  color: white;
+  text-align: center;
+  padding: 20px 10px; /* Reduced padding */
+  direction: ltr; /* Changed to LTR */
 }
 
 .container {
-  max-width: 400px;
-  margin: 0 auto;
-  background: rgba(255,255,255,0.05);
-  padding: 30px;
-  border-radius: 20px;
-  box-shadow: 0 0 25px rgba(0,255,180,0.15);
+  max-width: 400px;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.05);
+  padding: 20px; /* Reduced padding */
+  border-radius: 15px; /* Reduced border-radius */
+  box-shadow: 0 0 15px rgba(0,255,180,0.15);
 }
 
 h1 {
-  font-size: 22px;
-  margin-bottom: 25px;
-  color: #00c39a;
+  font-size: 20px; /* Reduced font size */
+  margin-bottom: 10px; /* Reduced margin */
+  color: #00c39a;
+}
+
+/* New Price Info Style */
+.price-info {
+  background: rgba(0, 195, 154, 0.1);
+  padding: 8px 10px;
+  margin-bottom: 15px; /* Reduced margin */
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.price-info span {
+  color: #00ffc8;
+  font-weight: 800;
 }
 
 .wallet-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f6851b;
-  color: white;
-  border: none;
-  border-radius: 12px;
-  padding: 14px 22px;
-  font-size: 17px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f6851b;
+  color: white;
+  border: none;
+  border-radius: 10px; /* Reduced border-radius */
+  padding: 12px 20px; /* Reduced padding */
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  margin-bottom: 5px; /* Reduced margin */
 }
 .wallet-btn:hover {
-  background: #ff8c2a;
-  transform: scale(1.02);
+  background: #ff8c2a;
+  transform: scale(1.02);
 }
 .wallet-btn img {
-  width: 28px;
-  height: 28px;
-  margin-left: 10px;
-  border-radius: 5px;
+  width: 24px; /* Reduced image size */
+  height: 24px;
+  margin-right: 8px; /* Changed margin-left to margin-right for LTR */
+  border-radius: 5px;
 }
 .address-box {
-  margin-top: 20px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 10px;
-  padding: 10px;
-  word-wrap: break-word;
-  font-size: 14px;
-  display: none;
+  margin-top: 10px; /* Reduced margin */
+  background: rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 8px; /* Reduced padding */
+  word-wrap: break-word;
+  font-size: 13px;
+  display: none;
+  text-align: left;
 }
 .fade-in {
-  animation: fadeIn 1s forwards;
+  animation: fadeIn 1s forwards;
 }
 @keyframes fadeIn {
-  from {opacity: 0; transform: translateY(10px);}
-  to {opacity: 1; transform: translateY(0); opacity: 1;}
+  from {opacity: 0; transform: translateY(10px);}
+  to {opacity: 1; transform: translateY(0); opacity: 1;}
 }
 .footer {
-  margin-top: 30px;
-  font-size: 13px;
-  color: #9adbd1;
-  opacity: 0.8;
+  margin-top: 15px; /* Reduced margin */
+  font-size: 12px;
+  color: #9adbd1;
+  opacity: 0.8;
 }
 </style>
 </head>
 <body>
-  <div class="container">
-    <h1>اتصال کیف پول برای BRICS</h1>
-    <button id="connectBtn" class="wallet-btn">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask">
-      اتصال کیف پول
-    </button>
-    <div id="addressBox" class="address-box fade-in"></div>
-    <div class="footer">BRICS Blockchain © 2025</div>
-  </div>
+  <div class="container">
+    <h1>BRICS Token Purchase Portal</h1>
+    
+        <div id="priceInfo" class="price-info">
+      BRICS Price: <span>$3.11</span> (≈ <span id="bnbPrice">Loading...</span> BNB)
+    </div>
+
+    <button id="connectBtn" class="wallet-btn">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask">
+      Connect Wallet
+    </button>
+    <div id="addressBox" class="address-box fade-in"></div>
+    <div class="footer">BRICS Blockchain © 2025</div>
+  </div>
 
 <script>
+// 2. Static Price Configuration
+const BRICS_USD_PRICE = 3.11;
+const BNB_PRICE_ELEMENT = document.getElementById('bnbPrice');
+
+// Function to fetch current BNB/USD price and calculate BRICS price in BNB
+async function updateBRICSPriceInBNB() {
+  try {
+    // Fetch BNB/USDT price from Binance API
+    const res = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT");
+    const data = await res.json();
+    const bnbUsdPrice = parseFloat(data.price); // e.g., 600.50
+
+    if (bnbUsdPrice > 0) {
+      // Calculate BRICS price in BNB: BRICS_USD_PRICE / BNB_USD_PRICE
+      const bricsBnbPrice = BRICS_USD_PRICE / bnbUsdPrice;
+      BNB_PRICE_ELEMENT.textContent = `${bricsBnbPrice.toFixed(6)}`;
+    } else {
+      BNB_PRICE_ELEMENT.textContent = 'N/A';
+    }
+  } catch (e) {
+    console.error("Could not fetch BNB price:", e);
+    BNB_PRICE_ELEMENT.textContent = 'Error';
+  }
+}
+updateBRICSPriceInBNB();
+// Update every 10 seconds
+setInterval(updateBRICSPriceInBNB, 10000);
+
+
 async function connectWallet() {
-  const btn = document.getElementById("connectBtn");
-  const box = document.getElementById("addressBox");
+  const btn = document.getElementById("connectBtn");
+  const box = document.getElementById("addressBox");
 
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  const isTelegram = window.Telegram && window.Telegram.WebApp;
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  const isTelegram = window.Telegram && window.Telegram.WebApp;
 
-  // ✅ MetaMask یا Extension
-  if (window.ethereum) {
-    try {
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      const address = accounts[0];
-      box.style.display = "block";
-      box.innerText = "آدرس متصل: " + address;
-      btn.innerText = "✅ متصل شد";
-      btn.style.background = "#00c39a";
-    } catch (err) {
-      alert("اتصال لغو شد!");
-    }
-    return;
-  }
+  // ✅ MetaMask or Extension
+  if (window.ethereum) {
+    try {
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const address = accounts[0];
+      box.style.display = "block";
+      box.innerText = "Connected Address: " + address; // English Text
+      btn.innerHTML = '<img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask"> ✅ Connected'; // English Text
+      btn.style.background = "#00c39a";
+    } catch (err) {
+      alert("Connection rejected!"); // English Text
+    }
+    return;
+  }
 
-  // ✅ Telegram Mini App
-  if (isTelegram) {
-    alert("برای اتصال کیف پول، لطفاً صفحه را در مرورگر (Chrome یا MetaMask App) باز کنید.");
-    const dappUrl = encodeURIComponent(window.location.href);
-    window.open(https://metamask.app.link/dapp/${dappUrl}, "_blank");
-    return;
-  }
+  // ✅ Telegram Mini App
+  if (isTelegram) {
+    alert("To connect your wallet, please open this page in a standard browser (Chrome or MetaMask App)."); // English Text
+    // The redirection logic for Telegram Mini App is complex and often fails. 
+    // We just alert the user to open it externally.
+    return;
+  }
 
-  // ✅ موبایل بدون window.ethereum → باز کردن در متامسک
-  if (isMobile && !window.ethereum) {
-    const dappUrl = encodeURIComponent(window.location.href);
-    window.open(https://metamask.app.link/dapp/${dappUrl}, "_blank");
-    return;
-  }
+  // ✅ Mobile without window.ethereum → Redirect to MetaMask App
+  if (isMobile && !window.ethereum) {
+    const dappUrl = encodeURIComponent(window.location.href);
+    window.open(`https://metamask.app.link/dapp/${dappUrl}`, "_blank");
+    return;
+  }
 
-  // ✅ دسکتاپ بدون MetaMask → WalletConnect
-  try {
-    const provider = new WalletConnectProvider.default({
-      rpc: {56: "https://bsc-dataseed.binance.org/"},
-      chainId: 56
-    });
-    await provider.enable();
-    const web3Provider = new ethers.providers.Web3Provider(provider);
-    const signer = web3Provider.getSigner();
-    const address = await signer.getAddress();
+  // ✅ Desktop without MetaMask → WalletConnect
+  try {
+    const provider = new WalletConnectProvider.default({
+      rpc: {56: "https://bsc-dataseed.binance.org/"},
+      chainId: 56
+    });
+    await provider.enable();
+    const web3Provider = new ethers.providers.Web3Provider(provider);
+    const signer = web3Provider.getSigner();
+    const address = await signer.getAddress();
 
-    box.style.display = "block";
-    box.innerText = "آدرس متصل: " + address;
-    btn.innerText = "✅ متصل شد (WalletConnect)";
-    btn.style.background = "#00c39a";
-  } catch (err) {
-    alert("اتصال ممکن نشد!");
-  }
+    box.style.display = "block";
+    box.innerText = "Connected Address: " + address; // English Text
+    btn.innerHTML = '<img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask"> ✅ Connected (WalletConnect)'; // English Text
+    btn.style.background = "#00c39a";
+  } catch (err) {
+    alert("Connection failed!"); // English Text
+  }
 }
 
 document.getElementById("connectBtn").addEventListener("click", connectWallet);
