@@ -149,12 +149,12 @@ contractBox.addEventListener('click', ()=> copyContract.click());
 function calcDiscount(amount){
   const a = Number(amount);
   if(!a) return 0;
-  if(a>=1000000) return 10; // 10% برای بیشترین
-  if(a>=500000) return 15;
-  if(a>=100000) return 20;
-  if(a>=10000) return 30;
-  if(a>=1000) return 40;
-  return 50; // کمترین مقدار
+  if(a>=1000000) return 50; // 50% برای بیشترین
+  if(a>=500000) return 40;
+  if(a>=100000) return 30;
+  if(a>=10000) return 20;
+  if(a>=1000) return 15;
+  return 10; // کمترین مقدار
 }
 
 function updateCalc(){
