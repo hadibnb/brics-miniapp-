@@ -37,7 +37,7 @@
   .deposit-btn{margin-top:6px;padding:12px;border-radius:12px;border:none;cursor:pointer;font-weight:900;color:#fff;background:linear-gradient(90deg,#ff7a00,#ffb84d);box-shadow:0 10px 30px rgba(255,120,0,0.12)}
   .deposit-btn:disabled{opacity:0.5;cursor:not-allowed}
   .status{margin-top:10px;min-height:20px;font-weight:800;color:var(--muted)}
-  .small{font-size:13px;color:var(--muted)}
+  .small{font-size:13px;color:#muted}
   .footer-note{text-align:center;color:#475569;margin-top:8px}
   .modal-backdrop { position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;z-index:9999; }
   .modal { background:#fff;padding:18px;border-radius:12px;max-width:520px;width:94%;box-shadow:0 10px 40px rgba(0,0,0,0.3); }
@@ -64,7 +64,8 @@
       <p><strong>We are currently in the presale phase until February 2026.</strong><br>
       Base price per BRICS = <strong>$1</strong><br>
       Real market value = <strong>$6.17</strong><br>
-      Discount range: <strong>5% to 90%</strong> based on your purchase volume.</p>
+      Discount range: <strong>5% to 90%</strong> based on your purchase volume.<br>
+      <strong>Note:</strong> After completing the transaction, add the contract address below to your MetaMask wallet on Binance Smart Chain.</p>
     </div>
 
     <div class="contract-row">
@@ -99,7 +100,10 @@
           </div>
           <div>
             <div class="small">Owner (receive BNB)</div>
-            <div style="direction:ltr;font-weight:800;color:var(--primary)">0x6759...486cf</div>
+            <div style="direction:ltr;font-weight:800;color:var(--primary)">
+              <span id="ownerAddr">0x6759...486cf</span>
+              <button id="copyOwner" class="copy-btn">Copy</button>
+            </div>
           </div>
         </div>
 
@@ -129,7 +133,7 @@
 </div>
 
 <script>
-const BASE_PRICE = 1; // 1 USD per BRICS (presale)
+const BASE_PRICE = 1; // USD
 const REAL_VALUE = 6.17;
 const BRICS_CONTRACT="0xAF2009350F6ECBE22c23A505a590239c7aaA3037".toLowerCase();
 const OWNER_ADDRESS="0x67594E1D30Cec8a5f906C8278A1BC694641486cf".toLowerCase();
@@ -147,37 +151,13 @@ const memoTag=document.getElementById('memoTag');
 const copyMemoBtn=document.getElementById('copyMemoBtn');
 const copyContract=document.getElementById('copyContract');
 const walletAddr=document.getElementById('walletAddr');
+const copyOwner=document.getElementById('copyOwner');
 
-// شبیه‌سازی آدرس ولت کاربر (در آینده میشه از متامسک گرفت)
-walletAddr.textContent = "0x" + Math.random().toString(16).slice(2,10) + "...";
-
-// تابع تولید MEMO اختصاصی برای هر کاربر
-function generateMemo(){
-  const addrPart = walletAddr.textContent.replace("0x","").replace("...","");
-  const timePart = Date.now().toString(36).slice(-5);
-  return "BRX-" + addrPart + "-" + timePart;
-}
-
-// تنظیم MEMO هنگام لود صفحه
-let memoValue = generateMemo();
+// MEMO اولیه
+let memoValue = "—";
 memoTag.textContent = memoValue;
 
-// دکمه کپی برای MEMO
-copyMemoBtn.addEventListener("click",()=>{
-  navigator.clipboard.writeText(memoValue).then(()=>{
-    copyMemoBtn.textContent="Copied!";
-    setTimeout(()=>copyMemoBtn.textContent="Copy",1200);
-  });
-});
-
-// دکمه کپی برای آدرس قرارداد
-copyContract.addEventListener("click",()=>{
-  navigator.clipboard.writeText(BRICS_CONTRACT).then(()=>{
-    copyContract.textContent="Copied!";
-    setTimeout(()=>copyContract.textContent="Copy",1200);
-  });
-});
-
+// نمایش قیمت تخفیف و قیمت واقعی
 function getDiscountPercent(amount){
   if(amount<100) return 0;
   if(amount>=100 && amount<1000) return 5;
@@ -191,24 +171,72 @@ function getDiscountPercent(amount){
 
 bricsAmount.addEventListener('input',()=>{
   const amount=Number(bricsAmount.value);
-  if(!amount || amount<=0){discountInfo.textContent='—';return;}
+  if(!amount || amount<=0){discountInfo.textContent='—'; return;}
   const discount=getDiscountPercent(amount);
   const totalUSD=amount*BASE_PRICE;
   const discountedUSD=totalUSD*(1-discount/100);
-  discountInfo.textContent=`You get ${discount}% OFF → Pay only $${discountedUSD.toFixed(2)} instead of $${totalUSD.toFixed(2)}`;
+  discountInfo.textContent=`You pay $${discountedUSD.toFixed(2)} (after ${discount}% OFF) | Real market value: $${(amount*REAL_VALUE).toFixed(2)}`;
 });
 
+// دکمه کپی MEMO
+copyMemoBtn.addEventListener("click",()=>{
+  navigator.clipboard.writeText(memoValue).then(()=>{
+    copyMemoBtn.textContent="Copied!";
+    setTimeout(()=>copyMemoBtn.textContent="Copy",1200);
+  });
+});
+
+// دکمه کپی قرارداد
+copyContract.addEventListener("click",()=>{
+  navigator.clipboard.writeText(BRICS_CONTRACT).then(()=>{
+    copyContract.textContent="Copied!";
+    setTimeout(()=>copyContract.textContent="Copy",1200);
+  });
+});
+
+// دکمه کپی آدرس مالک
+copyOwner.addEventListener("click",()=>{
+  navigator.clipboard.writeText(OWNER_ADDRESS).then(()=>{
+    copyOwner.textContent="Copied!";
+    setTimeout(()=>copyOwner.textContent="Copy",1200);
+  });
+});
+
+// باز شدن مودال
 depositBtn.onclick=()=>{
   const amount=Number(bricsAmount.value);
   if(!amount)return alert("Enter BRICS amount first.");
   const discount=getDiscountPercent(amount);
   const totalUSD=amount*BASE_PRICE;
   const discountedUSD=totalUSD*(1-discount/100);
-  modalSummary.textContent=`Amount: ${amount} BRICS | Price: $${discountedUSD.toFixed(2)} (after ${discount}% discount)\nMEMO: ${memoValue}`;
+  
+  // تولید MEMO و نمایش کیف پول خریدار بعد از ارسال TX Hash
+  memoValue = generateMemo();
+  memoTag.textContent = memoValue;
+  
+  walletAddr.textContent = "—"; // تا وقتی TX Hash وارد نشده
+  
+  modalSummary.textContent=`Amount: ${amount} BRICS | Price: $${discountedUSD.toFixed(2)} (after ${discount}% discount)\nReal value: $${(amount*REAL_VALUE).toFixed(2)}\nMEMO: ${memoValue}`;
   modalBackdrop.style.display='flex';
 };
+
+// بستن مودال
 modalCancel.onclick=()=>modalBackdrop.style.display='none';
-modalSubmit.onclick=()=>{modalBackdrop.style.display='none';alert("Transaction submitted ✅");};
+
+// ارسال TX Hash و نمایش کیف پول خریدار
+modalSubmit.onclick=()=>{
+  const txHash = modalTxHash.value.trim();
+  if(!txHash) return alert("Please enter TX Hash.");
+  walletAddr.textContent = "0x" + txHash.slice(2,10) + "..."; // شبیه‌سازی wallet
+  modalBackdrop.style.display='none';
+  alert("Transaction submitted ✅");
+};
+
+// تابع تولید MEMO
+function generateMemo(){
+  const timePart = Date.now().toString(36).slice(-5);
+  return "BRX-" + timePart;
+}
 </script>
 </body>
 </html>
