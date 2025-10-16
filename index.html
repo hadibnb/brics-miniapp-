@@ -143,6 +143,41 @@ const modalCancel=document.getElementById('modalCancel');
 const modalTxHash=document.getElementById('modalTxHash');
 const modalSubmit=document.getElementById('modalSubmit');
 
+const memoTag=document.getElementById('memoTag');
+const copyMemoBtn=document.getElementById('copyMemoBtn');
+const copyContract=document.getElementById('copyContract');
+const walletAddr=document.getElementById('walletAddr');
+
+// شبیه‌سازی آدرس ولت کاربر (در آینده میشه از متامسک گرفت)
+walletAddr.textContent = "0x" + Math.random().toString(16).slice(2,10) + "...";
+
+// تابع تولید MEMO اختصاصی برای هر کاربر
+function generateMemo(){
+  const addrPart = walletAddr.textContent.replace("0x","").replace("...","");
+  const timePart = Date.now().toString(36).slice(-5);
+  return "BRX-" + addrPart + "-" + timePart;
+}
+
+// تنظیم MEMO هنگام لود صفحه
+let memoValue = generateMemo();
+memoTag.textContent = memoValue;
+
+// دکمه کپی برای MEMO
+copyMemoBtn.addEventListener("click",()=>{
+  navigator.clipboard.writeText(memoValue).then(()=>{
+    copyMemoBtn.textContent="Copied!";
+    setTimeout(()=>copyMemoBtn.textContent="Copy",1200);
+  });
+});
+
+// دکمه کپی برای آدرس قرارداد
+copyContract.addEventListener("click",()=>{
+  navigator.clipboard.writeText(BRICS_CONTRACT).then(()=>{
+    copyContract.textContent="Copied!";
+    setTimeout(()=>copyContract.textContent="Copy",1200);
+  });
+});
+
 function getDiscountPercent(amount){
   if(amount<100) return 0;
   if(amount>=100 && amount<1000) return 5;
@@ -169,7 +204,7 @@ depositBtn.onclick=()=>{
   const discount=getDiscountPercent(amount);
   const totalUSD=amount*BASE_PRICE;
   const discountedUSD=totalUSD*(1-discount/100);
-  modalSummary.textContent=`Amount: ${amount} BRICS | Price: $${discountedUSD.toFixed(2)} (after ${discount}% discount)`;
+  modalSummary.textContent=`Amount: ${amount} BRICS | Price: $${discountedUSD.toFixed(2)} (after ${discount}% discount)\nMEMO: ${memoValue}`;
   modalBackdrop.style.display='flex';
 };
 modalCancel.onclick=()=>modalBackdrop.style.display='none';
