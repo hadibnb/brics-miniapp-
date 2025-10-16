@@ -8,10 +8,10 @@
 <style>
   :root{--bg:#f8fbff;--card:#fff;--primary:#0b63ff;--accent:#00b07a;--muted:#6b7280;}
   *{box-sizing:border-box}
-  body{margin:0;font-family:Inter,"Arial",sans-serif;background:var(--bg);padding:20px;display:flex;justify-content:center;}
+  body{margin:0;font-family:Inter, "Arial", sans-serif;background:var(--bg);padding:20px;display:flex;justify-content:center;}
   .container{width:100%;max-width:980px}
   .card{background:var(--card);border-radius:14px;padding:18px;box-shadow:0 12px 30px rgba(11,99,255,0.06);display:flex;flex-direction:column;gap:12px}
-  .hero{position:relative;border-radius:10px;overflow:hidden;height:160px;background:linear-gradient(90deg,rgba(11,99,255,0.06),rgba(0,176,122,0.03));}
+  .hero{position:relative;border-radius:10px;overflow:hidden;height:160px;background:linear-gradient(90deg, rgba(11,99,255,0.06), rgba(0,176,122,0.03));}
   .hero img.map{width:100%;height:100%;object-fit:cover;display:block}
   .logo{position:absolute;left:50%;transform:translateX(-50%);top:12px;width:86px;height:86px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;border:3px solid rgba(11,99,255,0.12);box-shadow:0 8px 20px rgba(11,99,255,0.08)}
   .logo img{width:98%;height:98%;object-fit:contain}
@@ -27,9 +27,10 @@
   .input-row{display:flex;gap:10px;align-items:center}
   .amount-input{flex:1;padding:12px;border-radius:10px;border:1px solid #e6eefb;font-size:16px}
   .amount-input:focus{outline:none;box-shadow:0 6px 20px rgba(11,99,255,0.06);border-color:var(--primary)}
-  .token-tag{min-width:120px;background:linear-gradient(90deg,#f3f7ff,#ffffff);border-radius:10px;padding:10px;text-align:center;font-weight:900;font-size:14px}
+  .token-tag{min-width:120px;background:linear-gradient(90deg,#f3f7ff,#ffffff);border-radius:10px;padding:10px;text-align:center;font-weight:900;display:flex;flex-direction:column;align-items:center}
+  .token-tag small{font-size:12px;color:var(--muted)}
+  .discount-info{margin-top:8px;font-weight:700;color:#0b63ff}
   .memo{margin-top:12px;padding:10px;border-radius:10px;background:linear-gradient(180deg,#f6fbff,#ffffff);border:1px solid #eef6ff;font-weight:700;display:flex;justify-content:space-between;align-items:center}
-  .price-info{margin-top:8px;padding:10px;border-radius:10px;background:#f9fbff;border:1px solid #e9f1ff;font-weight:700;color:#0b63ff}
   .wallet-card{padding:14px;border-radius:12px;background:linear-gradient(90deg,#f8fbff,#ffffff);border:1px solid rgba(11,99,255,0.04);display:flex;flex-direction:column;gap:10px;align-items:stretch}
   .wallet-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
   .wallet-addr{font-weight:800;color:var(--primary);direction:ltr}
@@ -38,21 +39,21 @@
   .status{margin-top:10px;min-height:20px;font-weight:800;color:var(--muted)}
   .small{font-size:13px;color:var(--muted)}
   .footer-note{text-align:center;color:#475569;margin-top:8px}
-  .modal-backdrop {position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;z-index:9999;}
-  .modal {background:#fff;padding:18px;border-radius:12px;max-width:520px;width:94%;box-shadow:0 10px 40px rgba(0,0,0,0.3);}
+  .modal-backdrop { position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;z-index:9999; }
+  .modal { background:#fff;padding:18px;border-radius:12px;max-width:520px;width:94%;box-shadow:0 10px 40px rgba(0,0,0,0.3); }
   .modal h3{margin:0 0 8px}
+  .modal .summary{font-weight:700;margin:8px 0;color:#0b63ff}
   .modal input{padding:10px;border-radius:8px;border:1px solid #ddd;font-size:14px}
   .modal .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
   .btn{padding:10px 12px;border-radius:8px;border:none;cursor:pointer}
   .btn.primary{background:var(--primary);color:#fff}
   .btn.ghost{background:#f3f4f6}
   .note-small{font-size:12px;color:#555;margin-top:6px}
-  #priceUSD,#discountedUSD{font-weight:800;color:#0b63ff}
 </style>
 </head>
 <body>
 <div class="container">
-  <div class="card">
+  <div class="card" role="main">
     <div class="hero">
       <img class="map" src="brics-map.jpg" alt="BRICS map" />
       <div class="logo"><img src="bricslogo.png" alt="BRICS logo" /></div>
@@ -61,7 +62,9 @@
     <h1>Buy BRICS Token</h1>
     <div class="subtitle">
       <p><strong>We are currently in the presale phase until February 2026.</strong><br>
-      Each BRICS token has a real value of <strong>$6.17</strong>, but during presale you get up to <strong>90% discount</strong> depending on amount purchased.</p>
+      Base price per BRICS = <strong>$1</strong><br>
+      Real market value = <strong>$6.17</strong><br>
+      Discount range: <strong>5% to 90%</strong> based on your purchase volume.</p>
     </div>
 
     <div class="contract-row">
@@ -74,10 +77,13 @@
         <div class="label">Enter amount of BRICS to buy</div>
         <div class="input-row">
           <input id="bricsAmount" class="amount-input" type="number" min="1" max="2000000" placeholder="e.g. 1000" />
-          <div class="token-tag" id="bricsValue">—</div>
+          <div class="token-tag">
+            BRICS
+            <small>=$6.17 value</small>
+          </div>
         </div>
 
-        <div class="price-info" id="discountInfo">Enter BRICS amount to see discount details</div>
+        <div id="discountInfo" class="discount-info">—</div>
 
         <div class="memo">
           <div><strong>MEMO:</strong> <span id="memoTag">—</span></div>
@@ -97,9 +103,9 @@
           </div>
         </div>
 
-        <button id="depositBtn" class="deposit-btn">Deposited</button>
+        <button id="depositBtn" class="deposit-btn">Proceed to Payment</button>
         <div id="status" class="status">Status: ready</div>
-        <div class="footer-note">Accepted: <strong>BNB (BEP20)</strong> • Manual BRICS distribution after confirmation</div>
+        <div class="footer-note">Accepted: <strong>BNB (BEP20)</strong></div>
       </div>
     </div>
   </div>
@@ -108,12 +114,12 @@
 <!-- modal -->
 <div id="modalBackdrop" class="modal-backdrop">
   <div class="modal">
-    <h3>Paste your transaction hash</h3>
+    <h3>Confirm Your Purchase</h3>
+    <div id="modalSummary" class="summary"></div>
     <label>TX Hash (required)</label>
     <input id="modalTxHash" placeholder="0x..." />
     <label>Transaction link (optional)</label>
     <input id="modalTxLink" placeholder="https://bscscan.com/tx/..." />
-    <p id="modalPriceInfo" style="font-weight:700;color:#0b63ff;margin-top:10px;">Payment: $0.00 USD</p>
     <p class="note-small">Make sure you sent BNB to the owner address and included the MEMO in your transfer.</p>
     <div class="actions">
       <button id="modalCancel" class="btn ghost">Cancel</button>
@@ -123,53 +129,51 @@
 </div>
 
 <script>
-const BRICS_PRICE = 6.17;
+const BASE_PRICE = 1; // 1 USD per BRICS (presale)
+const REAL_VALUE = 6.17;
 const BRICS_CONTRACT="0xAF2009350F6ECBE22c23A505a590239c7aaA3037".toLowerCase();
 const OWNER_ADDRESS="0x67594E1D30Cec8a5f906C8278A1BC694641486cf".toLowerCase();
 
 const bricsAmount=document.getElementById('bricsAmount');
-const bricsValue=document.getElementById('bricsValue');
 const discountInfo=document.getElementById('discountInfo');
 const depositBtn=document.getElementById('depositBtn');
 const modalBackdrop=document.getElementById('modalBackdrop');
+const modalSummary=document.getElementById('modalSummary');
 const modalCancel=document.getElementById('modalCancel');
-const modalSubmit=document.getElementById('modalSubmit');
-const modalPriceInfo=document.getElementById('modalPriceInfo');
 const modalTxHash=document.getElementById('modalTxHash');
+const modalSubmit=document.getElementById('modalSubmit');
 
-function calcDiscount(amount){
+function getDiscountPercent(amount){
   if(amount<100) return 0;
-  if(amount>=100 && amount<500) return 0.05;
-  if(amount>=500 && amount<1000) return 0.10;
-  if(amount>=1000 && amount<5000) return 0.20;
-  if(amount>=5000 && amount<20000) return 0.30;
-  if(amount>=20000 && amount<100000) return 0.50;
-  if(amount>=100000 && amount<500000) return 0.70;
-  if(amount>=500000 && amount<=2000000) return 0.90;
+  if(amount>=100 && amount<1000) return 5;
+  if(amount>=1000 && amount<10000) return 10;
+  if(amount>=10000 && amount<100000) return 25;
+  if(amount>=100000 && amount<500000) return 50;
+  if(amount>=500000 && amount<1000000) return 75;
+  if(amount>=1000000 && amount<=2000000) return 90;
   return 0;
 }
 
 bricsAmount.addEventListener('input',()=>{
-  const amount=parseFloat(bricsAmount.value);
-  if(!amount || amount<=0){bricsValue.textContent='—';discountInfo.textContent='Enter BRICS amount to see discount details';return;}
-  const realValue=amount*BRICS_PRICE;
-  bricsValue.textContent=`$${realValue.toFixed(2)}`;
-  const disc=calcDiscount(amount);
-  const finalPay=realValue*(1-disc);
-  discountInfo.innerHTML=`Real Value: <strong>$${realValue.toFixed(2)}</strong><br>Discount: <strong>${(disc*100).toFixed(0)}%</strong><br>Payable Now: <strong id="discountedUSD">$${finalPay.toFixed(2)}</strong>`;
+  const amount=Number(bricsAmount.value);
+  if(!amount || amount<=0){discountInfo.textContent='—';return;}
+  const discount=getDiscountPercent(amount);
+  const totalUSD=amount*BASE_PRICE;
+  const discountedUSD=totalUSD*(1-discount/100);
+  discountInfo.textContent=`You get ${discount}% OFF → Pay only $${discountedUSD.toFixed(2)} instead of $${totalUSD.toFixed(2)}`;
 });
 
 depositBtn.onclick=()=>{
-  const amount=parseFloat(bricsAmount.value);
-  if(!amount){alert("Enter amount first!");return;}
-  const disc=calcDiscount(amount);
-  const finalPay=amount*BRICS_PRICE*(1-disc);
-  modalPriceInfo.textContent=`Payment: $${finalPay.toFixed(2)} USD`;
+  const amount=Number(bricsAmount.value);
+  if(!amount)return alert("Enter BRICS amount first.");
+  const discount=getDiscountPercent(amount);
+  const totalUSD=amount*BASE_PRICE;
+  const discountedUSD=totalUSD*(1-discount/100);
+  modalSummary.textContent=`Amount: ${amount} BRICS | Price: $${discountedUSD.toFixed(2)} (after ${discount}% discount)`;
   modalBackdrop.style.display='flex';
 };
-
-modalCancel.onclick=()=>{modalBackdrop.style.display='none';};
-modalSubmit.onclick=()=>{modalBackdrop.style.display='none';alert('Transaction submitted ✅');};
+modalCancel.onclick=()=>modalBackdrop.style.display='none';
+modalSubmit.onclick=()=>{modalBackdrop.style.display='none';alert("Transaction submitted ✅");};
 </script>
 </body>
 </html>
