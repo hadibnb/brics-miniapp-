@@ -1,121 +1,127 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Buy BRICS Token</title>
-<meta name="theme-color" content="#0b63ff"/>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Buy BRICS Token - Dark Mode Animated</title>
+<meta name="theme-color" content="#0b63ff">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#f8fbff;--card:#fff;--primary:#0b63ff;--accent:#00b07a;--muted:#6b7280;}
-  *{box-sizing:border-box}
-  body{margin:0;font-family:Inter, "Arial", sans-serif;background:var(--bg);padding:20px;display:flex;justify-content:center;}
-  .container{width:100%;max-width:980px}
-  .card{background:var(--card);border-radius:14px;padding:18px;box-shadow:0 12px 30px rgba(11,99,255,0.06);display:flex;flex-direction:column;gap:12px}
-  .hero{position:relative;border-radius:10px;overflow:hidden;height:160px;background:linear-gradient(90deg, rgba(11,99,255,0.06), rgba(0,176,122,0.03));}
-  .hero img.map{width:100%;height:100%;object-fit:cover;display:block}
-  .logo{position:absolute;left:50%;transform:translateX(-50%);top:12px;width:86px;height:86px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;border:3px solid rgba(11,99,255,0.12);box-shadow:0 8px 20px rgba(11,99,255,0.08)}
-  .logo img{width:98%;height:98%;object-fit:contain}
-  h1{color:var(--primary);text-align:center;margin:6px 0 0;font-size:22px}
-  .subtitle{text-align:center;color:#475569;font-weight:600;line-height:1.5}
-  .contract-row{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
-  .contract-box{background:linear-gradient(180deg,#f7fbff,#ffffff);padding:8px 12px;border-radius:10px;border:1px solid #eef5ff;font-weight:800;direction:ltr}
-  .copy-btn{background:transparent;border:none;color:var(--primary);cursor:pointer;font-weight:800}
-  .grid{display:grid;grid-template-columns:1fr 360px;gap:16px;margin-top:12px}
-  @media(max-width:880px){.grid{grid-template-columns:1fr}}
-  .panel{padding:12px;border-radius:12px;background:linear-gradient(180deg,#ffffff,#fcfeff);border:1px solid rgba(11,99,255,0.04)}
-  .label{font-weight:800;color:#0e2546;margin-bottom:6px}
-  .input-row{display:flex;gap:10px;align-items:center}
-  .amount-input{flex:1;padding:12px;border-radius:10px;border:1px solid #e6eefb;font-size:16px}
-  .amount-input:focus{outline:none;box-shadow:0 6px 20px rgba(11,99,255,0.06);border-color:var(--primary)}
-  .token-tag{min-width:120px;background:linear-gradient(90deg,#f3f7ff,#ffffff);border-radius:10px;padding:10px;text-align:center;font-weight:900;display:flex;flex-direction:column;align-items:center}
-  .token-tag small{font-size:12px;color:var(--muted)}
-  .discount-info{margin-top:8px;font-weight:700;color:#0b63ff}
-  .memo{margin-top:12px;padding:10px;border-radius:10px;background:linear-gradient(180deg,#f6fbff,#ffffff);border:1px solid #eef6ff;font-weight:700;display:flex;justify-content:space-between;align-items:center}
-  .wallet-card{padding:14px;border-radius:12px;background:linear-gradient(90deg,#f8fbff,#ffffff);border:1px solid rgba(11,99,255,0.04);display:flex;flex-direction:column;gap:10px;align-items:stretch}
-  .wallet-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
-  .wallet-addr{font-weight:800;color:var(--primary);direction:ltr}
-  .deposit-btn{margin-top:6px;padding:12px;border-radius:12px;border:none;cursor:pointer;font-weight:900;color:#fff;background:linear-gradient(90deg,#ff7a00,#ffb84d);box-shadow:0 10px 30px rgba(255,120,0,0.12)}
-  .deposit-btn:disabled{opacity:0.5;cursor:not-allowed}
-  .status{margin-top:10px;min-height:20px;font-weight:800;color:var(--muted)}
-  .small{font-size:13px;color:#muted}
-  .footer-note{text-align:center;color:#475569;margin-top:8px}
-  .modal-backdrop { position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;z-index:9999; }
-  .modal { background:#fff;padding:18px;border-radius:12px;max-width:520px;width:94%;box-shadow:0 10px 40px rgba(0,0,0,0.3); }
-  .modal h3{margin:0 0 8px}
-  .modal .summary{font-weight:700;margin:8px 0;color:#0b63ff}
-  .modal input{padding:10px;border-radius:8px;border:1px solid #ddd;font-size:14px}
-  .modal .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
-  .btn{padding:10px 12px;border-radius:8px;border:none;cursor:pointer}
-  .btn.primary{background:var(--primary);color:#fff}
-  .btn.ghost{background:#f3f4f6}
-  .note-small{font-size:12px;color:#555;margin-top:6px}
+:root {
+  --bg:#121212; --card:#1e1e2f; --primary:#0b63ff; --accent:#00b07a; --muted:#bbbbbb; --orange:#ff7a00;
+  --input-bg:#2a2a3d; --input-border:#444457;
+}
+*{box-sizing:border-box; transition: all 0.2s ease;}
+body{margin:0;font-family:'Inter',sans-serif;background:var(--bg);padding:20px;display:flex;justify-content:center;color:#eee;}
+.container{width:100%;max-width:980px}
+.card{background:var(--card);border-radius:16px;padding:24px;box-shadow:0 16px 36px rgba(0,0,0,0.5);display:flex;flex-direction:column;gap:20px; transition: transform 0.2s, box-shadow 0.2s;}
+.card:hover{transform: translateY(-6px); box-shadow:0 24px 48px rgba(0,0,0,0.7);}
+.hero{position:relative;border-radius:12px;overflow:hidden;height:180px;background:linear-gradient(90deg, rgba(11,99,255,0.08), rgba(0,176,122,0.04));}
+.hero img.map{width:100%;height:100%;object-fit:cover;}
+.logo{position:absolute;left:50%;transform:translateX(-50%);top:16px;width:90px;height:90px;border-radius:50%;background:#222233;display:flex;align-items:center;justify-content:center;border:3px solid rgba(11,99,255,0.3);box-shadow:0 10px 24px rgba(11,99,255,0.3);}
+.logo img{width:92%;height:92%;object-fit:contain;}
+h1{color:var(--primary);text-align:center;margin:0;font-size:26px;}
+.subtitle{text-align:center;color:#ccc;font-weight:600;line-height:1.6;font-size:15px;}
+.contract-row{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:12px;}
+.contract-box{background:var(--input-bg);padding:10px 14px;border-radius:12px;border:1px solid #333;font-weight:800;direction:ltr;font-size:14px;color:#eee;}
+.copy-btn{background:transparent;border:none;color:var(--primary);cursor:pointer;font-weight:800;font-size:14px;}
+.copy-btn:hover{color:var(--accent);}
+.grid{display:grid;grid-template-columns:1fr 380px;gap:20px;margin-top:20px;}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.panel{padding:16px;border-radius:14px;background:#1f1f2f;border:1px solid #333; transition: transform 0.2s, box-shadow 0.2s;}
+.panel:hover{transform: translateY(-4px); box-shadow:0 12px 36px rgba(0,0,0,0.6);}
+.label{font-weight:800;color:#ccc;margin-bottom:8px;font-size:14px;}
+.input-row{display:flex;gap:12px;align-items:center;}
+.amount-input{flex:1;padding:14px;border-radius:12px;border:1px solid var(--input-border);background:var(--input-bg);color:#eee;font-size:16px;transition: all 0.2s ease;}
+.amount-input:focus{outline:none;box-shadow:0 8px 24px rgba(11,99,255,0.5);border-color:var(--primary);}
+.token-tag{min-width:120px;background:#2a2a3d;border-radius:12px;padding:12px;text-align:center;font-weight:900;display:flex;flex-direction:column;align-items:center;font-size:14px;color:#eee;}
+.token-tag small{font-size:12px;color:var(--muted);}
+.discount-info{margin-top:10px;font-weight:700;color:var(--primary);font-size:14px;}
+.memo{margin-top:14px;padding:12px;border-radius:12px;background:#2a2a3d;border:1px solid #333;font-weight:700;display:flex;justify-content:space-between;align-items:center;font-size:13px; transition: all 0.2s ease;}
+.memo:hover{box-shadow:0 4px 12px rgba(0,0,0,0.5);}
+.wallet-card{padding:16px;border-radius:14px;background:#1f1f2f;border:1px solid #333;display:flex;flex-direction:column;gap:14px;align-items:stretch; transition: transform 0.2s, box-shadow 0.2s;}
+.wallet-card:hover{transform: translateY(-4px); box-shadow:0 12px 36px rgba(0,0,0,0.6);}
+.wallet-top{display:flex;justify-content:space-between;align-items:center;gap:12px;}
+.wallet-addr{font-weight:800;color:var(--primary);direction:ltr;font-size:14px;}
+.deposit-btn{margin-top:8px;padding:14px;border-radius:14px;border:none;cursor:pointer;font-weight:900;color:#fff;background:linear-gradient(90deg,var(--orange),#ffb84d);box-shadow:0 12px 36px rgba(255,120,0,0.3);font-size:16px;transition: all 0.3s ease;}
+.deposit-btn:hover{box-shadow:0 16px 40px rgba(255,120,0,0.5); transform: scale(1.02);}
+.deposit-btn:disabled{opacity:0.5;cursor:not-allowed;}
+.status{margin-top:12px;min-height:22px;font-weight:800;color:var(--muted);font-size:13px;}
+.footer-note{text-align:center;color:#bbb;margin-top:10px;font-size:13px;}
+.modal-backdrop { position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.75);display:none;align-items:center;justify-content:center;z-index:9999; }
+.modal { background:#222233;padding:20px;border-radius:14px;max-width:520px;width:94%;box-shadow:0 12px 48px rgba(0,0,0,0.8); color:#eee; transition: all 0.2s ease;}
+.modal h3{margin:0 0 10px;font-size:18px;}
+.modal .summary{font-weight:700;margin:10px 0;color:var(--primary);font-size:14px;}
+.modal input{padding:12px;border-radius:10px;border:1px solid #444;background:#2a2a3d;color:#eee;font-size:14px;margin-top:6px; transition: all 0.2s ease;}
+.modal input:focus{box-shadow:0 6px 18px rgba(11,99,255,0.5);}
+.modal .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:10px;}
+.btn{padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-size:14px;}
+.btn.primary{background:var(--primary);color:#fff;}
+.btn.ghost{background:#444457;color:#eee;}
+.note-small{font-size:12px;color:#bbb;margin-top:6px;}
 </style>
 </head>
 <body>
 <div class="container">
-  <div class="card" role="main">
-    <div class="hero">
-      <img class="map" src="brics-map.jpg" alt="BRICS map" />
-      <div class="logo"><img src="bricslogo.png" alt="BRICS logo" /></div>
-    </div>
+<div class="card" role="main">
+  <div class="hero">
+    <img class="map" src="brics-map.jpg" alt="BRICS map" />
+    <div class="logo"><img src="bricslogo.png" alt="BRICS logo" /></div>
+  </div>
 
-    <h1>Buy BRICS Token</h1>
-    <div class="subtitle">
-      <p><strong>We are currently in the presale phase until February 2026.</strong><br>
-      Base price per BRICS = <strong>$1</strong><br>
-      Real market value = <strong>$6.17</strong><br>
-      Discount range: <strong>5% to 90%</strong> based on your purchase volume.<br>
-      <strong>Note:</strong> After completing the transaction, add the contract address below to your MetaMask wallet on Binance Smart Chain.</p>
-    </div>
+  <h1>Buy BRICS Token</h1>
+  <div class="subtitle">
+    <p><strong>We are currently in the presale phase until February 2026.</strong><br>
+    Base price per BRICS = <strong>$1</strong><br>
+    Real market value = <strong>$6.17</strong><br>
+    Discount range: <strong>5% to 90%</strong> based on your purchase volume.<br>
+    <strong>Note:</strong> After completing the transaction, add the contract address below to your MetaMask wallet on Binance Smart Chain.</p>
+  </div>
 
-    <div class="contract-row">
-      <div id="contractBox" class="contract-box">0xAF20...3037</div>
-      <button id="copyContract" class="copy-btn">Copy</button>
-    </div>
+  <div class="contract-row">
+    <div id="contractBox" class="contract-box">0xAF20...3037</div>
+    <button id="copyContract" class="copy-btn">Copy</button>
+  </div>
 
-    <div class="grid">
-      <div class="panel">
-        <div class="label">Enter amount of BRICS to buy</div>
-        <div class="input-row">
-          <input id="bricsAmount" class="amount-input" type="number" min="1" max="2000000" placeholder="e.g. 1000" />
-          <div class="token-tag">
-            BRICS
-            <small>=$6.17 value</small>
-          </div>
-        </div>
-
-        <div id="discountInfo" class="discount-info">—</div>
-
-        <div class="memo">
-          <div><strong>MEMO:</strong> <span id="memoTag">—</span></div>
-          <button id="copyMemoBtn" class="copy-btn">Copy</button>
+  <div class="grid">
+    <div class="panel">
+      <div class="label">Enter amount of BRICS to buy</div>
+      <div class="input-row">
+        <input id="bricsAmount" class="amount-input" type="number" min="1" max="2000000" placeholder="e.g. 1000" />
+        <div class="token-tag">
+          BRICS
+          <small>=$6.17 value</small>
         </div>
       </div>
+      <div id="discountInfo" class="discount-info">—</div>
+      <div class="memo">
+        <div><strong>MEMO:</strong> <span id="memoTag">—</span></div>
+        <button id="copyMemoBtn" class="copy-btn">Copy</button>
+      </div>
+    </div>
 
-      <div class="wallet-card">
-        <div class="wallet-top">
-          <div>
-            <div class="small">Buyer wallet</div>
-            <div class="wallet-addr" id="walletAddr">—</div>
-          </div>
-          <div>
-            <div class="small">Owner (receive BNB)</div>
-            <div style="direction:ltr;font-weight:800;color:var(--primary)">
-              <span id="ownerAddr">0x6759...486cf</span>
-              <button id="copyOwner" class="copy-btn">Copy</button>
-            </div>
+    <div class="wallet-card">
+      <div class="wallet-top">
+        <div>
+          <div class="small">Buyer wallet</div>
+          <div class="wallet-addr" id="walletAddr">—</div>
+        </div>
+        <div>
+          <div class="small">Owner (receive BNB)</div>
+          <div style="direction:ltr;font-weight:800;color:var(--primary)">
+            <span id="ownerAddr">0x6759...486cf</span>
+            <button id="copyOwner" class="copy-btn">Copy</button>
           </div>
         </div>
-
-        <button id="depositBtn" class="deposit-btn">Proceed to Payment</button>
-        <div id="status" class="status">Status: ready</div>
-        <div class="footer-note">Accepted: <strong>BNB (BEP20)</strong></div>
       </div>
+      <button id="depositBtn" class="deposit-btn">Proceed to Payment</button>
+      <div id="status" class="status">Status: ready</div>
+      <div class="footer-note">Accepted: <strong>BNB (BEP20)</strong></div>
     </div>
   </div>
 </div>
+</div>
 
-<!-- modal -->
 <div id="modalBackdrop" class="modal-backdrop">
   <div class="modal">
     <h3>Confirm Your Purchase</h3>
@@ -133,110 +139,59 @@
 </div>
 
 <script>
-const BASE_PRICE = 1; // USD
-const REAL_VALUE = 6.17;
-const BRICS_CONTRACT="0xAF2009350F6ECBE22c23A505a590239c7aaA3037".toLowerCase();
-const OWNER_ADDRESS="0x67594E1D30Cec8a5f906C8278A1BC694641486cf".toLowerCase();
+// Variables
+const BASE_PRICE=1, REAL_VALUE=6.17, BRICS_CONTRACT="0xAF2009350F6ECBE22c23A505a590239c7aaA3037".toLowerCase(), OWNER_ADDRESS="0x67594E1D30Cec8a5f906C8278A1BC694641486cf".toLowerCase();
+const bricsAmount=document.getElementById('bricsAmount'), discountInfo=document.getElementById('discountInfo'), depositBtn=document.getElementById('depositBtn');
+const modalBackdrop=document.getElementById('modalBackdrop'), modalSummary=document.getElementById('modalSummary'), modalCancel=document.getElementById('modalCancel');
+const modalTxHash=document.getElementById('modalTxHash'), modalSubmit=document.getElementById('modalSubmit');
+const memoTag=document.getElementById('memoTag'), copyMemoBtn=document.getElementById('copyMemoBtn'), copyContract=document.getElementById('copyContract'), walletAddr=document.getElementById('walletAddr'), copyOwner=document.getElementById('copyOwner');
 
-const bricsAmount=document.getElementById('bricsAmount');
-const discountInfo=document.getElementById('discountInfo');
-const depositBtn=document.getElementById('depositBtn');
-const modalBackdrop=document.getElementById('modalBackdrop');
-const modalSummary=document.getElementById('modalSummary');
-const modalCancel=document.getElementById('modalCancel');
-const modalTxHash=document.getElementById('modalTxHash');
-const modalSubmit=document.getElementById('modalSubmit');
+let memoValue="—"; memoTag.textContent=memoValue;
 
-const memoTag=document.getElementById('memoTag');
-const copyMemoBtn=document.getElementById('copyMemoBtn');
-const copyContract=document.getElementById('copyContract');
-const walletAddr=document.getElementById('walletAddr');
-const copyOwner=document.getElementById('copyOwner');
-
-// MEMO اولیه
-let memoValue = "—";
-memoTag.textContent = memoValue;
-
-// نمایش قیمت تخفیف و قیمت واقعی
+// Functions
 function getDiscountPercent(amount){
-  if(amount<100) return 0;
-  if(amount>=100 && amount<1000) return 5;
-  if(amount>=1000 && amount<10000) return 10;
-  if(amount>=10000 && amount<100000) return 25;
-  if(amount>=100000 && amount<500000) return 50;
-  if(amount>=500000 && amount<1000000) return 75;
-  if(amount>=1000000 && amount<=2000000) return 90;
-  return 0;
+  if(amount<100) return 0; if(amount>=100 && amount<1000) return 5; if(amount>=1000 && amount<10000) return 10;
+  if(amount>=10000 && amount<100000) return 25; if(amount>=100000 && amount<500000) return 50;
+  if(amount>=500000 && amount<1000000) return 75; if(amount>=1000000 && amount<=2000000) return 90; return 0;
 }
 
+function generateMemo(){return "BRX-"+Date.now().toString(36).slice(-5);}
+
+// Input listener
 bricsAmount.addEventListener('input',()=>{
   const amount=Number(bricsAmount.value);
   if(!amount || amount<=0){discountInfo.textContent='—'; return;}
   const discount=getDiscountPercent(amount);
   const totalUSD=amount*BASE_PRICE;
   const discountedUSD=totalUSD*(1-discount/100);
-  discountInfo.textContent=`You pay $${discountedUSD.toFixed(2)} (after ${discount}% OFF) | Real market value: $${(amount*REAL_VALUE).toFixed(2)}`;
+  discountInfo.textContent=`You pay $${discountedUSD.toFixed(2)} (after ${discount}% OFF) | Real value: $${(amount*REAL_VALUE).toFixed(2)}`;
 });
 
-// دکمه کپی MEMO
-copyMemoBtn.addEventListener("click",()=>{
-  navigator.clipboard.writeText(memoValue).then(()=>{
-    copyMemoBtn.textContent="Copied!";
-    setTimeout(()=>copyMemoBtn.textContent="Copy",1200);
-  });
-});
+// Copy buttons
+copyMemoBtn.addEventListener("click",()=>{navigator.clipboard.writeText(memoValue).then(()=>{copyMemoBtn.textContent="Copied!";setTimeout(()=>copyMemoBtn.textContent="Copy",1200);});});
+copyContract.addEventListener("click",()=>{navigator.clipboard.writeText(BRICS_CONTRACT).then(()=>{copyContract.textContent="Copied!";setTimeout(()=>copyContract.textContent="Copy",1200);});});
+copyOwner.addEventListener("click",()=>{navigator.clipboard.writeText(OWNER_ADDRESS).then(()=>{copyOwner.textContent="Copied!";setTimeout(()=>copyOwner.textContent="Copy",1200);});});
 
-// دکمه کپی قرارداد
-copyContract.addEventListener("click",()=>{
-  navigator.clipboard.writeText(BRICS_CONTRACT).then(()=>{
-    copyContract.textContent="Copied!";
-    setTimeout(()=>copyContract.textContent="Copy",1200);
-  });
-});
-
-// دکمه کپی آدرس مالک
-copyOwner.addEventListener("click",()=>{
-  navigator.clipboard.writeText(OWNER_ADDRESS).then(()=>{
-    copyOwner.textContent="Copied!";
-    setTimeout(()=>copyOwner.textContent="Copy",1200);
-  });
-});
-
-// باز شدن مودال
+// Deposit button
 depositBtn.onclick=()=>{
-  const amount=Number(bricsAmount.value);
-  if(!amount)return alert("Enter BRICS amount first.");
+  const amount=Number(bricsAmount.value); if(!amount)return alert("Enter BRICS amount first.");
   const discount=getDiscountPercent(amount);
   const totalUSD=amount*BASE_PRICE;
   const discountedUSD=totalUSD*(1-discount/100);
-  
-  // تولید MEMO و نمایش کیف پول خریدار بعد از ارسال TX Hash
-  memoValue = generateMemo();
-  memoTag.textContent = memoValue;
-  
-  walletAddr.textContent = "—"; // تا وقتی TX Hash وارد نشده
-  
+  memoValue=generateMemo(); memoTag.textContent=memoValue;
+  walletAddr.textContent="—";
   modalSummary.textContent=`Amount: ${amount} BRICS | Price: $${discountedUSD.toFixed(2)} (after ${discount}% discount)\nReal value: $${(amount*REAL_VALUE).toFixed(2)}\nMEMO: ${memoValue}`;
   modalBackdrop.style.display='flex';
 };
 
-// بستن مودال
+// Modal actions
 modalCancel.onclick=()=>modalBackdrop.style.display='none';
-
-// ارسال TX Hash و نمایش کیف پول خریدار
 modalSubmit.onclick=()=>{
-  const txHash = modalTxHash.value.trim();
-  if(!txHash) return alert("Please enter TX Hash.");
-  walletAddr.textContent = "0x" + txHash.slice(2,10) + "..."; // شبیه‌سازی wallet
+  const txHash=modalTxHash.value.trim(); if(!txHash) return alert("Please enter TX Hash.");
+  walletAddr.textContent="0x"+txHash.slice(2,10)+"...";
   modalBackdrop.style.display='none';
   alert("Transaction submitted ✅");
 };
-
-// تابع تولید MEMO
-function generateMemo(){
-  const timePart = Date.now().toString(36).slice(-5);
-  return "BRX-" + timePart;
-}
 </script>
 </body>
 </html>
