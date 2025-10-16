@@ -161,8 +161,35 @@ function getBricsPrice(amount){
   return 1.00;
 }
 
-let memoValue = "—";
+let memoValue = localStorage.getItem("currentMemo");
+
+// اگر قبلاً ممو وجود ندارد، یکی بساز
+if (!memoValue) {
+  memoValue = generateMemo();
+  localStorage.setItem("currentMemo", memoValue);
+}
 memoTag.textContent = memoValue;
+
+// تابع تولید ممو
+function generateMemo(){
+  const t = Date.now().toString(36).slice(-5);
+  return "BRX-" + t;
+}
+
+// وقتی کاربر تراکنش رو ارسال می‌کنه
+modalSubmit.onclick = ()=>{
+  const txHash = modalTxHash.value.trim();
+  if(!txHash) return alert("Please enter TX Hash.");
+  
+  walletAddr.textContent = "0x" + txHash.slice(2,6) + "..." + txHash.slice(-4);
+  modalBackdrop.style.display = 'none';
+  alert("Transaction submitted ✅");
+  
+  // بعد از ارسال تراکنش، ممو جدید تولید و ذخیره شود
+  memoValue = generateMemo();
+  localStorage.setItem("currentMemo", memoValue);
+  memoTag.textContent = memoValue;
+};
 
 // نمایش قیمت و ارزش واقعی
 bricsAmount.addEventListener('input',()=>{
