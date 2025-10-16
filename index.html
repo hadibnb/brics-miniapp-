@@ -6,189 +6,126 @@
 <title>Buy BRICS Token</title>
 <meta name="theme-color" content="#0b63ff"/>
 <style>
-  :root{--bg:#f8fbff;--card:#fff;--primary:#0b63ff;--accent:#00b07a;--muted:#6b7280;}
-  *{box-sizing:border-box}
-  body{margin:0;font-family:Inter, "Arial", sans-serif;background:var(--bg);padding:20px;display:flex;justify-content:center;}
-  .container{width:100%;max-width:980px}
-  .card{background:var(--card);border-radius:14px;padding:18px;box-shadow:0 12px 30px rgba(11,99,255,0.06);display:flex;flex-direction:column;gap:12px}
-  .hero{position:relative;border-radius:10px;overflow:hidden;height:160px;background:linear-gradient(90deg, rgba(11,99,255,0.06), rgba(0,176,122,0.03));}
-  .hero img.map{width:100%;height:100%;object-fit:cover;display:block}
-  .logo{position:absolute;left:50%;transform:translateX(-50%);top:12px;width:86px;height:86px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;border:3px solid rgba(11,99,255,0.12);box-shadow:0 8px 20px rgba(11,99,255,0.08)}
-  .logo img{width:100%;height:100%;object-fit:contain}
-  h1{color:var(--primary);text-align:center;margin:6px 0 0;font-size:22px}
-  .subtitle{text-align:center;color:#475569;font-weight:600;line-height:1.5}
-  .contract-row{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
-  .contract-box{background:linear-gradient(180deg,#f7fbff,#ffffff);padding:8px 12px;border-radius:10px;border:1px solid #eef5ff;font-weight:800;direction:ltr}
-  .copy-btn{background:transparent;border:none;color:var(--primary);cursor:pointer;font-weight:800}
-  .grid{display:grid;grid-template-columns:1fr 360px;gap:16px;margin-top:12px}
-  @media(max-width:880px){.grid{grid-template-columns:1fr}}
-  .panel{padding:12px;border-radius:12px;background:linear-gradient(180deg,#ffffff,#fcfeff);border:1px solid rgba(11,99,255,0.04)}
-  .label{font-weight:800;color:#0e2546;margin-bottom:6px}
-  .input-row{display:flex;gap:10px;align-items:center}
-  .amount-input{flex:1;padding:12px;border-radius:10px;border:1px solid #e6eefb;font-size:16px}
-  .amount-input:focus{outline:none;box-shadow:0 6px 20px rgba(11,99,255,0.06);border-color:var(--primary)}
-  .token-tag{min-width:96px;background:linear-gradient(90deg,#f3f7ff,#ffffff);border-radius:10px;padding:10px;text-align:center;font-weight:900}
-  .memo{margin-top:12px;padding:10px;border-radius:10px;background:linear-gradient(180deg,#f6fbff,#ffffff);border:1px solid #eef6ff;font-weight:700;display:flex;justify-content:space-between;align-items:center}
-  .wallet-card{padding:14px;border-radius:12px;background:linear-gradient(90deg,#f8fbff,#ffffff);border:1px solid rgba(11,99,255,0.04);display:flex;flex-direction:column;gap:10px;align-items:stretch}
-  .wallet-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
-  .wallet-addr{font-weight:800;color:var(--primary);direction:ltr}
-  .deposit-btn{margin-top:6px;padding:12px;border-radius:12px;border:none;cursor:pointer;font-weight:900;color:#fff;background:linear-gradient(90deg,#ff7a00,#ffb84d);box-shadow:0 10px 30px rgba(255,120,0,0.12)}
-  .deposit-btn:disabled{opacity:0.5;cursor:not-allowed}
-  .status{margin-top:10px;min-height:20px;font-weight:800;color:var(--muted)}
-  .small{font-size:13px;color:var(--muted)}
-  .footer-note{text-align:center;color:#475569;margin-top:8px}
-  .modal-backdrop { position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;z-index:9999; }
-  .modal { background:#fff;padding:18px;border-radius:12px;max-width:520px;width:94%;box-shadow:0 10px 40px rgba(0,0,0,0.3); }
-  .modal h3{margin:0 0 8px}
-  .modal input{padding:10px;border-radius:8px;border:1px solid #ddd;font-size:14px}
-  .modal .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
-  .btn{padding:10px 12px;border-radius:8px;border:none;cursor:pointer}
-  .btn.primary{background:var(--primary);color:#fff}
-  .btn.ghost{background:#f3f4f6}
-  .note-small{font-size:12px;color:#555;margin-top:6px}
-
-    /* New styles for price calculation box */
-    .calc-output-container {
-        margin-top: 12px;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-    .calc-row {
-        padding: 8px 10px;
-        border-radius: 8px;
-        font-weight: 700;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border: 1px solid #eef6ff;
-    }
-    .calc-row.concept {
-        background: linear-gradient(180deg,#fff,#fcfdff);
-        color: var(--muted);
-    }
-    .calc-row.presale {
-        background: linear-gradient(180deg,#f3f7ff,#ffffff);
-        color: var(--primary);
-    }
-    .calc-row .label-text {
-        font-size: 14px;
-    }
-    .calc-row .value-text {
-        font-size: 15px;
-        font-weight: 800;
-        direction: ltr;
-        color: #0e2546; /* darker color for value */
-    }
-    .calc-row.presale .value-text {
-        color: var(--accent); /* green accent for the actual price */
-    }
+  :root{--bg:#f8fbff;--card:#fff;--primary:#0b63ff;--accent:#00b07a;--muted:#6b7280;}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter, "Arial", sans-serif;background:var(--bg);padding:20px;display:flex;justify-content:center;}
+  .container{width:100%;max-width:980px}
+  .card{background:var(--card);border-radius:14px;padding:18px;box-shadow:0 12px 30px rgba(11,99,255,0.06);display:flex;flex-direction:column;gap:12px}
+  .hero{position:relative;border-radius:10px;overflow:hidden;height:160px;background:linear-gradient(90deg, rgba(11,99,255,0.06), rgba(0,176,122,0.03));}
+  .hero img.map{width:100%;height:100%;object-fit:cover;display:block}
+  .logo{position:absolute;left:50%;transform:translateX(-50%);top:12px;width:86px;height:86px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;border:3px solid rgba(11,99,255,0.12);box-shadow:0 8px 20px rgba(11,99,255,0.08)}
+  .logo img{width:68%;height:68%;object-fit:contain}
+  h1{color:var(--primary);text-align:center;margin:6px 0 0;font-size:22px}
+  .subtitle{text-align:center;color:#475569;font-weight:600;line-height:1.5}
+  .contract-row{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
+  .contract-box{background:linear-gradient(180deg,#f7fbff,#ffffff);padding:8px 12px;border-radius:10px;border:1px solid #eef5ff;font-weight:800;direction:ltr}
+  .copy-btn{background:transparent;border:none;color:var(--primary);cursor:pointer;font-weight:800}
+  .grid{display:grid;grid-template-columns:1fr 360px;gap:16px;margin-top:12px}
+  @media(max-width:880px){.grid{grid-template-columns:1fr}}
+  .panel{padding:12px;border-radius:12px;background:linear-gradient(180deg,#ffffff,#fcfeff);border:1px solid rgba(11,99,255,0.04)}
+  .label{font-weight:800;color:#0e2546;margin-bottom:6px}
+  .input-row{display:flex;gap:10px;align-items:center}
+  .amount-input{flex:1;padding:12px;border-radius:10px;border:1px solid #e6eefb;font-size:16px}
+  .amount-input:focus{outline:none;box-shadow:0 6px 20px rgba(11,99,255,0.06);border-color:var(--primary)}
+  .token-tag{min-width:96px;background:linear-gradient(90deg,#f3f7ff,#ffffff);border-radius:10px;padding:10px;text-align:center;font-weight:900}
+  .memo{margin-top:12px;padding:10px;border-radius:10px;background:linear-gradient(180deg,#f6fbff,#ffffff);border:1px solid #eef6ff;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+  .wallet-card{padding:14px;border-radius:12px;background:linear-gradient(90deg,#f8fbff,#ffffff);border:1px solid rgba(11,99,255,0.04);display:flex;flex-direction:column;gap:10px;align-items:stretch}
+  .wallet-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .wallet-addr{font-weight:800;color:var(--primary);direction:ltr}
+  .deposit-btn{margin-top:6px;padding:12px;border-radius:12px;border:none;cursor:pointer;font-weight:900;color:#fff;background:linear-gradient(90deg,#ff7a00,#ffb84d);box-shadow:0 10px 30px rgba(255,120,0,0.12)}
+  .deposit-btn:disabled{opacity:0.5;cursor:not-allowed}
+  .status{margin-top:10px;min-height:20px;font-weight:800;color:var(--muted)}
+  .small{font-size:13px;color:var(--muted)}
+  .footer-note{text-align:center;color:#475569;margin-top:8px}
+  .modal-backdrop { position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;z-index:9999; }
+  .modal { background:#fff;padding:18px;border-radius:12px;max-width:520px;width:94%;box-shadow:0 10px 40px rgba(0,0,0,0.3); }
+  .modal h3{margin:0 0 8px}
+  .modal input{padding:10px;border-radius:8px;border:1px solid #ddd;font-size:14px}
+  .modal .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
+  .btn{padding:10px 12px;border-radius:8px;border:none;cursor:pointer}
+  .btn.primary{background:var(--primary);color:#fff}
+  .btn.ghost{background:#f3f4f6}
+  .note-small{font-size:12px;color:#555;margin-top:6px}
 </style>
 </head>
 <body>
 <div class="container">
-  <div class="card" role="main">
-    <div class="hero">
-      <img class="map" src="brics-map.jpg" alt="BRICS map" />
-      <div class="logo"><img src="bricslogo.png" alt="BRICS logo" /></div>
-    </div>
+  <div class="card" role="main">
+    <div class="hero">
+      <img class="map" src="brics-map.jpg" alt="BRICS map" />
+      <div class="logo"><img src="bricslogo.png" alt="BRICS logo" /></div>
+    </div>
 
-    <h1>Buy BRICS Token</h1>
-    <div class="subtitle">
-      <p><strong>We are currently in the presale phase until February 2026.</strong><br>
-      The price of each BRICS token is calculated at <strong>1 USD per BNB</strong>.<br>
-      As the presale approaches its end, the discount percentage will automatically decrease.<br>
-      After completing your transaction, copy the BRICS contract address and add it to your MetaMask wallet.</p>
-    </div>
+    <h1>Buy BRICS Token</h1>
+    <div class="subtitle">
+      <p><strong>We are currently in the presale phase until February 2026.</strong><br>
+      The price of each BRICS token is calculated at <strong>1 USD per BNB</strong>.<br>
+      As the presale approaches its end, the discount percentage will automatically decrease.<br>
+      After completing your transaction, copy the BRICS contract address and add it to your MetaMask wallet.</p>
+    </div>
 
-    <div class="contract-row">
-      <div id="contractBox" class="contract-box">0xAF20...3037</div>
-      <button id="copyContract" class="copy-btn">Copy</button>
-    </div>
+    <div class="contract-row">
+      <div id="contractBox" class="contract-box">0xAF20...3037</div>
+      <button id="copyContract" class="copy-btn">Copy</button>
+    </div>
 
-    <div class="grid">
-      <div class="panel">
-        <div class="label">Enter amount of BRICS to buy</div>
-        <div class="input-row">
-          <input id="bricsAmount" class="amount-input" type="number" min="1" max="2000000" placeholder="e.g. 1000" />
-          <div class="token-tag">BRICS</div>
-        </div>
-
-        <div class="calc-output-container">
-            <div class="calc-row concept">
-                <div class="label-text">
-                    Total Concept Price (6.17$ per BRICS)
-                </div>
-                <div class="value-text" id="conceptTotal">$0.00</div>
-            </div>
-            
-            <div class="calc-row presale">
-                <div class="label-text">
-                    Presale Price (1.00$ per BRICS) 
-                    <span id="discountText" class="small" style="font-weight:700; color:var(--primary); margin-right:4px;">(Discount: 0%)</span>
-                </div>
-                <div class="value-text" id="presaleTotal">$0.00</div>
-            </div>
+    <div class="grid">
+      <div class="panel">
+        <div class="label">Enter amount of BRICS to buy</div>
+        <div class="input-row">
+          <input id="bricsAmount" class="amount-input" type="number" min="1" max="2000000" placeholder="e.g. 1000" />
+          <div class="token-tag">BRICS</div>
         </div>
-                <div class="memo">
-          <div><strong>MEMO:</strong> <span id="memoTag">—</span></div>
-          <button id="copyMemoBtn" class="copy-btn">Copy</button>
-        </div>
-      </div>
 
-      <div class="wallet-card">
-        <div class="wallet-top">
-          <div>
-            <div class="small">Buyer wallet</div>
-            <div class="wallet-addr" id="walletAddr">—</div>
-          </div>
-          <div>
-            <div class="small">Owner (receive BNB)</div>
-            <div style="direction:ltr;font-weight:800;color:var(--primary)">0x6759...486cf</div>
-          </div>
-        </div>
+        <div class="memo">
+          <div><strong>MEMO:</strong> <span id="memoTag">—</span></div>
+          <button id="copyMemoBtn" class="copy-btn">Copy</button>
+        </div>
+      </div>
 
-        <button id="depositBtn" class="deposit-btn">Deposited</button>
-        <div id="status" class="status">Status: ready</div>
-        <div class="footer-note">Accepted: <strong>BNB (BEP20)</strong> • Manual BRICS distribution after confirmation</div>
-      </div>
-    </div>
-  </div>
+      <div class="wallet-card">
+        <div class="wallet-top">
+          <div>
+            <div class="small">Buyer wallet</div>
+            <div class="wallet-addr" id="walletAddr">—</div>
+          </div>
+          <div>
+            <div class="small">Owner (receive BNB)</div>
+            <div style="direction:ltr;font-weight:800;color:var(--primary)">0x6759...486cf</div>
+          </div>
+        </div>
+
+        <button id="depositBtn" class="deposit-btn">Deposited</button>
+        <div id="status" class="status">Status: ready</div>
+        <div class="footer-note">Accepted: <strong>BNB (BEP20)</strong> • Manual BRICS distribution after confirmation</div>
+      </div>
+    </div>
+  </div>
 </div>
 
+<!-- modal -->
 <div id="modalBackdrop" class="modal-backdrop">
-  <div class="modal">
-    <h3>Paste your transaction hash</h3>
-    <label>TX Hash (required)</label>
-    <input id="modalTxHash" placeholder="0x..." />
-    <label>Transaction link (optional)</label>
-    <input id="modalTxLink" placeholder="https://bscscan.com/tx/..." />
-    <p class="note-small">Make sure you sent BNB to the owner address and included the MEMO in your transfer.</p>
-    <div class="actions">
-      <button id="modalCancel" class="btn ghost">Cancel</button>
-      <button id="modalSubmit" class="btn primary">Submit</button>
-    </div>
-  </div>
+  <div class="modal">
+    <h3>Paste your transaction hash</h3>
+    <label>TX Hash (required)</label>
+    <input id="modalTxHash" placeholder="0x..." />
+    <label>Transaction link (optional)</label>
+    <input id="modalTxLink" placeholder="https://bscscan.com/tx/..." />
+    <p class="note-small">Make sure you sent BNB to the owner address and included the MEMO in your transfer.</p>
+    <div class="actions">
+      <button id="modalCancel" class="btn ghost">Cancel</button>
+      <button id="modalSubmit" class="btn primary">Submit</button>
+    </div>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 <script>
-// ================== CONFIGURATION ==================
 const BRICS_CONTRACT="0xAF2009350F6ECBE22c23A505a590239c7aaA3037".toLowerCase();
 const OWNER_ADDRESS="0x67594E1D30Cec8a5f906C8278A1BC694641486cf".toLowerCase();
 const SERVER_ENDPOINT="/.netlify/functions/sendTelegram";
 const CHANNEL_ID="-1003031571306";
 
-// 💡 Price Constants
-const BRICS_CONCEPT_PRICE = 6.17; 
-const BRICS_PRESALE_PRICE = 1.00;
-const MIN_BRICS_BUY = 100;
-const MAX_BRICS_BUY = 2000000;
-const MIN_DISCOUNT_PERCENT = 5;
-const MAX_DISCOUNT_PERCENT = 90;
-// ===================================================
-
-// DOM Elements
 const contractBox=document.getElementById('contractBox');
 const copyContract=document.getElementById('copyContract');
 const bricsAmount=document.getElementById('bricsAmount');
@@ -201,103 +138,27 @@ const modalBackdrop=document.getElementById('modalBackdrop');
 const modalTxHash=document.getElementById('modalTxHash');
 const modalCancel=document.getElementById('modalCancel');
 const modalSubmit=document.getElementById('modalSubmit');
-const conceptTotal=document.getElementById('conceptTotal'); // New
-const presaleTotal=document.getElementById('presaleTotal'); // New
-const discountText=document.getElementById('discountText'); // New
 
 function short(a){return a?a.slice(0,6)+'...'+a.slice(-4):'—';}
 function setStatus(t){statusEl.textContent=t;}
 function genMemo(){return Math.random().toString(36).slice(2,12).toUpperCase();}
-
-// 💡 Discount Calculation Logic
-function calcDiscount(amount) {
-    const n = Number(amount);
-    if (n < MIN_BRICS_BUY) return 0; // No discount below minimum
-    if (n >= MAX_BRICS_BUY) return MAX_DISCOUNT_PERCENT; // Max discount at or above max limit
-    
-    // Interpolate discount between MIN_BRICS_BUY (5%) and MAX_BRICS_BUY (90%)
-    const rangeSize = MAX_BRICS_BUY - MIN_BRICS_BUY;
-    const discountRange = MAX_DISCOUNT_PERCENT - MIN_DISCOUNT_PERCENT;
-    
-    const ratio = (n - MIN_BRICS_BUY) / rangeSize;
-    const discount = MIN_DISCOUNT_PERCENT + ratio * discountRange;
-    
-    // Round to two decimal places
-    return Math.round(discount * 100) / 100;
-}
-
-// 💡 Price Calculation Logic
-function updateCalc() {
-    const amount = Number(bricsAmount.value);
-
-    if (isNaN(amount) || amount <= 0) {
-        conceptTotal.textContent = '$0.00';
-        presaleTotal.textContent = '$0.00';
-        discountText.textContent = '(Discount: 0%)';
-        return;
-    }
-    
-    // 1. Concept Price Calculation (6.17$)
-    const totalConceptUSD = amount * BRICS_CONCEPT_PRICE;
-    conceptTotal.textContent = `$${totalConceptUSD.toFixed(2)}`;
-    
-    // 2. Presale Price Calculation (1.00$ with floating discount)
-    const discount = calcDiscount(amount);
-    const totalPresaleUSD = amount * BRICS_PRESALE_PRICE * (1 - discount / 100);
-    
-    presaleTotal.textContent = `$${totalPresaleUSD.toFixed(2)}`;
-    discountText.textContent = `(Discount: ${discount.toFixed(2)}%)`;
-}
-
-// Event Listeners
-bricsAmount.addEventListener('input', updateCalc);
-
-
 let currentMemo=genMemo();
 memoTag.textContent=currentMemo;
 copyMemoBtn.onclick=()=>navigator.clipboard.writeText(currentMemo);
 copyContract.onclick=()=>navigator.clipboard.writeText(BRICS_CONTRACT);
 
-depositBtn.onclick=()=>{
-    const amt = Number(bricsAmount.value);
-    if (!amt || amt < 1) {
-        setStatus('Please enter the amount of BRICS you wish to buy.','error');
-        return;
-    }
-    modalBackdrop.style.display='flex';
-};
+depositBtn.onclick=()=>{modalBackdrop.style.display='flex';};
 modalCancel.onclick=()=>{modalBackdrop.style.display='none';};
 
 modalSubmit.onclick=async()=>{
-  const txHash=modalTxHash.value.trim();
-  if(!txHash)return;
-  modalBackdrop.style.display='none';
-  setStatus('Transaction submitted...');
-  
-  // You might want to log the final calculated USD amount here too
-  const bricsAmt = Number(bricsAmount.value);
-  const discount = calcDiscount(bricsAmt);
-  const totalUSD = bricsAmt * BRICS_PRESALE_PRICE * (1 - discount / 100);
-
-  const payload={
-      txHash,
-      memo:currentMemo,
-      bricsAmount: bricsAmt,
-      totalUSDToPay: totalUSD.toFixed(2),
-      discountApplied: discount.toFixed(2),
-      timestamp:new Date().toISOString(),
-      channel_id:CHANNEL_ID
-  };
-
-  await fetch(SERVER_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-  setStatus('Transaction info sent ✅');
-  // Generate new memo after successful submission
-  currentMemo = genMemo();
-  memoTag.textContent = currentMemo;
+  const txHash=modalTxHash.value.trim();
+  if(!txHash)return;
+  modalBackdrop.style.display='none';
+  setStatus('Transaction submitted...');
+  const payload={txHash,memo:currentMemo,timestamp:new Date().toISOString(),channel_id:CHANNEL_ID};
+  await fetch(SERVER_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  setStatus('Transaction info sent ✅');
 };
-
-// Initial call to show 0.00
-updateCalc(); 
 </script>
 </body>
 </html>
