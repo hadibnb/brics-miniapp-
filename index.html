@@ -257,7 +257,7 @@ function generateMemo(){
   return "BRX-"+t;
 }
 
-  // ✉️ ارسال تراکنش به تلگرام از طریق Cloudflare Worker
+  // --- ارسال پیام به Cloudflare Worker ---
 async function sendToTelegram(txHash, memo, amount) {
   const msg = `
 🪙 *New BRICS Purchase!*
@@ -268,26 +268,41 @@ Date: ${new Date().toLocaleString()}
   `;
 
   try {
-    const workerURL = "https://holy-hall-baaf.<username>.workers.dev"; // آدرس Worker خودت اینجا بذار
-    await fetch(`${workerURL}/?msg=${encodeURIComponent(msg)}`);
+    const workerURL = "https://holy-hall-baaf.hadivideo.workers.dev"; // لینک واقعی Worker شما
+    await fetch(`${workerURL}/?msg=${encodeURIComponent(msg)}`, {
+      method: 'GET',
+      mode: 'cors',
+    });
     console.log("✅ Message sent to Telegram");
   } catch (err) {
     console.error("❌ Error sending to Telegram", err);
   }
 }
 
-// 🚀 وقتی کاربر تراکنش رو سابمیت کرد
+// --- باز شدن مودال ---
+depositBtn.onclick=()=>{
+  const amount=Number(bricsAmount.value);
+  if(!amount)return alert("Enter BRICS amount first.");
+  memoValue=generateMemo();
+  memoTag.textContent = memoValue;
+  modalSummary.textContent=`Amount: ${amount} BRICS\nMEMO: ${memoValue}`;
+  modalBackdrop.style.display='flex';
+};
+
+// --- بستن مودال ---
+modalCancel.onclick=()=>modalBackdrop.style.display='none';
+
+// --- ارسال تراکنش و پیام به Worker ---
 modalSubmit.onclick = async () => {
   const txHash = modalTxHash.value.trim();
-  if (!txHash) return alert("Please enter TX Hash.");
-
   const amount = Number(bricsAmount.value);
-  if (!amount) return alert("Please enter BRICS amount.");
+  if(!txHash || !amount) return alert("Please enter TX Hash and amount.");
 
-  walletAddr.textContent = "0x" + txHash.slice(2, 6) + "..." + txHash.slice(-4);
+  walletAddr.textContent = "0x" + txHash.slice(2,6) + "..." + txHash.slice(-4);
   modalBackdrop.style.display = 'none';
   alert("Transaction submitted ✅");
 
+  // ارسال پیام به Cloudflare Worker
   await sendToTelegram(txHash, memoValue, amount);
 
   // بعد از ارسال، ممو جدید ساخته شود
