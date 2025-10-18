@@ -6,27 +6,128 @@
 <title>Buy BRICS Token</title>
 <meta name="theme-color" content="#0b63ff"/>
 <style>
-  /* --- همان استایل‌های قبلی شما --- */
+  :root{--bg:#f8fbff;--card:#fff;--primary:#0b63ff;--accent:#00b07a;--muted:#6b7280;}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter, "Arial", sans-serif;background:var(--bg);padding:20px;display:flex;justify-content:center;}
+  .container{width:100%;max-width:980px}
+  .card{background:var(--card);border-radius:14px;padding:18px;box-shadow:0 12px 30px rgba(11,99,255,0.06);display:flex;flex-direction:column;gap:12px}
+  .hero{position:relative;border-radius:10px;overflow:hidden;height:160px;background:linear-gradient(90deg, rgba(11,99,255,0.06), rgba(0,176,122,0.03));}
+  .hero img.map{width:100%;height:100%;object-fit:cover;display:block}
+  .logo{position:absolute;left:50%;transform:translateX(-50%);top:12px;width:86px;height:86px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;border:3px solid rgba(11,99,255,0.12);box-shadow:0 8px 20px rgba(11,99,255,0.08)}
+  .logo img{width:98%;height:98%;object-fit:contain}
+  h1{color:var(--primary);text-align:center;margin:6px 0 0;font-size:22px}
+  .subtitle{text-align:center;color:#475569;font-weight:600;line-height:1.5}
+  .contract-row{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
+  .contract-box{background:linear-gradient(180deg,#f7fbff,#ffffff);padding:8px 12px;border-radius:10px;border:1px solid #eef5ff;font-weight:800;direction:ltr}
+  .copy-btn{background:transparent;border:none;color:var(--primary);cursor:pointer;font-weight:800}
+  .grid{display:grid;grid-template-columns:1fr 360px;gap:16px;margin-top:12px}
+  @media(max-width:880px){.grid{grid-template-columns:1fr}}
+  .panel{padding:12px;border-radius:12px;background:linear-gradient(180deg,#ffffff,#fcfeff);border:1px solid rgba(11,99,255,0.04)}
+  .label{font-weight:800;color:#0e2546;margin-bottom:6px}
+  .input-row{display:flex;gap:10px;align-items:center}
+  .amount-input{flex:1;padding:12px;border-radius:10px;border:1px solid #e6eefb;font-size:16px}
+  .amount-input:focus{outline:none;box-shadow:0 6px 20px rgba(11,99,255,0.06);border-color:var(--primary)}
+  .token-tag{min-width:120px;background:linear-gradient(90deg,#f3f7ff,#ffffff);border-radius:10px;padding:10px;text-align:center;font-weight:900;display:flex;flex-direction:column;align-items:center}
+  .token-tag small{font-size:12px;color:var(--muted)}
+  .discount-info{margin-top:8px;font-weight:700;color:#0b63ff}
+  .memo{margin-top:12px;padding:10px;border-radius:10px;background:linear-gradient(180deg,#f6fbff,#ffffff);border:1px solid #eef6ff;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+  .wallet-card{padding:14px;border-radius:12px;background:linear-gradient(90deg,#f8fbff,#ffffff);border:1px solid rgba(11,99,255,0.04);display:flex;flex-direction:column;gap:10px;align-items:stretch}
+  .wallet-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .wallet-addr{font-weight:800;color:var(--primary);direction:ltr}
+  .deposit-btn{margin-top:6px;padding:12px;border-radius:12px;border:none;cursor:pointer;font-weight:900;color:#fff;background:linear-gradient(90deg,#ff7a00,#ffb84d);box-shadow:0 10px 30px rgba(255,120,0,0.12)}
+  .deposit-btn:disabled{opacity:0.5;cursor:not-allowed}
+  .status{margin-top:10px;min-height:20px;font-weight:800;color:var(--muted)}
+  .small{font-size:13px;color:#muted}
+  .footer-note{text-align:center;color:#475569;margin-top:8px}
+  .modal-backdrop { position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;z-index:9999; }
+  .modal { background:#fff;padding:18px;border-radius:12px;max-width:520px;width:94%;box-shadow:0 10px 40px rgba(0,0,0,0.3); }
+  .modal h3{margin:0 0 8px}
+  .modal .summary{font-weight:700;margin:8px 0;color:#0b63ff}
+  .modal input{padding:10px;border-radius:8px;border:1px solid #ddd;font-size:14px}
+  .modal .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
+  .btn{padding:10px 12px;border-radius:8px;border:none;cursor:pointer}
+  .btn.primary{background:var(--primary);color:#fff}
+  .btn.ghost{background:#f3f4f6}
+  .note-small{font-size:12px;color:#555;margin-top:6px}
 </style>
 </head>
 <body>
 <div class="container">
   <div class="card" role="main">
-    <!-- ... بقیه HTML همانند قبل ... -->
-    <input id="bricsAmount" class="amount-input" type="number" min="1" max="2000000" placeholder="e.g. 1000" />
-    <div id="memoTag">—</div>
-    <button id="depositBtn" class="deposit-btn">Proceed to Payment</button>
-    <div id="modalBackdrop" class="modal-backdrop">
-      <div class="modal">
-        <h3>Confirm Your Purchase</h3>
-        <div id="modalSummary" class="summary"></div>
-        <label>TX Hash (required)</label>
-        <input id="modalTxHash" placeholder="0x..." />
-        <div class="actions">
-          <button id="modalCancel" class="btn ghost">Cancel</button>
-          <button id="modalSubmit" class="btn primary">Submit</button>
+    <div class="hero">
+      <img class="map" src="brics-map.jpg" alt="BRICS map" />
+      <div class="logo"><img src="bricslogo.png" alt="BRICS logo" /></div>
+    </div>
+
+    <h1>Buy BRICS Token</h1>
+    <div class="subtitle">
+      <p><strong>We are currently in the presale phase until February 2026.</strong><br>
+      Base price per BRICS = <strong>$1</strong><br>
+      Real market value = <strong>$6.17</strong><br>
+      Price tiers apply based on purchase volume.<br>
+      <strong>Note:</strong> After completing the transaction, add the contract address below to your MetaMask wallet on Binance Smart Chain.</p>
+    </div>
+
+    <div class="contract-row">
+      <div id="contractBox" class="contract-box">0xAF20...3037</div>
+      <button id="copyContract" class="copy-btn">Copy</button>
+    </div>
+
+    <div class="grid">
+      <div class="panel">
+        <div class="label">Enter amount of BRICS to buy</div>
+        <div class="input-row">
+          <input id="bricsAmount" class="amount-input" type="number" min="1" max="2000000" placeholder="e.g. 1000" />
+          <div class="token-tag">
+            BRICS
+            <small>=$6.17 value</small>
+          </div>
+        </div>
+
+        <div id="discountInfo" class="discount-info">—</div>
+
+        <div class="memo">
+          <div><strong>MEMO:</strong> <span id="memoTag">—</span></div>
+          <button id="copyMemoBtn" class="copy-btn">Copy</button>
         </div>
       </div>
+
+      <div class="wallet-card">
+        <div class="wallet-top">
+          <div>
+            <div class="small">Buyer wallet</div>
+            <div class="wallet-addr" id="walletAddr">—</div>
+          </div>
+          <div>
+            <div class="small">Owner (receive BNB)</div>
+            <div style="direction:ltr;font-weight:800;color:var(--primary)">
+              <span id="ownerAddr">0x6759...486cf</span>
+              <button id="copyOwner" class="copy-btn">Copy</button>
+            </div>
+          </div>
+        </div>
+
+        <button id="depositBtn" class="deposit-btn">Proceed to Payment</button>
+        <div id="status" class="status">Status: ready</div>
+        <div class="footer-note">Accepted: <strong>BNB (BEP20)</strong></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- modal -->
+<div id="modalBackdrop" class="modal-backdrop">
+  <div class="modal">
+    <h3>Confirm Your Purchase</h3>
+    <div id="modalSummary" class="summary"></div>
+    <label>TX Hash (required)</label>
+    <input id="modalTxHash" placeholder="0x..." />
+    <label>Transaction link (optional)</label>
+    <input id="modalTxLink" placeholder="https://bscscan.com/tx/..." />
+    <p class="note-small">Make sure you sent BNB to the owner address and included the MEMO in your transfer.</p>
+    <div class="actions">
+      <button id="modalCancel" class="btn ghost">Cancel</button>
+      <button id="modalSubmit" class="btn primary">Submit</button>
     </div>
   </div>
 </div>
@@ -37,6 +138,7 @@ const BRICS_CONTRACT="0xAF2009350F6ECBE22c23A505a590239c7aaA3037".toLowerCase();
 const OWNER_ADDRESS="0x67594E1D30Cec8a5f906C8278A1BC694641486cf".toLowerCase();
 
 const bricsAmount=document.getElementById('bricsAmount');
+const discountInfo=document.getElementById('discountInfo');
 const depositBtn=document.getElementById('depositBtn');
 const modalBackdrop=document.getElementById('modalBackdrop');
 const modalSummary=document.getElementById('modalSummary');
@@ -44,21 +146,118 @@ const modalCancel=document.getElementById('modalCancel');
 const modalTxHash=document.getElementById('modalTxHash');
 const modalSubmit=document.getElementById('modalSubmit');
 const memoTag=document.getElementById('memoTag');
+const copyMemoBtn=document.getElementById('copyMemoBtn');
+const copyContract=document.getElementById('copyContract');
+const walletAddr=document.getElementById('walletAddr');
+const copyOwner=document.getElementById('copyOwner');
 
-// --- مدیریت MEMO ---
+// تابع محاسبه قیمت براساس محدوده خرید
+function getBricsPrice(amount){
+  if(amount >= 100 && amount <= 10000) return 0.40;
+  if(amount >= 10001 && amount <= 20000) return 0.35;
+  if(amount >= 20001 && amount <= 40000) return 0.25;
+  if(amount >= 40001 && amount <= 100000) return 0.15;
+  if(amount >= 100001 && amount <= 500000) return 0.10;
+  return 1.00;
+}
+
 let memoValue = localStorage.getItem("currentMemo");
+
+// اگر قبلاً ممو وجود ندارد، یکی بساز
 if (!memoValue) {
   memoValue = generateMemo();
   localStorage.setItem("currentMemo", memoValue);
 }
 memoTag.textContent = memoValue;
 
+// تابع تولید ممو
 function generateMemo(){
   const t = Date.now().toString(36).slice(-5);
   return "BRX-" + t;
 }
 
-// --- ارسال پیام به Cloudflare Worker ---
+// وقتی کاربر تراکنش رو ارسال می‌کنه
+modalSubmit.onclick = ()=>{
+  const txHash = modalTxHash.value.trim();
+  if(!txHash) return alert("Please enter TX Hash.");
+  
+  walletAddr.textContent = "0x" + txHash.slice(2,6) + "..." + txHash.slice(-4);
+  modalBackdrop.style.display = 'none';
+  alert("Transaction submitted ✅");
+  
+  // بعد از ارسال تراکنش، ممو جدید تولید و ذخیره شود
+  memoValue = generateMemo();
+  localStorage.setItem("currentMemo", memoValue);
+  memoTag.textContent = memoValue;
+};
+
+// نمایش قیمت و ارزش واقعی
+bricsAmount.addEventListener('input',()=>{
+  const amount=Number(bricsAmount.value);
+  if(!amount || amount<=0){discountInfo.textContent='—'; return;}
+  const pricePerBrics=getBricsPrice(amount);
+  const totalUSD=amount*pricePerBrics;
+  discountInfo.textContent=`You pay $${totalUSD.toFixed(2)} | Each BRICS = $${pricePerBrics.toFixed(2)} | Real market value: $${(amount*REAL_VALUE).toFixed(2)}`;
+});
+
+// کپی MEMO
+copyMemoBtn.addEventListener("click",()=>{
+  navigator.clipboard.writeText(memoValue).then(()=>{
+    copyMemoBtn.textContent="Copied!";
+    setTimeout(()=>copyMemoBtn.textContent="Copy",1200);
+  });
+});
+
+// کپی قرارداد
+copyContract.addEventListener("click",()=>{
+  navigator.clipboard.writeText(BRICS_CONTRACT).then(()=>{
+    copyContract.textContent="Copied!";
+    setTimeout(()=>copyContract.textContent="Copy",1200);
+  });
+});
+
+// کپی آدرس مالک
+copyOwner.addEventListener("click",()=>{
+  navigator.clipboard.writeText(OWNER_ADDRESS).then(()=>{
+    copyOwner.textContent="Copied!";
+    setTimeout(()=>copyOwner.textContent="Copy",1200);
+  });
+});
+
+// باز شدن مودال
+depositBtn.onclick=()=>{
+  const amount=Number(bricsAmount.value);
+  if(!amount)return alert("Enter BRICS amount first.");
+  const pricePerBrics=getBricsPrice(amount);
+  const totalUSD=amount*pricePerBrics;
+
+  memoValue=generateMemo();
+  memoTag.textContent=memoValue;
+  walletAddr.textContent="—";
+
+  modalSummary.textContent=`Amount: ${amount} BRICS | Price per BRICS: $${pricePerBrics.toFixed(2)} | Total: $${totalUSD.toFixed(2)}\nReal value: $${(amount*REAL_VALUE).toFixed(2)}\nMEMO: ${memoValue}`;
+  modalBackdrop.style.display='flex';
+};
+
+// بستن مودال
+modalCancel.onclick=()=>modalBackdrop.style.display='none';
+
+// ارسال هش و نمایش ولت خریدار
+modalSubmit.onclick=()=>{
+  const txHash=modalTxHash.value.trim();
+  if(!txHash)return alert("Please enter TX Hash.");
+  walletAddr.textContent="0x"+txHash.slice(2,6)+"..."+txHash.slice(-4);
+  modalBackdrop.style.display='none';
+  alert("Transaction submitted ✅");
+};
+
+// تولید ممو
+function generateMemo(){
+  const t=Date.now().toString(36).slice(-5);
+  return "BRX-"+t;
+}
+
+  // ✉️ ارسال تراکنش به تلگرام از طریق Cloudflare Worker
 async function sendToTelegram(txHash, memo, amount) {
   const msg = `
 🪙 *New BRICS Purchase!*
@@ -69,48 +268,34 @@ Date: ${new Date().toLocaleString()}
   `;
 
   try {
-    const workerURL = "https://holy-hall-baaf.hadivideo.workers.dev"; // لینک واقعی Worker شما
-    await fetch(`${workerURL}/?msg=${encodeURIComponent(msg)}`, {
-      method: 'GET',
-      mode: 'cors',
-    });
+    const workerURL = "https://holy-hall-baaf.<username>.workers.dev"; // آدرس Worker خودت اینجا بذار
+    await fetch(`${workerURL}/?msg=${encodeURIComponent(msg)}`);
     console.log("✅ Message sent to Telegram");
   } catch (err) {
     console.error("❌ Error sending to Telegram", err);
   }
 }
 
-// --- باز شدن مودال ---
-depositBtn.onclick=()=>{
-  const amount=Number(bricsAmount.value);
-  if(!amount)return alert("Enter BRICS amount first.");
-  memoValue=generateMemo();
-  memoTag.textContent = memoValue;
-  modalSummary.textContent=`Amount: ${amount} BRICS\nMEMO: ${memoValue}`;
-  modalBackdrop.style.display='flex';
-};
-
-// --- بستن مودال ---
-modalCancel.onclick=()=>modalBackdrop.style.display='none';
-
-// --- ارسال تراکنش و پیام به Worker ---
+// 🚀 وقتی کاربر تراکنش رو سابمیت کرد
 modalSubmit.onclick = async () => {
   const txHash = modalTxHash.value.trim();
-  const amount = Number(bricsAmount.value);
-  if(!txHash || !amount) return alert("Please enter TX Hash and amount.");
+  if (!txHash) return alert("Please enter TX Hash.");
 
-  walletAddr.textContent = "0x" + txHash.slice(2,6) + "..." + txHash.slice(-4);
+  const amount = Number(bricsAmount.value);
+  if (!amount) return alert("Please enter BRICS amount.");
+
+  walletAddr.textContent = "0x" + txHash.slice(2, 6) + "..." + txHash.slice(-4);
   modalBackdrop.style.display = 'none';
   alert("Transaction submitted ✅");
 
-  // ارسال پیام به Cloudflare Worker
   await sendToTelegram(txHash, memoValue, amount);
 
-  // ممو جدید بساز
+  // بعد از ارسال، ممو جدید ساخته شود
   memoValue = generateMemo();
   localStorage.setItem("currentMemo", memoValue);
   memoTag.textContent = memoValue;
 };
+
 </script>
 </body>
 </html>
