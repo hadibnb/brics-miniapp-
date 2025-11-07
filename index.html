@@ -151,14 +151,20 @@ const copyContract=document.getElementById('copyContract');
 const walletAddr=document.getElementById('walletAddr');
 const copyOwner=document.getElementById('copyOwner');
 
-// تابع محاسبه قیمت براساس محدوده خرید
-function getBricsPrice(amount){
-  if(amount >= 100 && amount <= 10000) return 0.40;
-  if(amount >= 10001 && amount <= 20000) return 0.35;
-  if(amount >= 20001 && amount <= 40000) return 0.25;
-  if(amount >= 40001 && amount <= 100000) return 0.15;
-  if(amount >= 100001 && amount <= 500000) return 0.10;
-  return 1.00;
+// تابع محاسبه قیمت براساس محدوده خرید با محدودیت حداقل و حداکثر
+function getBricsPrice(amount) {
+  // بررسی محدودیت‌ها
+  if (amount < 1000 || amount > 15000) {
+    return "Invalid amount: مقدار خرید باید بین ۱۰۰۰ تا ۱۵۰۰۰ واحد باشد";
+  }
+
+  // محاسبه قیمت براساس محدوده
+  if (amount <= 2000) return 0.20;
+  if (amount <= 5000) return 0.15;
+  if (amount <= 9000) return 0.10;
+  if (amount <= 15000) return 0.08;
+
+  return "Invalid range";
 }
 
 let memoValue = localStorage.getItem("currentMemo");
